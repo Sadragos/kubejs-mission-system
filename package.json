@@ -1,0 +1,16 @@
+{
+  "name": "ftbquestgenerator",
+  "version": "1.0.0",
+  "description": "Generates Mission like Quests in FTB Quests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ftbquestgenerator": "file:",
+    "minimist": "^1.2.8",
+    "seedrandom": "^3.0.5"
+  }
+}
