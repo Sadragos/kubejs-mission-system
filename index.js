@@ -2,6 +2,12 @@ const { readFileSync, writeFileSync, mkdirSync, copyFileSync } = require('fs');
 const { parse } = require('path');
 const seedrandom = require('seedrandom');
 
+/**
+ * give @a acacia_button[custom_name='["",{"text":"Mission:","bold":true,"italic":false},{"text":" ","italic":false},{"text":"64x Birch Plank","italic":false,"color":"gold"}]',lore=['["",{"text":"Die Abendheurergilde benötigt möglichst bald ","italic":false},{"text":"64x Birch Plank","italic":false,"color":"gold"},{"text":". Als Belohnung erhälst du ","italic":false},{"text":"8-12 Coins","italic":false,"color":"gold"},{"text":"!","italic":false}]']]
+ */
+const chapterGroupId = "60F280BAC7EAC29D";
+const missionItem = 'kubejs:mission';
+const rewardItem = 'kubejs:coin';
 
 console.log('Rading Missions CSV...');
 const missions = parseCSV("missions/Missions.csv").map(p => {
@@ -9,28 +15,13 @@ const missions = parseCSV("missions/Missions.csv").map(p => {
     p.coin_bonus = 4;
     p.missionId = generateId(p.item);
     p.book = {
-        Count: 1,
-        id: "minecraft:written_book",
-        tag: {
-            author: p.group,
-            display: {
-                Name: `{\"text\":\"${getMissionTitle(p.amount, p.name)}\",\"color\":\"gold\",\"italic\":false}`
-            },
-            pages: [
-                `{\"text\":\"Die §1${p.group}§r benötigt möglichst bald\n\n§l${p.amount}x ${p.name}§r\n\nUm diesen Quest anzunehmen muss dieses Buch in den FTB-Quests im Kapitel §1${p.group}§r abgegeben werden.\"}`,
-                `{\"text\":\"§oDieser Auftrag kann abgegeben oder zu einem späteren Zeitpunkt angenommen werden.§r\"}`
-            ],
-            title: getMissionTitle(p.amount, p.name),
-            resolved: true
-        }
-    };
-    if(p.item.endsWith("spawn_egg")) {
-        p.book.tags.pages.splice(1, `{\"text\":\"Für diesen Auftrag musst du eine Waffe mit der §1Capturing§r Verzauberung führen.\n\nPro Level gibt dieses Enchant eine 0.4% Chance, dass das Monster sein Ei verliert.\"}`);
+        components: { 
+            "minecraft:custom_name": `{\"extra\":[{\"bold\":true,\"italic\":false,\"text\":\"Mission:\"},{\"italic\":false,\"text\":\" \"},{\"color\":\"gold\",\"italic\":false,\"text\":\"${getMissionTitle(p.amount, p.name)}\"}],\"text\":\"\"}`, 
+            "minecraft:lore": [`{\"extra\":[{\"italic\":false,\"text\":\"§5Die §6${p.group}§5 benötigt möglichst bald §6${p.amount}x ${p.name}§5!\n\n§8§oUm diesen Quest anzunehmen muss dieses Buch in den FTB-Quests im Kapitel ${p.group} abgegeben werden.\"}],\"text\":\"\"}`] },
+        count: 1,
+        id: missionItem
     }
-    p.isTag = p.item.startsWith("#");
-    if(p.isTag) {
-        p.item = p.item.substring(1);
-    }
+
     p.icon = p.icon || p.item;
     return p
 });
@@ -57,7 +48,7 @@ const quest_tokens = {
     }),
     title: "Auftragsbücher",
     hide_tooltip: true,
-    icon: "botania:cosmetic_questgiver_mark"
+    icon: missionItem
 };
 writeSNBT("reward_tables", "quest_tokens.snbt", quest_tokens);
 
@@ -87,13 +78,7 @@ Object.values(chapters).forEach(chapter => {
         const id = generateId("mission_" + mission.missionId);
         let title = getMissionTitle(mission.amount, mission.name);
 
-        const item = mission.isTag ? {
-            id: "itemfilters:tag",
-            tag: {
-                value: mission.item
-            },
-            Count: 1
-        } : mission.item
+        const item = mission.item
 
         dataChapter.quests.push({
             id,
@@ -101,7 +86,7 @@ Object.values(chapters).forEach(chapter => {
                 {
                     count: parseInt(mission.coin_base),
                     id: generateId("reward_coins_" + mission.missionId),
-                    item: "createdeco:iron_coin",
+                    item: rewardItem,
                     random_bonus: parseInt(mission.coin_bonus),
                     team_reward: true,
                     type: "item"
@@ -134,7 +119,7 @@ Object.values(chapters).forEach(chapter => {
                 {
                     id: generateId("task_1_" + mission.missionId),
                     item: mission.book,
-                    match_nbt: true,
+                    match_components: "strict",
                     type: "item",
                     count: 1,
                     consume_items: false,
@@ -144,7 +129,7 @@ Object.values(chapters).forEach(chapter => {
                 {
                     id: generateId("task_2_" + mission.missionId),
                     item: mission.book,
-                    match_nbt: true,
+                    match_components: "strict",
                     type: "item",
                     count: 1,
                     consume_items: true
@@ -174,34 +159,6 @@ console.table(Object.values(chapters).map(chap => ({
 })));
 console.log('done');
 
-
-
-// // kubjejs file schreiben
-// console.log('Generating KubejS Quest Notifications...');
-// let kubejs = `function questComplete(event, quest) {
-//     for(let player of event.getOnlineMembers()) {
-//         event.server.tell(Text.green(\`\${player.username} hat den Auftrag "\${quest}" abgeschlossen\`));
-//         event.server.runCommandSilent(\`execute as @a[name=\${player.username}] at @s run summon firework_rocket ~ ~2 ~ {LifeTime:30,FireworksItem:{id:firework_rocket,Count:1,tag:{Fireworks:{Flight:1,Explosions:[{Type:2,Flicker:1,Trail:1,Colors:[I;14602026],FadeColors:[I;11743532]}]}}}}\`);
-//     }
-// }
-// function questAccepted(event, quest) {
-//     for(let player of event.getOnlineMembers()) {
-//         event.server.tell(Text.yellow(\`\${player.username} hat den Auftrag "\${quest}" erhalten\`));
-//     }
-// }\n\n`;
-
-
-// Object.values(chapters).forEach(chapter => {
-//     chapter.dataChapter.quests.forEach(quest => {
-//         kubejs += `//FTBQuestsEvents.started('${quest.id}', event => questAccepted(event, '${quest.title}'));\n`;
-//         kubejs += `FTBQuestsEvents.completed('${quest.id}', event => questComplete(event, '${quest.title}'));\n`;
-//     });
-// })
-
-// mkdirSync('out/serverscripts', { recursive: true });
-// writeFileSync('out/serverscripts/quests.js', kubejs);
-
-
 // Tools -------------------------------------
 
 function getMissionTitle(amount, name) {
@@ -221,7 +178,7 @@ function generateChapter(title, filename) {
         default_repeatable_quest: true,
         disable_toast: true,
         filename,
-        group: "60F280BAC7EAC29D",
+        group: chapterGroupId,
         hide_quest_details_until_startable: true,
         hide_quest_until_deps_visible: true,
         hide_quest_until_deps_complete: true,
