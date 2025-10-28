@@ -141,7 +141,9 @@ Object.values(chapters).forEach(chapter => {
                     count: parseInt(mission.amount)
                 }
             ],
-            title,
+            icon: {
+                id: mission.icon
+            },
             x: row,
             y: col
         })
