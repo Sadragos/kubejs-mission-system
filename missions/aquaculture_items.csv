@@ -1,36 +1,36 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;aquaculture:algae;Algen;16;;;;30
-item;aquaculture:arapaima;Arapaima;8;;;;25
-item;aquaculture:atlantic_cod;Atlantischer Kabeljau;8;;;;25
-item;aquaculture:atlantic_halibut;Atlantischer Heilbutt;8;;;;25
-item;aquaculture:atlantic_herring;Atlantischer Hering;8;;;;25
-item;aquaculture:blackfish;Schwarzfisch;8;;;;25
-item;aquaculture:bluegill;Bluegill;8;;;;25
-item;aquaculture:boulti;Boulti;8;;;;25
-item;aquaculture:box;Box;6;;;;30
-item;aquaculture:brown_trout;Bachforelle;8;;;;25
-item;aquaculture:capitaine;Capitaine;8;;;;25
-item;aquaculture:carp;Karpfen;8;;;;25
-item;aquaculture:catfish;Wels;8;;;;25
-item;aquaculture:driftwood;Treibholz;8;;;;30
-item;aquaculture:fish_bones;Gräten;8;;;;30
-item;aquaculture:gar;Gar;8;;;;25
-item;aquaculture:jellyfish;Qualle;8;;;;25
-item;aquaculture:lockbox;Schließfach;4;;;;20
-item;aquaculture:message_in_a_bottle;Flaschenpost;8;;;;20
-item;aquaculture:minnow;Elritze;8;;;;25
-item;aquaculture:muskellunge;Muskellunge;8;;;;25
-item;aquaculture:neptunium_ingot;Neptunium Barren;2;;;;100
-item;aquaculture:pacific_halibut;Pazifischer Heilbutt;8;;;;25
-item;aquaculture:perch;Barsch;8;;;;25
-item;aquaculture:pink_salmon;Buckellachs;8;;;;25
-item;aquaculture:piranha;Piranha;8;;;;25
-item;aquaculture:pollock;Pollock;8;;;;25
-item;aquaculture:rainbow_trout;Regenbogenforelle;8;;;;25
-item;aquaculture:red_grouper;Roter Zackenbarsch;8;;;;25
-item;aquaculture:smallmouth_bass;Schwarzbarsch;8;;;;25
-item;aquaculture:synodontis;Synodontie;8;;;;25
-item;aquaculture:tambaqui;Tambaqui;8;;;;25
-item;aquaculture:tin_can;Blechdose;8;;;;30
-item;aquaculture:treasure_chest;Schatztruhe;2;;;;10
-item;aquaculture:tuna;Thunfisch;8;;;;25
+item;aquaculture:algae;Algen;16;32;6;10;30
+item;aquaculture:box;Box;1;6;6;12;30
+item;aquaculture:lockbox;Schließfach;1;4;6;10;20
+item;aquaculture:tin_can;Blechdose;4;16;4;10;30
+item;aquaculture:message_in_a_bottle;Flaschenpost;4;16;4;12;20
+item;aquaculture:treasure_chest;Schatztruhe;1;3;6;16;10
+item;aquaculture:neptunium_ingot;Neptunium Barren;1;3;6;16;100
+item;aquaculture:arapaima;Arapaima;6;24;6;16;25
+item;aquaculture:atlantic_cod;Atlantischer Kabeljau;6;24;6;16;25
+item;aquaculture:atlantic_halibut;Atlantischer Heilbutt;6;24;6;16;25
+item;aquaculture:atlantic_herring;Atlantischer Hering;6;24;6;16;25
+item;aquaculture:blackfish;Schwarzfisch;6;24;6;16;25
+item;aquaculture:bluegill;Bluegill;6;24;6;16;25
+item;aquaculture:boulti;Boulti;6;24;6;16;25
+item;aquaculture:brown_trout;Bachforelle;6;24;6;16;25
+item;aquaculture:capitaine;Capitaine;6;24;6;16;25
+item;aquaculture:carp;Karpfen;6;24;6;16;25
+item;aquaculture:catfish;Wels;6;24;6;16;25
+item;aquaculture:driftwood;Treibholz;6;24;6;16;30
+item;aquaculture:fish_bones;Gräten;6;24;6;16;30
+item;aquaculture:gar;Gar;6;24;6;16;25
+item;aquaculture:jellyfish;Qualle;6;24;6;16;25
+item;aquaculture:minnow;Elritze;6;24;6;16;25
+item;aquaculture:muskellunge;Muskellunge;6;24;6;16;25
+item;aquaculture:pacific_halibut;Pazifischer Heilbutt;6;24;6;16;25
+item;aquaculture:perch;Barsch;6;24;6;16;25
+item;aquaculture:pink_salmon;Buckellachs;6;24;6;16;25
+item;aquaculture:piranha;Piranha;6;24;6;16;25
+item;aquaculture:pollock;Pollock;6;24;6;16;25
+item;aquaculture:rainbow_trout;Regenbogenforelle;6;24;6;16;25
+item;aquaculture:red_grouper;Roter Zackenbarsch;6;24;6;16;25
+item;aquaculture:smallmouth_bass;Schwarzbarsch;6;24;6;16;25
+item;aquaculture:synodontis;Synodontie;6;24;6;16;25
+item;aquaculture:tambaqui;Tambaqui;6;24;6;16;25
+item;aquaculture:tuna;Thunfisch;6;24;6;16;25

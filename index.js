@@ -30,7 +30,8 @@ allCsvFiles.forEach(file => {
     missions.forEach(mission => {
         const item = {
             type: mission.type,
-            name: mission.name,
+            item: mission.item,
+            name: mission.name || nameFromItem(mission.item),
             min: parseInt(mission.minAmount) || defaults.minAmount,
             max: parseInt(mission.maxAmount) || parseInt(mission.minAmount) || defaults.minAmount,
             minCoins: parseInt(mission.minCoins) || defaults.minCoins,
@@ -49,6 +50,7 @@ if (outFile === 'out/missions.js') {
 } else {
     console.log(`Reading ${outFile} and looking for marker...`);
     const finds = readFileSync(outFile).toString().split(outFileMarker);
+    console.log(`Writing ${out.filter(line => !line.startsWith('//') && line.trim().length > 0).length} Missions to ${outFile}`);
     writeFileSync(outFile, `${finds[0]}${outFileMarker}\n\n${out.join('\n')}\n`);
 }   
 
@@ -72,4 +74,9 @@ function parseCSV(file, missionIdKey) {
         result.push(obj);
     }
     return result;
+}
+
+function nameFromItem(item) {
+    const base = item.indexOf(':') === -1 ? item : item.split(':')[1];
+    return base.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
