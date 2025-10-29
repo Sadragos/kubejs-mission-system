@@ -1,0 +1,14 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;irons_spellbooks:arcane_debris;Arkaner Schrott;6;;;;100
+item;irons_spellbooks:arcane_essence;Arkane Essenz;48;;;;100
+item;irons_spellbooks:blank_rune;Blank Runestone;3;;;;50
+item;irons_spellbooks:cinder_essence;Cinder Essence;8;;;;60
+item;irons_spellbooks:common_ink;Common Ink;16;;;;100
+item;irons_spellbooks:dragonskin;Drachenhaut;2;;;;25
+item;irons_spellbooks:epic_ink;Epic Ink;4;;;;100
+item;irons_spellbooks:firefly_jar;Firefly Jar;16;;;;100
+item;irons_spellbooks:hogskin;Hogskin;16;;;;75
+item;irons_spellbooks:legendary_ink;Legendary Ink;1;;;;100
+item;irons_spellbooks:rare_ink;Rare Ink;8;;;;100
+item;irons_spellbooks:tarnished_helmet;Tarnished Crown;4;;;;100
+item;irons_spellbooks:uncommon_ink;Uncommon Ink;12;;;;100

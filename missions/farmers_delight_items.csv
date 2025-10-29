@@ -1,0 +1,9 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;farmersdelight:cooked_bacon;Gebratener Speck;64;;;;100
+item;farmersdelight:cooked_mutton_chops;Gebratene Hammelkoteletts;64;;;;100
+item;farmersdelight:hamburger;Hamburger;16;;;;75
+item;farmersdelight:kelp_roll_slice;Sushi;32;;;;100
+item;farmersdelight:rice_roll_medley_block;Gebratene Reisrollen;16;;;;100
+item;farmersdelight:shepherds_pie_block;Hirtenkuchen;16;;;;100
+item;farmersdelight:straw;Wither Rose;64;;;;100
+item;farmersdelight:vegetable_noodles;Gemüsenudeln;16;;;;50

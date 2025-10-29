@@ -1,0 +1,7 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;minecolonies:gate_iron;Eisentor;8;;;;15
+item;minecolonies:gate_wood;Holztor;8;;;;15
+item;minecolonies:plate_armor_chest;Plattenpanzer;4;;;;15
+item;minecolonies:plate_armor_helmet;Plattenhelm;4;;;;15
+item;minecolonies:plate_armor_helmet;Plattenhelm;4;;;;15
+item;minecolonies:plate_armor_legs;Plattenhose;4;;;;15

@@ -25,6 +25,7 @@ allCsvFiles.forEach(file => {
     console.log(`Parsing ${file}...`);
     const missions = parseCSV(`missions/${file}`);
     console.log(`Found ${missions.length} Missions`);
+    out.push('');
     out.push(`// ${file}`);
     missions.forEach(mission => {
         const item = {
@@ -42,7 +43,7 @@ allCsvFiles.forEach(file => {
 
 
 if (outFile === 'out/missions.js') {
-    console.log(`Writing ${out.filter(line => !line.startsWith('//')).length} Missions to ${outFile}`);
+    console.log(`Writing ${out.filter(line => !line.startsWith('//') && line.trim().length > 0).length} Missions to ${outFile}`);
     mkdirSync('out', { recursive: true });
     writeFileSync('out/missions.js', out.join('\n'));
 } else {
