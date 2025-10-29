@@ -1,2 +1,2 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;supplementaries:present;Geschenk;32;;;;100
+item;supplementaries:present;Geschenk;8;64;6;12;25

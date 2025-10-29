@@ -6,7 +6,7 @@ const seedrandom = require('seedrandom');
 const defaults = {
     minAmount: 64,
     minCoins: 8,
-    weight: 100
+    weight: 25
 }
 const outFileMarker = '// ------------------ ALL MISSIONS ------------------';
 
@@ -33,9 +33,9 @@ allCsvFiles.forEach(file => {
             item: mission.item,
             name: mission.name || nameFromItem(mission.item),
             min: parseInt(mission.minAmount) || defaults.minAmount,
-            max: parseInt(mission.maxAmount) || parseInt(mission.minAmount) || defaults.minAmount,
+            max: parseInt(mission.maxAmount) || ((parseInt(mission.minAmount) || defaults.minAmount) * 2),
             minCoins: parseInt(mission.minCoins) || defaults.minCoins,
-            maxCoins: parseInt(mission.maxCoins) || parseInt(mission.minCoins) || defaults.minCoins,
+            maxCoins: parseInt(mission.maxCoins) || ((parseInt(mission.minCoins) || defaults.minCoins) * 2),
             weight: parseInt(mission.weight) || defaults.weight,
         }
         out.push(`ALL_MISSIONS.push(${JSON.stringify(item)});`)
@@ -52,7 +52,7 @@ if (outFile === 'out/missions.js') {
     const finds = readFileSync(outFile).toString().split(outFileMarker);
     console.log(`Writing ${out.filter(line => !line.startsWith('//') && line.trim().length > 0).length} Missions to ${outFile}`);
     writeFileSync(outFile, `${finds[0]}${outFileMarker}\n\n${out.join('\n')}\n`);
-}   
+}
 
 
 
