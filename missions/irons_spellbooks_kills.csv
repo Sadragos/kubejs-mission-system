@@ -4,7 +4,7 @@ kill;irons_spellbooks:archevoker;;1;1;12;24;50
 kill;irons_spellbooks:cryomancer;;1;1;12;24;50
 kill;irons_spellbooks:dead_king;Untoter König;1;1;24;32;25
 kill;irons_spellbooks:ice_spider;;16;48;10;18;100
-kill;irons_spellbooks:keeper;;2;6;10;18;50
-kill;irons_spellbooks:necromancer;;3;12;10;18;100
+kill;irons_spellbooks:keeper;;2;6;8;18;50
+kill;irons_spellbooks:necromancer;;3;12;8;18;100
 kill;irons_spellbooks:priest;;1;1;12;24;50
 kill;irons_spellbooks:pyromancer;;1;1;12;24;50

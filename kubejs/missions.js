@@ -25,19 +25,18 @@ let events = [
         }
     },
     {weight: 4 , action: (event) => THIEF_EVENT},
-    {weight: 3 , action: (event) => AIRDROP_EVENT},
+    {weight: 4 , action: (event) => AIRDROP_EVENT},
     {weight: 2 , action: (event) => SPAWN_RACE_EVENT},
     {weight: 2 , action: (event) => PRESENT_EVENT},
     {weight: 2 , action: (event) => PLANT_EVENT},
-    {weight: 3 , action: (event) => MINE_EVENT},
-    // {weight: 3 , action: (event) => FEED_CAT_EVENT},
-    // {weight: 3 , action: (event) => FEED_FAIRY_EVENT},
-    {weight: 4 , action: (event) => RACE_EVENT},
+    {weight: 2 , action: (event) => MINE_EVENT},
+    {weight: 2 , action: (event) => RACE_EVENT},
 ];
 
 let validHuntTargets = [
     { weight: 18, id: '*', name: 'Gegner', amount: 150 },
     { weight: 5, id: 'zombie', name: 'Zombie', amount: 15 },
+    { weight: 2, id: 'silverfish', name: 'Silberfisch', amount: 15 },
     { weight: 3, id: 'skeleton', name: 'Skelett', amount: 12 },
     { weight: 3, id: 'spider', name: 'Spinne', amount: 12 },
     { weight: 1, id: 'blaze', name: 'Lohe', amount: 8 },
@@ -49,7 +48,7 @@ let validHuntTargets = [
     { weight: 2, id: 'maggot', name: 'Maden', amount: 20 },
     { weight: 1, id: 'minecraft:piglin', name: 'Piglin', amount: 8 },
     { weight: 1, id: 'minecraft:zombified_piglin', name: 'Zombie-Piglin', amount: 10 },
-    // TODO Alle Mobs
+    { weight: 1, id: 'born_in_chaos_v1:nightmare_stalker', name: 'Nightmare Stalker', amount: 1 },
 ];
 
 
@@ -293,7 +292,8 @@ const THIEF_EVENT = {
     
         let summonPos = generateSummonPos(player);
     
-        event.server.tell(`§fEin §6Zombie-Dieb§f hat der Händlergilde Tokens geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!\n -> ${toMapPosition('Dieb', summonPos, 'minecraft:overworld')}`);
+        // event.server.tell(`§fEin §6Zombie-Dieb§f hat der Händlergilde Tokens geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!\n -> ${toMapPosition('Dieb', summonPos, 'minecraft:overworld')}`);
+        event.server.tell(`§fEin §6Zombie-Dieb§f hat der Händlergilde Tokens geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
         event.server.runCommandSilent(`summon minecraft:zombie ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Zombie Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:diamond_boots",Count:1b},{id:"minecraft:diamond_leggings",Count:1b},{id:"minecraft:diamond_chestplate",Count:1b},{id:"minecraft:diamond_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"kubejs:mission_token",Count:1b},{id:"kubejs:mission_token",Count:1b}],HandDropChances:[1.0f,0.3f]}`);
         event.server.runCommandSilent(`effect give @e[name="Zombie Dieb"] minecraft:slow_falling 120`);
         event.server.runCommandSilent(`effect give @e[name="Zombie Dieb"] minecraft:strength infinite 2`);
@@ -325,7 +325,8 @@ const AIRDROP_EVENT = {
         event.server.runCommandSilent(`effect give @e[type=minecraft:item] minecraft:slow_falling 120`);
         event.server.runCommandSilent(`particle minecraft:campfire_signal_smoke ${summonPos.x} ${summonPos.y} ${summonPos.z} 0 400 0 0 500 force`);
         event.server.runCommandSilent(`particle minecraft:totem_of_undying ${summonPos.x} ${summonPos.y} ${summonPos.z} 0 400 0 0 1000 force`);
-        event.server.tell(`§fEine §6Flugmaschine hat§f bei §a${toChatPosition(summonPos)}§f Fracht verloren.\n -> ${toMapPosition('Fracht', summonPos, 'minecraft:overworld')}`);
+        // event.server.tell(`§fEine §6Flugmaschine hat§f bei §a${toChatPosition(summonPos)}§f Fracht verloren.\n -> ${toMapPosition('Fracht', summonPos, 'minecraft:overworld')}`);
+        event.server.tell(`§fEine §6Flugmaschine hat§f bei §a${toChatPosition(summonPos)}§f Fracht verloren.`);
         currentEvent.stopEvent();
     },
     stopEvent(event) {
@@ -535,166 +536,6 @@ const MINE_EVENT = {
     }
 }
 
-// const FEED_FAIRY_EVENT = {
-//     name: "Hungrige Fee",
-//     startTick: undefined,
-//     endTick: undefined,
-//     missionTime: undefined,
-
-//     dimension: undefined,
-
-//     targetAmount: undefined,
-//     actionTable: undefined,
-//     total: undefined,
-
-//     startEvent(event) {
-//         currentEvent.startTick = event.server.tickCount;
-//         currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
-//         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
-        
-//         currentEvent.targetAmount = rng(1, 64);
-//         currentEvent.actionTable = new Map();
-
-//         event.server.tell(`§6[${currentEvent.name}]§f Die §6Fee§f am Spawn ist hungrig! Bringt  ihr §6${currentEvent.targetAmount} Kuchenstücke§f. Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.`);
-//     },
-
-//     handeItemInteraction(event) {
-//         if (!event?.player?.username) return;
-//         let player = event.player;
-
-//         if (event.target.type !== 'easy_npc:fairy') return;
-//         if (event.item.id.toString().indexOf('cake') === -1) return;
-
-
-//         let cakeValue = event.item.id.toString().indexOf('slice') === -1 ? 4 : 1;
-//         let giver = String(player.username);
-//         let current = currentEvent.actionTable.get(giver) || 0;
-//         let missing = currentEvent.targetAmount - current;
-//         let take = Math.min(Math.ceil(missing/cakeValue), event.item.count);
-//         event.item.count -= take;
-
-//         currentEvent.actionTable.set(giver, (current) + (take*cakeValue));
-//         event.server.tell(`§6[${currentEvent.name}]§f §a${giver}§f hat der Fee §a${currentEvent.actionTable.get(giver)} / §a${currentEvent.targetAmount}§f Kuchenstücke gebracht.`);
-
-//         if(currentEvent.actionTable.get(giver) >= currentEvent.targetAmount) {
-//             currentEvent.stopEvent(event);
-//         }
-//     },
-
-//     stopEvent(event) {
-
-//         // get the entry with the highest count from  actionTable
-//         let participants = [];
-//         let participantNames = [];
-//         let winnerCount = 0;
-//         let winnerName = undefined;
-
-//         for (let [key, data] of currentEvent.actionTable) {
-//             participants.push(key);
-//             participantNames.push(`${key} (${data})`);
-//             if (data > winnerCount) {
-//                 winnerCount = data;
-//                 winnerName = key;
-//             }
-//         }
-
-//         let failed = winnerCount < currentEvent.targetAmount;
-//         if (failed) {
-//             event.server.tell(`§6[${currentEvent.name}]§f §cZeit ist abgelaufen - Die Fee hat keinen Hunger mehr.`);
-//             currentEvent = undefined;
-//             return;
-//         }
-
-
-//         event.server.tell(`§6[${currentEvent.name}]§f §aDie Fee ist dank ${winnerName} satt!§f\n  -> Teilnehmer: §a${participantNames.join('§f, §a')}§f\n${getTimeStats(event)}`);
-//         summonPlayerCoin(event, winnerName);
-//         currentEvent = undefined;
-//     },
-
-//     timeNotification(event) {
-//         getTimeRemaining(event);
-//     }
-// }
-
-// const FEED_CAT_EVENT = {
-//     name: "Hungrige Katze",
-//     startTick: undefined,
-//     endTick: undefined,
-//     missionTime: undefined,
-
-//     dimension: undefined,
-
-//     targetAmount: undefined,
-//     actionTable: undefined,
-//     total: undefined,
-
-//     startEvent(event) {
-//         currentEvent.startTick = event.server.tickCount;
-//         currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
-//         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
-        
-//         currentEvent.targetAmount = rng(1, 128);
-//         currentEvent.actionTable = new Map();
-
-//         event.server.tell(`§6[${currentEvent.name}]§f Die §Sprechende Katze§f am Spawn ist hungrig! Bringt  ihr §6${currentEvent.targetAmount} Fisch§f. Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.`);
-//     },
-
-//     handeItemInteraction(event) {
-//         if (!event?.player?.username) return;
-//         let player = event.player;
-
-//         if (event.target.type !== 'easy_npc:cat') return;
-//         if (!event.item.hasTag('minecraft:fishes')) return;
-
-//         let giver = String(player.username);
-//         let current = currentEvent.actionTable.get(giver) || 0;
-//         let missing = currentEvent.targetAmount - current;
-//         let take = Math.min(missing, event.item.count);
-//         event.item.count -= take;
-
-//         currentEvent.actionTable.set(giver, (current) + take);
-//         event.server.tell(`§6[${currentEvent.name}]§f §a${giver}§f hat §a${currentEvent.actionTable.get(giver)} / §a${currentEvent.targetAmount}§f Fisch an die Katze verfüttert.`);
-
-//         if(currentEvent.actionTable.get(giver) >= currentEvent.targetAmount) {
-//             currentEvent.stopEvent(event);
-//         }
-//     },
-
-//     stopEvent(event) {
-
-//         // get the entry with the highest count from  actionTable
-//         let participants = [];
-//         let participantNames = [];
-//         let winnerCount = 0;
-//         let winnerName = undefined;
-
-//         for (let [key, data] of currentEvent.actionTable) {
-//             participants.push(key);
-//             participantNames.push(`${key} (${data})`);
-//             if (data > winnerCount) {
-//                 winnerCount = data;
-//                 winnerName = key;
-//             }
-//         }
-
-//         let failed = winnerCount < currentEvent.targetAmount;
-//         if (failed) {
-//             event.server.tell(`§6[${currentEvent.name}]§f §cZeit ist abgelaufen - die sprechende Katze ist jetzt eingeschnappt und will lieder wieder raus!`);
-//             currentEvent = undefined;
-//             return;
-//         }
-
-
-//         event.server.tell(`§6[${currentEvent.name}]§f §aKatze ist dank ${winnerName} satt!§f\n  -> Teilnehmer: §a${participantNames.join('§f, §a')}§f\n${getTimeStats(event)}`);
-//         summonPlayerCoin(event, winnerName);
-//         currentEvent = undefined;
-//     },
-
-//     timeNotification(event) {
-//         getTimeRemaining(event);
-//     }
-// }
-
 const RACE_EVENT = {
     name: 'Rennen',
     startTick: undefined,
@@ -724,7 +565,8 @@ const RACE_EVENT = {
         let posZ = spawnPosition.z + rng(-raceMaxDistance, raceMaxDistance);
         currentEvent.targetPos = { x: posX, y: posY, z: posZ };
 
-        event.server.tell(`§fWer zuerst bei §6${toChatPosition(currentEvent.targetPos, true)}§f ist, gewinnt! Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.\n  -> ${toMapPosition('Rennen', currentEvent.targetPos, 'minecraft:overworld')}`);
+        // event.server.tell(`§fWer zuerst bei §6${toChatPosition(currentEvent.targetPos, true)}§f ist, gewinnt! Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.\n  -> ${toMapPosition('Rennen', currentEvent.targetPos, 'minecraft:overworld')}`);
+        event.server.tell(`§fWer zuerst bei §6${toChatPosition(currentEvent.targetPos, true)}§f ist, gewinnt! Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.`);
     },
     handleTick(event) {
         const players = event.server.players.filter(p => p.level.dimension === currentEvent.dimension);

@@ -1,14 +1,14 @@
 // priority: 0
 
-//----- letANTS ------
+//----- CONSTANTS ------
 const coinItem = 'kubejs:coin';
 const missionItem = 'kubejs:mission';
 const missionToken = 'kubejs:mission_scroll';
 
-const typeRegEx = /§lAuftrag:§r (.+?) §6\d+x .+§r/
-const nameRegEx = /§lAuftrag:§r .+? §6\d+x (.+)§r/
+const typeRegEx = /Auftrag: (.+?) §6\d+x .+§r/
+const nameRegEx = /Auftrag: .+? §6\d+x (.+)§r/
 const coinsRegex = /Belohnung: §6(\d+) Coins/
-const itemRegex = /Item: (.+)/
+const itemRegex = /Ziel: (.+)/
 const erstelltRegex = /Erstellt: (.+)/
 const playerRegex = /Von: (.+)/
 //----------------------
@@ -16,23 +16,13 @@ const playerRegex = /Von: (.+)/
 //----- MISSION TYPES -----
 const MISSION_TYPE_ITEM = {
     id: 'item',
-    text: 'Sammle',
+    text: '§aSende§r',
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem du ${name} im Inventar hast und mit dem Auftrag-Item rechtsklickst.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let need = dataItem.currentDamage;
-        let item = Item.of(dataItem.item);
-        let have = player.inventory.count(item);
 
-        if (have === 0) {
-            player.tell(`§cDir fehlen noch §6${need}x ${dataItem.name}§c, du hast aber keine im Inventar.`);
-            event.cancel();
-        }
-
-        let take = Math.min(have, need);
-
-        removeFromInventory(player, item, take);
-
+        let take = removeFromInventory(player, dataItem.item, need);
 
         let remaining = dataItem.currentDamage - take;
         if (remaining > 0) {
@@ -49,7 +39,7 @@ const MISSION_TYPE_ITEM = {
 
 const MISSION_TYPE_KILL = {
     id: 'kill',
-    text: 'Töte',
+    text: '§4Töte§r',
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem dieses Auftrag-Item im Inventar hast, während du ${name} tötest.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -72,9 +62,14 @@ const ALL_MISSIONS = [];
  * Erhalte neue Mission
  */
 ItemEvents.rightClicked(missionToken, event => {
-    event.item.count = event.item.count - 1;
-    let mission = getRandomMission();
-    giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(mission.min, mission.max), randomInt(mission.minCoins, mission.maxCoins), new Date(), event.player.username);
+    try {
+        let mission = getRandomMission();
+        giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(mission.min, mission.max), randomInt(mission.minCoins, mission.maxCoins), new Date(), event.player.username);
+        event.item.count = event.item.count - 1;
+    } catch (e) {
+        console.log(e, JSON.stringify(mission));
+        event.player.tell(`§cEs konnte keine Mission erzeugt werden! Versuch es nochmal.`);
+    }
 })
 
 /**
@@ -83,7 +78,7 @@ ItemEvents.rightClicked(missionToken, event => {
 ItemEvents.rightClicked(missionItem, event => {
     let stack = event.getItem();
     let data = getItemInfo(stack);
-    console.log(global.get('myMission'));
+    console.log(data);
 
     data.type.rightClickHandler(event, data, stack);
 });
@@ -101,8 +96,8 @@ EntityEvents.death(event => {
         let item = inventory.getItem(i);
         if (item.is(searchItem)) {
             let data = getItemInfo(item);
-            if(data.type.id === MISSION_TYPE_KILL.id && died.indexOf(data.item) !== -1) {
-                if(data.currentDamage === 1) {
+            if (data.type.id === MISSION_TYPE_KILL.id && died.indexOf(data.item) !== -1) {
+                if (data.currentDamage === 1) {
                     player.tell(`§aDu hast den letzten Kill für den Auftrag §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishItem(event, player, data);
                     item.count = 0;
@@ -128,10 +123,11 @@ function removeFromInventory(player, searchItem, amount) {
     let inv = player.inventory;
     let remaining = amount;
     let size = inv.getContainerSize();
+    
 
     for (let i = 0; i < size && remaining > 0; i++) {
         let invItem = inv.getItem(i);
-        if (invItem.is(searchItem)) {
+        if (invItem.id.indexOf(searchItem) !== -1) {
             let take = Math.min(remaining, invItem.count);
             invItem.count -= take;
             remaining -= take;
@@ -146,13 +142,13 @@ function giveMissionItem(event, type, item, name, amount, reward, erstellt, user
 
 function generateTitle(type, name, amount) {
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
-    return `§lAuftrag:§r ${missionType.text} §6${amount}x ${name}§r`;
+    return `Auftrag: ${missionType.text} §6${amount}x ${name}§r`;
 }
 
 function generateLore(type, coins, erstellt, item, name, playername) {
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
     let hint = missionType.hint(name);
-    return `Belohnung: §6${coins} Coins§7\n\n${hint}\n\n§7Item: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}`;
+    return `Belohnung: §6${coins} Coins§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}`;
 }
 
 function finishItem(event, player, data) {
@@ -225,4 +221,3 @@ function getRandomMission() {
 }
 // ------------------ ALL MISSIONS ------------------
 
-ALL_MISSIONS.push({ "type": "kill", "item": "minecraft:spider", "name": "Spinne", "min": 1, "max": 5, "minCoins": 8, "maxCoins": 8, "weight": 100 });

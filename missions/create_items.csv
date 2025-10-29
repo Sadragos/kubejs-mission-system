@@ -1,0 +1,31 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;create:andesite_casing;Andesitgehäuse;32;128;6;12;25
+item;create:asurine;Asurin;128;512;6;12;25
+item;create:belt_connector;Förderband;16;64;6;12;25
+item;create:blaze_burner;Lohenbrenner;8;32;6;12;20
+item;create:brass_casing;Messingrahmen;16;64;6;12;25
+item;create:brass_hand;Messing Hand;8;32;6;12;25
+item;create:brass_ingot;Messing;32;128;6;12;25
+item;create:cogwheel;Zahnrad;256;1024;6;12;25
+item;create:crimsite;Karmesit;128;512;6;12;25
+item;create:crushing_wheel;Mahlwerk;4;12;6;12;25
+item;create:electron_tube;Elektronenröhre;16;32;6;12;25
+item;create:experience_nugget;Erfahrungsklumpen;128;512;6;12;25
+item;create:gearbox;Getriebe;32;128;6;12;25
+item;create:honeyed_apple;Honigapfel;16;64;6;12;25
+item;create:large_cogwheel;Großes Zahnrad;128;512;6;12;25
+item;create:limestone;Kalkstein;128;1024;6;12;25
+item;create:mechanical_arm;Mechanischer Arm;6;18;6;12;25
+item;create:ochrum;Ockrum;128;512;6;12;25
+item;create:polished_rose_quartz;Polierter Rosenquartz;16;64;6;12;25
+item;create:precision_mechanism;Präzisionsgetriebe;8;16;6;12;25
+item;create:propeller;Propeller;16;32;6;12;25
+item;create:railway_casing;Zugrahmen;8;32;6;12;25
+item;create:scorchia;Scorchia;128;512;6;12;25
+item;create:scoria;Schlacke;128;512;6;12;25
+item;create:shaft;Welle;256;1024;6;12;25
+item;create:steam_whistle;Dampfpfeife;16;32;6;12;25
+item;create:sweet_roll;Rosinenschnecke;16;64;6;12;25
+item;create:veridium;Veridium;128;512;6;12;25
+item;create:whisk;Rührstab;16;32;6;12;25
+item;create:zinc_ingot;Zink;64;256;6;12;100

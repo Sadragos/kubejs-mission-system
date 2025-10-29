@@ -1,12 +1,1 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;create_connected:control_chip;Control Chip;12;;;;40
-item;createaddition:electrum_ingot;Electrum;8;;;;75
-item;croptopia:beef_wellington;Beef Wellington;16;;;;60
-item;croptopia:buttered_toast;Buttertoast;16;;;;100
-item;croptopia:doughnut;Donut;16;;;;100
-item;croptopia:fajitas;Fajitas;24;;;;90
-item;croptopia:orange;Orange;64;;;;100
-item;croptopia:peach;Pfirsisch;64;;;;100
-item;croptopia:pizza;Pizza;16;;;;75
-item;croptopia:ratatouille;Ratatouille;12;;;;50
-item;croptopia:sunny_side_eggs;Spiegelei;32;;;;100
