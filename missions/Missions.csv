@@ -1,381 +1,381 @@
-group;item;name;amount;weight;icon
-Zauberergilde;irons_spellbooks:arcane_debris;Arkaner Schrott;6;100;
-Zauberergilde;irons_spellbooks:arcane_essence;Arkane Essenz;48;100;
-Seefahrergilde;aquaculture:driftwood;Treibholz;8;30;
-Seefahrergilde;aquaculture:tin_can;Blechdose;8;30;
-Seefahrergilde;aquaculture:box;Box;6;30;
-Seefahrergilde;aquaculture:lockbox;Schließfach;4;20;
-Seefahrergilde;aquaculture:treasure_chest;Schatztruhe;2;10;
-Seefahrergilde;aquaculture:message_in_a_bottle;Flaschenpost;8;20;
-Seefahrergilde;aquaculture:algae;Algen;16;30;
-Seefahrergilde;aquaculture:fish_bones;Gräten;8;30;
-Seefahrergilde;aquaculture:atlantic_cod;Atlantischer Kabeljau;8;25;
-Seefahrergilde;aquaculture:blackfish;Schwarzfisch;8;25;
-Seefahrergilde;aquaculture:pacific_halibut;Pazifischer Heilbutt;8;25;
-Seefahrergilde;aquaculture:atlantic_halibut;Atlantischer Heilbutt;8;25;
-Seefahrergilde;aquaculture:atlantic_herring;Atlantischer Hering;8;25;
-Seefahrergilde;aquaculture:pink_salmon;Buckellachs;8;25;
-Seefahrergilde;aquaculture:pollock;Pollock;8;25;
-Seefahrergilde;aquaculture:rainbow_trout;Regenbogenforelle;8;25;
-Seefahrergilde;aquaculture:boulti;Boulti;8;25;
-Seefahrergilde;aquaculture:capitaine;Capitaine;8;25;
-Seefahrergilde;aquaculture:synodontis;Synodontie;8;25;
-Seefahrergilde;aquaculture:smallmouth_bass;Schwarzbarsch;8;25;
-Seefahrergilde;aquaculture:bluegill;Bluegill;8;25;
-Seefahrergilde;aquaculture:brown_trout;Bachforelle;8;25;
-Seefahrergilde;aquaculture:carp;Karpfen;8;25;
-Seefahrergilde;aquaculture:catfish;Wels;8;25;
-Seefahrergilde;aquaculture:gar;Gar;8;25;
-Seefahrergilde;aquaculture:minnow;Elritze;8;25;
-Seefahrergilde;aquaculture:muskellunge;Muskellunge;8;25;
-Seefahrergilde;aquaculture:perch;Barsch;8;25;
-Seefahrergilde;aquaculture:arapaima;Arapaima;8;25;
-Seefahrergilde;aquaculture:piranha;Piranha;8;25;
-Seefahrergilde;aquaculture:tambaqui;Tambaqui;8;25;
-Seefahrergilde;aquaculture:jellyfish;Qualle;8;25;
-Seefahrergilde;aquaculture:red_grouper;Roter Zackenbarsch;8;25;
-Seefahrergilde;aquaculture:tuna;Thunfisch;8;25;
-Seefahrergilde;aquaculture:neptunium_ingot;Neptunium Barren;2;100;
-Seefahrergilde;#minecraft:boats;Holzboot;64;150;minecraft:oak_boat
-Kriegergilde;born_in_chaos_v1:corpse_maggot;Maden;64;100;
-Kriegergilde;born_in_chaos_v1:ethereal_spirit;Seelen;32;100;
-Kriegergilde;born_in_chaos_v1:dark_metal_ingot;Dunkelstahlbarren;3;100;
-Kriegergilde;born_in_chaos_v1:armor_plate_from_dark_metal;Dunkelstahlplatte;1;100;
-Kriegergilde;minecraft:dragon_breath;Drachenatem;32;50;
-Kriegergilde;minecraft:rabbit_foot;Hasenfuß;4;50;
-Kriegergilde;minecraft:echo_shard;Echo Scherbe;16;50;
-Abendheurergilde;minecraft:elytra;Elytra;1;20;
-Kriegergilde;minecraft:totem_of_undying;Totem der Unsterblichkeit;2;100;
-Kriegergilde;create:experience_nugget;Erfahrungsklumpen;256;100;
-Kriegergilde;minecraft:dragon_head;Drachenkopf;1;50;
-Kriegergilde;minecraft:rotten_flesh;Verottendes Fleisch;96;150;
-Kriegergilde;minecraft:leather;Leder;64;100;
-Kriegergilde;minecraft:feather;Feder;64;100;
-Kriegergilde;minecraft:bone;Knochen;128;100;
-Kriegergilde;minecraft:prismarine_shard;Prismarinscherbe;64;100;
-Kriegergilde;minecraft:heart_of_the_sea;Herz des Meeres;1;15;
-Abendheurergilde;minecraft:nautilus_shell;Nautilusschale;1;20;
-Abendheurergilde;minecraft:netherite_upgrade_smithing_template;Schmiedevorlage;1;20;
-Kriegergilde;minecraft:spider_eye;Spinnenauge;64;100;
-Kriegergilde;minecraft:shulker_shell;Schulker;8;25;
-Kriegergilde;minecraft:ghast_tear;Ghastträne;8;25;
-Kriegergilde;#forge:ender_pearls;Enderperle;16;100;minecraft:ender_pearl
-Kriegergilde;minecraft:name_tag;Nametag;4;100;
-Kriegergilde;minecraft:phantom_membrane;Phantomhaut;8;50;
-Kriegergilde;minecraft:nautilus_shell;Nautilusschale;2;50;
-Holzfällergilde;minecraft:oak_log;Eichenstamm;512;300;
-Holzfällergilde;minecraft:spruce_log;Fichtenstamm;1536;300;
-Holzfällergilde;minecraft:birch_log;Birkenstamm;512;200;
-Holzfällergilde;minecraft:jungle_log;Tropenbaumstamm;1024;250;
-Holzfällergilde;minecraft:acacia_log;Akazienstamm;512;200;
-Holzfällergilde;minecraft:dark_oak_log;Schwarzeichenstamm;1536;150;
-Holzfällergilde;minecraft:cherry_log;Kirschstamm;512;150;
-Holzfällergilde;minecraft:mangrove_log;Mangrovenstamm;512;100;
-Holzfällergilde;minecraft:crimson_stem;Karmesinstiel;256;100;
-Holzfällergilde;minecraft:warped_stem;Wirrstiel;256;100;
-Handwerkergilde;create:shaft;Welle;256;100;
-Handwerkergilde;create:cogwheel;Zahnrad;256;100;
-Handwerkergilde;create:large_cogwheel;Großes Zahnrad;192;100;
-Handwerkergilde;create:andesite_casing;Andesitgehäuse;64;100;
-Handwerkergilde;create:brass_casing;Messingrahmen;32;100;
-Handwerkergilde;create:railway_casing;Zugrahmen;12;100;
-Handwerkergilde;create:electron_tube;Elektronenröhre;24;100;
-Handwerkergilde;create:polished_rose_quartz;Rosenquartz;32;100;
-Handwerkergilde;minecraft:stone_bricks;Steinziegel;1024;100;
-Handwerkergilde;minecraft:ladder;Eichenleiter;512;100;
-Handwerkergilde;minecraft:barrel;Fass;128;100;
-Handwerkergilde;minecraft:chest;Truhe;128;100;
-Handwerkergilde;minecraft:anvil;Amboss;16;100;
-Handwerkergilde;minecraft:scaffolding;Gerüst;256;100;
-Handwerkergilde;minecraft:crafting_table;Werkbank;256;100;
-Handwerkergilde;minecraft:furnace;Ofen;256;100;
-Handwerkergilde;minecraft:rail;Schiene;512;100;
-Handwerkergilde;minecraft:sticky_piston;Klebriger Kolben;256;100;
-Handwerkergilde;minecraft:dispenser;Werfer;192;100;
-Handwerkergilde;minecraft:observer;Beobachter;192;100;
-Handwerkergilde;minecraft:daylight_detector;Tageslichtsensor;128;100;
-Handwerkergilde;create:gearbox;Getriebe;64;100;
-Handwerkergilde;create:precision_mechanism;Präzisionsgetriebe;32;40;
-Handwerkergilde;create:steam_whistle;Dampfpfeife;24;100;
-Handwerkergilde;create:propeller;Propeller;24;100;
-Handwerkergilde;create:whisk;Rührstab;24;100;
-Handwerkergilde;create:brass_hand;Messing Hand;16;50;
-Handwerkergilde;create_connected:control_chip;Control Chip;12;40;
-Handwerkergilde;minecraft:hopper;Trichter;32;100;
-Handwerkergilde;minecraft:comparator;Komparator;32;100;
-Gilde der Gastwirte;minecraft:golden_carrot;Goldene Karotte;64;100;
-Gilde der Gastwirte;minecraft:baked_potato;Ofenkartoffel;256;100;
-Gilde der Gastwirte;minecraft:cooked_beef;Steak;64;100;
-Gilde der Gastwirte;minecraft:cooked_porkchop;Gebratenes Schweinefleisch;64;100;
-Gilde der Gastwirte;minecraft:cooked_mutton;Gebratenes Hammelfleisch;64;100;
-Gilde der Gastwirte;minecraft:cooked_chicken;Gebratenes Hühnchen;64;100;
-Gilde der Gastwirte;minecraft:cooked_rabbit;Gebratenes Kaninchen;64;100;
-Gilde der Gastwirte;minecraft:cooked_cod;Gebratener Kabeljau;64;100;
-Gilde der Gastwirte;minecraft:cooked_salmon;Gebratener Lachs;64;100;
-Gilde der Gastwirte;minecraft:bread;Brot;128;100;
-Gilde der Gastwirte;minecraft:cookie;Kekse;256;100;
-Gilde der Gastwirte;minecraft:pumpkin_pie;Kürbiskuchen;64;100;
-Gilde der Gastwirte;minecraft:apple;Apfel;96;100;
-Gilde der Gastwirte;create:honeyed_apple;Honigapfel;16;75;
-Gilde der Gastwirte;create:sweet_roll;Rosinenschnecke;16;100;
-Gilde der Gastwirte;minecraft:chorus_fruit;Chorous Frucht;64;50;
-Gilde der Gastwirte;minecraft:sugar;Zucker;64;100;
-Gilde der Gastwirte;minecraft:wheat;Weizen;128;200;
-Gilde der Gastwirte;minecraft:pumpkin;Kürbis;64;200;
-Gilde der Gastwirte;minecraft:melon;Melone;64;200;
-Gilde der Gastwirte;farmersdelight:cooked_mutton_chops;Gebratene Hammelkoteletts;64;100;
-Gilde der Gastwirte;farmersdelight:cooked_bacon;Gebratener Speck;64;100;
-Gilde der Gastwirte;farmersdelight:kelp_roll_slice;Sushi;32;100;
-Gilde der Gastwirte;farmersdelight:hamburger;Hamburger;16;75;
-Gilde der Gastwirte;farmersdelight:vegetable_noodles;Gemüsenudeln;16;50;
-Gilde der Gastwirte;farmersdelight:shepherds_pie_block;Hirtenkuchen;16;100;
-Gilde der Gastwirte;farmersdelight:rice_roll_medley_block;Gebratene Reisrollen;16;100;
-Gilde der Gastwirte;croptopia:buttered_toast;Buttertoast;16;100;
-Gilde der Gastwirte;croptopia:doughnut;Donut;16;100;
-Gilde der Gastwirte;croptopia:fajitas;Fajitas;24;90;
-Gilde der Gastwirte;croptopia:ratatouille;Ratatouille;12;50;
-Gilde der Gastwirte;croptopia:sunny_side_eggs;Spiegelei;32;100;
-Gilde der Gastwirte;croptopia:pizza;Pizza;16;75;
-Gilde der Gastwirte;croptopia:beef_wellington;Beef Wellington;16;60;
-Gilde der Gastwirte;minecraft:beetroot;Rote Beete;256;200;
-Gilde der Gastwirte;minecraft:potato;Kartoffel;256;200;
-Gilde der Gastwirte;minecraft:carrot;Karotte;256;200;
-Gilde der Gastwirte;croptopia:orange;Orange;64;100;
-Gilde der Gastwirte;croptopia:peach;Pfirsisch;64;100;
-Gilde der Gastwirte;minecraft:cake;Kuchen;8;100;
-Gärtner;minecraft:coarse_dirt;Grobe Erde;256;100;
-Gärtner;minecraft:fern;Farn;128;100;
-Gärtner;minecraft:grass;Grass;128;100;
-Gärtner;minecraft:grass_block;Grassblock;512;100;
-Gärtner;minecraft:dirt;Erde;1024;100;
-Gärtner;minecraft:azalea_leaves;Azaleenlaub;128;100;
-Gärtner;minecraft:flowering_azalea_leaves;Blühendes Azaleenlaub;64;100;
-Gärtner;minecraft:poppy;Mohn;64;100;
-Gärtner;minecraft:dandelion;Löwenzahn;64;100;
-Gärtner;minecraft:glow_lichen;Leuchtflechten;128;100;
-Gärtner;minecraft:moss_block;Moosblock;512;100;
-Gärtner;minecraft:moss_carpet;Moosteppich;256;100;
-Gärtner;minecraft:mossy_cobblestone;Bemooster Bruchstein;256;100;
-Gärtner;minecraft:cobblestone;Bruchstein;2048;250;
-Gärtner;minecraft:mossy_stone_bricks;Bemooste Steinziegel;256;100;
-Gärtner;minecraft:cracked_stone_bricks;Rissige Steinziegel;256;100;
-Gärtner;minecraft:big_dripleaf;Großes Tropfblad;64;100;
-Gärtner;minecraft:small_dripleaf;Kleines Tropfblatt;64;100;
-Gärtner;minecraft:vine;Ranken;128;100;
-Holzfällergilde;minecraft:oak_sapling;Eichensetzling;128;100;
-Holzfällergilde;minecraft:birch_sapling;Birkensetzling;128;100;
-Holzfällergilde;minecraft:spruce_sapling;Fichtensetzling;128;100;
-Holzfällergilde;minecraft:jungle_sapling;Tropensetzling;128;100;
-Holzfällergilde;minecraft:acacia_sapling;Akaziensetzling;128;100;
-Holzfällergilde;minecraft:dark_oak_sapling;Schwarzeichensetzling;128;100;
-Holzfällergilde;minecraft:cherry_sapling;Kirschsetzling;256;100;
-Holzfällergilde;minecraft:mangrove_propagule;Mangrovenkeimling;256;100;
-Gärtner;minecraft:oak_leaves;Eichenlaub;256;100;
-Gärtner;minecraft:birch_leaves;Birkenlaub;256;100;
-Gärtner;minecraft:spruce_leaves;Fichtenlaub;256;100;
-Gärtner;minecraft:jungle_leaves;Tropenbaumlaub;256;100;
-Gärtner;minecraft:acacia_leaves;Akazienlaub;256;100;
-Gärtner;minecraft:dark_oak_leaves;Schwarzeichenlaub;256;100;
-Gärtner;minecraft:cherry_leaves;Kirschlaub;256;100;
-Gärtner;minecraft:mangrove_leaves;Mangrovenlaub;256;100;
-Gärtner;minecraft:azalea;Azalee;64;100;
-Gärtner;minecraft:flowering_azalea;Blühende Azalee;64;100;
-Gärtner;minecraft:lantern;Laterne;64;100;
-Gärtner;minecraft:shroomlight;Pilzlicht;64;75;
-Gärtner;irons_spellbooks:firefly_jar;Firefly Jar;16;100;
-Gärtner;minecraft:flower_pot;Blumentopf;32;100;
-Gärtner;minecraft:packed_mud;Fester Schlamm;256;100;
-Gärtner;minecraft:lily_pad;Seerosenblatt;32;100;
-Zauberergilde;minecraft:beacon;Leuchtfeuer;1;20;
-Zauberergilde;minecraft:lodestone;Leitstein;2;20;
-Zauberergilde;minecraft:end_crystal;Enderkristall;16;50;
-Zauberergilde;minecraft:respawn_anchor;Seelenanker;8;50;
-Zauberergilde;minecraft:enchanting_table;Verzauberungstisch;8;75;
-Zauberergilde;minecraft:book;Buch;256;100;
-Zauberergilde;minecraft:ender_chest;Endertruhe;10;100;
-Zauberergilde;minecraft:calibrated_sculk_sensor;Kalibrierter Sculksensor;12;50;
-Bergbaumeisterei;minecraft:tnt;TNT;64;100;
-Bergbaumeisterei;minecraft:torch;Fackel;512;100;
-Bergbaumeisterei;minecraft:chain;Kette;192;100;
-Bergbaumeisterei;minecraft:candle;Kerze;128;100;
-Bergbaumeisterei;minecraft:cobblestone;Stein;2048;250;
-Bergbaumeisterei;minecraft:cobbled_deepslate;Tiefenschiefer;2048;200;
-Bergbaumeisterei;minecraft:sand;Sand;2048;100;
-Bergbaumeisterei;minecraft:sandstone;Sandstein;1024;100;
-Bergbaumeisterei;minecraft:red_sand;Roter Sand;512;100;
-Bergbaumeisterei;minecraft:terracotta;Terracotta;512;100;
-Bergbaumeisterei;minecraft:netherrack;Netherrack;2048;100;
-Bergbaumeisterei;minecraft:end_stone;Endstein;1024;100;
-Bergbaumeisterei;minecraft:soul_sand;Seelensand;512;100;
-Bergbaumeisterei;minecraft:dirt;Erde;2048;250;
-Bergbaumeisterei;minecraft:mud;Schlamm;512;100;
-Bergbaumeisterei;minecraft:rooted_dirt;Wurzelerde;32;100;
-Bergbaumeisterei;minecraft:tuff;Tuffstein;512;100;
-Bergbaumeisterei;minecraft:andesite;Andesite;1024;100;
-Bergbaumeisterei;minecraft:diorite;Diorit;1024;100;
-Bergbaumeisterei;minecraft:granite;Grannit;1024;100;
-Bergbaumeisterei;minecraft:basalt;Basalt;2048;100;
-Bergbaumeisterei;minecraft:gravel;Kies;2048;200;
-Bergbaumeisterei;minecraft:calcite;Kalzit;128;100;
-Bergbaumeisterei;minecraft:blackstone;Schwarzstein;512;100;
-Bergbaumeisterei;minecraft:gilded_blackstone;Golddurchzogener Schwarzstein;8;100;
-Bergbaumeisterei;minecraft:grass_block;Grassblock;512;100;
-Bergbaumeisterei;minecraft:obsidian;Obsidian;128;100;
-Bergbaumeisterei;minecraft:dripstone_block;Tropfstesinblock;64;100;
-Bergbaumeisterei;minecraft:pointed_dripstone;Spitzer Tropfstein;64;100;
-Bergbaumeisterei;minecraft:clay;Lehm;512;100;
-Bergbaumeisterei;minecraft:quartz;Netherquarz;128;100;
-Bergbaumeisterei;create:asurine;Asurin;512;100;
-Bergbaumeisterei;create:crimsite;Karmesit;512;100;
-Bergbaumeisterei;create:veridium;Veridium;512;100;
-Bergbaumeisterei;create:ochrum;Ockrum;512;100;
-Bergbaumeisterei;create:limestone;Kalkstein;512;100;
-Bergbaumeisterei;create:scoria;Schlacke;512;100;
-Bergbaumeisterei;create:scorchia;Scorchia;512;100;
-Bergbaumeisterei;minecraft:amethyst_block;Amethystblock;512;100;
-Bergbaumeisterei;minecraft:ancient_debris;Antiker Schrott;6;100;
-Bergbaumeisterei;minecraft:magma_block;Magmablock;256;100;
-Bergbaumeisterei;minecraft:sculk;Skulk;256;100;
-Bergbaumeisterei;minecraft:iron_ingot;Eisen;128;350;
-Bergbaumeisterei;minecraft:copper_ingot;Kupfer;192;300;
-Bergbaumeisterei;minecraft:gold_ingot;Gold;64;250;
-Bergbaumeisterei;minecraft:netherite_ingot;Netherit;1;75;
-Bergbaumeisterei;minecraft:coal;Kohle;128;250;
-Bergbaumeisterei;minecraft:charcoal;Holzkohle;128;100;
-Bergbaumeisterei;minecraft:diamond;Diamant;16;100;
-Bergbaumeisterei;minecraft:emerald;Smaragd;64;100;
-Bergbaumeisterei;create:zinc_ingot;Zink;128;150;
-Bergbaumeisterei;minecraft:redstone;Redstone;128;150;
-Bergbaumeisterei;minecraft:lapis_lazuli;Lapis;64;150;
-Abendheurergilde;minecraft:leather_helmet;Lederkappe;8;100;
-Abendheurergilde;minecraft:leather_chestplate;Lederjacke;8;100;
-Abendheurergilde;minecraft:leather_leggings;Lederhose;8;100;
-Abendheurergilde;minecraft:leather_boots;Lederstiefel;8;100;
-Abendheurergilde;minecraft:iron_helmet;Eisenhelm;16;100;
-Abendheurergilde;minecraft:iron_chestplate;Eisenharnisch;16;100;
-Abendheurergilde;minecraft:iron_leggings;Eisenbeinschutz;16;100;
-Abendheurergilde;minecraft:iron_boots;Eisenstiefel;16;100;
-Abendheurergilde;minecraft:golden_helmet;Goldhelm;8;100;
-Abendheurergilde;minecraft:golden_chestplate;Goldharnisch;8;100;
-Abendheurergilde;minecraft:golden_leggings;Goldbeinschutz;8;100;
-Abendheurergilde;minecraft:golden_boots;Goldstiefel;8;100;
-Abendheurergilde;minecraft:diamond_helmet;Diamanthelm;6;100;
-Abendheurergilde;minecraft:diamond_chestplate;Diamantharnisch;6;100;
-Abendheurergilde;minecraft:diamond_leggings;Diamantbeinschutz;6;100;
-Abendheurergilde;minecraft:diamond_boots;Diamantstiefel;6;100;
-Abendheurergilde;minecraft:iron_pickaxe;Eisenspitzhacke;16;100;
-Abendheurergilde;minecraft:iron_axe;Eisenaxt;16;100;
-Abendheurergilde;minecraft:iron_hoe;Eisenhacke;16;100;
-Abendheurergilde;minecraft:iron_shovel;Eisenschaufel;16;100;
-Abendheurergilde;minecraft:iron_sword;Eisenschwert;16;100;
-Abendheurergilde;minecraft:golden_pickaxe;Goldspitzhacke;12;100;
-Abendheurergilde;minecraft:golden_axe;Goldaxt;12;100;
-Abendheurergilde;minecraft:golden_hoe;Goldhacke;12;100;
-Abendheurergilde;minecraft:golden_shovel;Goldschaufel;12;100;
-Abendheurergilde;minecraft:golden_sword;Goldschwert;12;100;
-Abendheurergilde;minecraft:diamond_pickaxe;Diamantspitzhacke;6;100;
-Abendheurergilde;minecraft:diamond_axe;Diamantaxt;6;100;
-Abendheurergilde;minecraft:diamond_hoe;Diamanthacke;6;100;
-Abendheurergilde;minecraft:diamond_shovel;Diamantschaufel;6;100;
-Abendheurergilde;minecraft:diamond_sword;Diamantschwert;6;100;
-Abendheurergilde;minecraft:chainmail_helmet;Kettenhaube;18;100;
-Abendheurergilde;minecraft:chainmail_chestplate;Kettenhemd;18;100;
-Abendheurergilde;minecraft:chainmail_leggings;Kettenhose;18;100;
-Abendheurergilde;minecraft:chainmail_boots;Kettenstiefel;18;100;
-Abendheurergilde;minecraft:firework_rocket;Feuerwerksrakete;128;100;
-Kriegergilde;born_in_chaos_v1:seedof_chaos;Seed of Chaos;16;75;
-Kriegergilde;minecraft:bone;Knochen;128;100;
-Handwerkergilde;create:belt_connector;Förderband;32;100;
-Kriegergilde;minecraft:wither_skeleton_skull;Wither Skelettschädel;4;75;
-Kriegergilde;minecraft:blaze_rod;Lohenrute;32;75;
-Zauberergilde;botania:life_essence;Essenz des Ewigen Leben;2;25;
-Zauberergilde;minecraft:nether_wart;Netherwarze;64;75;
-Zauberergilde;minecraft:honey_bottle;Honigflasche;32;100;
-Zauberergilde;minecraft:honeycomb;Honigwabe;32;100;
-Kriegergilde;deeperdarker:warden_carapace;Warden Carapce;1;25;
-Abendheurergilde;supplementaries:present;Geschenk;32;100;
-Abendheurergilde;minecraft:arrow;Pfeil;512;100;
-Abendheurergilde;minecraft:shield;Schild;24;100;
-Zauberergilde;irons_spellbooks:blank_rune;Blank Runestone;3;50;
-Zauberergilde;irons_spellbooks:cinder_essence;Cinder Essence;8;60;
-Kriegergilde;irons_spellbooks:dragonskin;Drachenhaut;2;25;
-Kriegergilde;born_in_chaos_v1:fused_bone;Fused Bone;16;100;
-Gärtner;minecraft:jack_o_lantern;Kürbislaterne;32;100;
-Gärtner;minecraft:sea_pickle;Meeresgurke;64;100;
-Abendheurergilde;minecraft:end_rod;Endstab;16;50;
-Abendheurergilde;minecraft:spyglass;Fernglas;16;100;
-Abendheurergilde;minecraft:map;Leere Karte;32;100;
-Kriegergilde;born_in_chaos_v1:nightmare_stalker_skull;Nightmare Stalker Skull;1;50;
-Handwerkergilde;create:crushing_wheel;Mahlwerk;8;80;
-Handwerkergilde;create:blaze_burner;Lohenbrenner;16;75;
-Handwerkergilde;create:mechanical_arm;Mechanischer Arm;16;100;
-Kriegergilde;born_in_chaos_v1:nightmare_claw;Nightmare Stalker Claw;2;50;
-Kriegergilde;born_in_chaos_v1:phantom_powder;Phantom Powder;8;75;
-Kriegergilde;minecraft:magma_cream;Magmacreme;64;100;
-Kriegergilde;minecraft:slime_ball;Schleimball;64;100;
-Kriegergilde;born_in_chaos_v1:dark_rod;Dark Rod;8;100;
-Kriegergilde;born_in_chaos_v1:shattered_skull;Shattered Skull;4;100;
-Kriegergilde;born_in_chaos_v1:fire_dust;Fire Light Dust;8;100;
-Kriegergilde;minecraft:shulker_shell;Shilker-Shale;8;50;
-Abendheurergilde;minecraft:feather;Feder;64;100;
-Abendheurergilde;minecraft:egg;Ei;64;100;
-Abendheurergilde;minecraft:cobweb;Spinnennetz;16;100;
-Zauberergilde;minecraft:bookshelf;Bücherregal;32;100;
-Kriegergilde;minecraft:ender_eye;Enderauge;8;50;
-Abendheurergilde;minecraft:target;Zielblock;32;100;
-Handwerkergilde;minecraft:bricks;Ziegelsteine;512;100;
-Abendheurergilde;minecraft:sculk_catalyst;Sculk-Katalysator;4;50;
-Handwerkergilde;minecolonies:gate_wood;Holztor;8;15;
-Handwerkergilde;minecolonies:gate_iron;Eisentor;8;15;
-Abendheurergilde;minecolonies:plate_armor_helmet;Plattenhelm;4;15;
-Abendheurergilde;minecolonies:plate_armor_chest;Plattenpanzer;4;15;
-Abendheurergilde;minecolonies:plate_armor_legs;Plattenhose;4;15;
-Gärtner;minecraft:dead_bush;Toter Busch;128;100;
-Abendheurergilde;minecolonies:plate_armor_helmet;Plattenhelm;4;15;
-Gärtner;minecraft:bamboo;Bambus;512;100;
-Gärtner;minecraft:spore_blossom;Sporenblüte;4;100;
-Gärtner;minecraft:amethyst_cluster;Amethysthaufen;32;100;
-Gärtner;minecraft:campfire;Lagerfeuer;128;100;
-Zauberergilde;irons_spellbooks:common_ink;Common Ink;16;100;
-Zauberergilde;irons_spellbooks:uncommon_ink;Uncommon Ink;12;100;
-Zauberergilde;irons_spellbooks:rare_ink;Rare Ink;8;100;
-Zauberergilde;irons_spellbooks:epic_ink;Epic Ink;4;100;
-Zauberergilde;irons_spellbooks:legendary_ink;Legendary Ink;1;100;
-Kriegergilde;minecraft:gunpowder;Schwarzpulver;128;100;
-Kriegergilde;born_in_chaos_v1:orbofthe_summoner;Orb of the Summoner;4;100;
-Kriegergilde;born_in_chaos_v1:monster_skin;Monster Skin;32;100;
-Kriegergilde;born_in_chaos_v1:fangofthe_hound_leader;Fang of the Hound Leader;1;50;
-Kriegergilde;born_in_chaos_v1:lifestealer_skull;Lifestealer Skull;1;50;
-Kriegergilde;minecraft:player_head;Spielerkopf;1;100;
-Handwerkergilde;minecraft:lava_bucket;Lavaeimer;24;100;
-Handwerkergilde;minecraft:glass;Glass;512;100;
-Handwerkergilde;minecraft:tinted_glass;Getöntes Glas;128;100;
-Handwerkergilde;create:brass_ingot;Messing;64;75;
-Handwerkergilde;minecraft:purpur_block;Purpur Block;256;25;
-Handwerkergilde;prettypipes:pipe;Röhre;256;100;
-Kriegergilde;minecraft:skeleton_skull;Skelettschädel;1;50;
-Kriegergilde;minecraft:creeper_head;Creeperschädel;1;50;
-Zauberergilde;minecraft:glow_ink_sac;Leuchttintenbeutel;32;100;
-Kriegergilde;born_in_chaos_v1:wood_splitter_axe;Holzaxt;2;100;
-Kriegergilde;born_in_chaos_v1:diamond_termite_shard;Diamanttermintenscherbe;16;100;
-Kriegergilde;irons_spellbooks:tarnished_helmet;Tarnished Crown;4;100;
-Kriegergilde;born_in_chaos_v1:mesh_door;Mesh Door;2;100;
-Bergbaumeisterei;createaddition:electrum_ingot;Electrum;8;75;
-Kriegergilde;irons_spellbooks:hogskin;Hogskin;16;75;
-Kriegergilde;graveyard:corruption;Korruption;16;100;
-Kriegergilde;minecraft:wither_rose;Wither Rose;16;50;
-Gärtner;farmersdelight:straw;Wither Rose;64;100;
-Kriegergilde;born_in_chaos_v1:trident_hayfork;Pitchfork;2;75;
-Kriegergilde;born_in_chaos_v1:staff_of_magic_arrows;Staff of Magic Arrows;2;75;
-Abendheurergilde;deeperdarker:soul_crystal;Soul Crystal;4;75;
-Abendheurergilde;deeperdarker:soul_dust;Soul Dust;16;75;
-Kriegergilde;deeperdarker:sculk_bone;Sculk Bone;32;75;
-Kriegergilde;deeperdarker:resonarium;Resonarium;32;75;
-Gärtner;deeperdarker:bloom_berries;Bloom Berries;256;75;
-Holzfällergilde;deeperdarker:echo_sapling;Echo Sappling;128;75;
-Bergbaumeisterei;deeperdarker:sculk_stone;Sculk Stone;2048;75;
-Bergbaumeisterei;deeperdarker:gloomslate;Gloomslate;2048;75;
-Gärtner;deeperdarker:sculk_gleam;Sculk Gleam;128;75;
-Holzfällergilde;deeperdarker:echo_log;Echo Log;256;75;
-Gärtner;deeperdarker:gloomy_cactus;Gloomy Cactus;64;75;
-Kriegergilde;born_in_chaos_v1:gnawed_bones;Gnawed Bones;16;100;
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;irons_spellbooks:arcane_debris;Arkaner Schrott;6;;;;100
+item;irons_spellbooks:arcane_essence;Arkane Essenz;48;;;;100
+item;aquaculture:driftwood;Treibholz;8;;;;30
+item;aquaculture:tin_can;Blechdose;8;;;;30
+item;aquaculture:box;Box;6;;;;30
+item;aquaculture:lockbox;Schließfach;4;;;;20
+item;aquaculture:treasure_chest;Schatztruhe;2;;;;10
+item;aquaculture:message_in_a_bottle;Flaschenpost;8;;;;20
+item;aquaculture:algae;Algen;16;;;;30
+item;aquaculture:fish_bones;Gräten;8;;;;30
+item;aquaculture:atlantic_cod;Atlantischer Kabeljau;8;;;;25
+item;aquaculture:blackfish;Schwarzfisch;8;;;;25
+item;aquaculture:pacific_halibut;Pazifischer Heilbutt;8;;;;25
+item;aquaculture:atlantic_halibut;Atlantischer Heilbutt;8;;;;25
+item;aquaculture:atlantic_herring;Atlantischer Hering;8;;;;25
+item;aquaculture:pink_salmon;Buckellachs;8;;;;25
+item;aquaculture:pollock;Pollock;8;;;;25
+item;aquaculture:rainbow_trout;Regenbogenforelle;8;;;;25
+item;aquaculture:boulti;Boulti;8;;;;25
+item;aquaculture:capitaine;Capitaine;8;;;;25
+item;aquaculture:synodontis;Synodontie;8;;;;25
+item;aquaculture:smallmouth_bass;Schwarzbarsch;8;;;;25
+item;aquaculture:bluegill;Bluegill;8;;;;25
+item;aquaculture:brown_trout;Bachforelle;8;;;;25
+item;aquaculture:carp;Karpfen;8;;;;25
+item;aquaculture:catfish;Wels;8;;;;25
+item;aquaculture:gar;Gar;8;;;;25
+item;aquaculture:minnow;Elritze;8;;;;25
+item;aquaculture:muskellunge;Muskellunge;8;;;;25
+item;aquaculture:perch;Barsch;8;;;;25
+item;aquaculture:arapaima;Arapaima;8;;;;25
+item;aquaculture:piranha;Piranha;8;;;;25
+item;aquaculture:tambaqui;Tambaqui;8;;;;25
+item;aquaculture:jellyfish;Qualle;8;;;;25
+item;aquaculture:red_grouper;Roter Zackenbarsch;8;;;;25
+item;aquaculture:tuna;Thunfisch;8;;;;25
+item;aquaculture:neptunium_ingot;Neptunium Barren;2;;;;100
+item;#minecraft:boats;;;;;;
+item;born_in_chaos_v1:corpse_maggot;Maden;64;;;;100
+item;born_in_chaos_v1:ethereal_spirit;Seelen;32;;;;100
+item;born_in_chaos_v1:dark_metal_ingot;Dunkelstahlbarren;3;;;;100
+item;born_in_chaos_v1:armor_plate_from_dark_metal;Dunkelstahlplatte;1;;;;100
+item;minecraft:dragon_breath;Drachenatem;32;;;;50
+item;minecraft:rabbit_foot;Hasenfuß;4;;;;50
+item;minecraft:echo_shard;Echo Scherbe;16;;;;50
+item;minecraft:elytra;Elytra;1;;;;20
+item;minecraft:totem_of_undying;Totem der Unsterblichkeit;2;;;;100
+item;create:experience_nugget;Erfahrungsklumpen;256;;;;100
+item;minecraft:dragon_head;Drachenkopf;1;;;;50
+item;minecraft:rotten_flesh;Verottendes Fleisch;96;;;;150
+item;minecraft:leather;Leder;64;;;;100
+item;minecraft:feather;Feder;64;;;;100
+item;minecraft:bone;Knochen;128;;;;100
+item;minecraft:prismarine_shard;Prismarinscherbe;64;;;;100
+item;minecraft:heart_of_the_sea;Herz des Meeres;1;;;;15
+item;minecraft:nautilus_shell;Nautilusschale;1;;;;20
+item;minecraft:netherite_upgrade_smithing_template;Schmiedevorlage;1;;;;20
+item;minecraft:spider_eye;Spinnenauge;64;;;;100
+item;minecraft:shulker_shell;Schulker;8;;;;25
+item;minecraft:ghast_tear;Ghastträne;8;;;;25
+item;#forge:ender_pearls;;;;;;
+item;minecraft:name_tag;Nametag;4;;;;100
+item;minecraft:phantom_membrane;Phantomhaut;8;;;;50
+item;minecraft:nautilus_shell;Nautilusschale;2;;;;50
+item;minecraft:oak_log;Eichenstamm;512;;;;300
+item;minecraft:spruce_log;Fichtenstamm;1536;;;;300
+item;minecraft:birch_log;Birkenstamm;512;;;;200
+item;minecraft:jungle_log;Tropenbaumstamm;1024;;;;250
+item;minecraft:acacia_log;Akazienstamm;512;;;;200
+item;minecraft:dark_oak_log;Schwarzeichenstamm;1536;;;;150
+item;minecraft:cherry_log;Kirschstamm;512;;;;150
+item;minecraft:mangrove_log;Mangrovenstamm;512;;;;100
+item;minecraft:crimson_stem;Karmesinstiel;256;;;;100
+item;minecraft:warped_stem;Wirrstiel;256;;;;100
+item;create:shaft;Welle;256;;;;100
+item;create:cogwheel;Zahnrad;256;;;;100
+item;create:large_cogwheel;Großes Zahnrad;192;;;;100
+item;create:andesite_casing;Andesitgehäuse;64;;;;100
+item;create:brass_casing;Messingrahmen;32;;;;100
+item;create:railway_casing;Zugrahmen;12;;;;100
+item;create:electron_tube;Elektronenröhre;24;;;;100
+item;create:polished_rose_quartz;Rosenquartz;32;;;;100
+item;minecraft:stone_bricks;Steinziegel;1024;;;;100
+item;minecraft:ladder;Eichenleiter;512;;;;100
+item;minecraft:barrel;Fass;128;;;;100
+item;minecraft:chest;Truhe;128;;;;100
+item;minecraft:anvil;Amboss;16;;;;100
+item;minecraft:scaffolding;Gerüst;256;;;;100
+item;minecraft:crafting_table;Werkbank;256;;;;100
+item;minecraft:furnace;Ofen;256;;;;100
+item;minecraft:rail;Schiene;512;;;;100
+item;minecraft:sticky_piston;Klebriger Kolben;256;;;;100
+item;minecraft:dispenser;Werfer;192;;;;100
+item;minecraft:observer;Beobachter;192;;;;100
+item;minecraft:daylight_detector;Tageslichtsensor;128;;;;100
+item;create:gearbox;Getriebe;64;;;;100
+item;create:precision_mechanism;Präzisionsgetriebe;32;;;;40
+item;create:steam_whistle;Dampfpfeife;24;;;;100
+item;create:propeller;Propeller;24;;;;100
+item;create:whisk;Rührstab;24;;;;100
+item;create:brass_hand;Messing Hand;16;;;;50
+item;create_connected:control_chip;Control Chip;12;;;;40
+item;minecraft:hopper;Trichter;32;;;;100
+item;minecraft:comparator;Komparator;32;;;;100
+item;minecraft:golden_carrot;Goldene Karotte;64;;;;100
+item;minecraft:baked_potato;Ofenkartoffel;256;;;;100
+item;minecraft:cooked_beef;Steak;64;;;;100
+item;minecraft:cooked_porkchop;Gebratenes Schweinefleisch;64;;;;100
+item;minecraft:cooked_mutton;Gebratenes Hammelfleisch;64;;;;100
+item;minecraft:cooked_chicken;Gebratenes Hühnchen;64;;;;100
+item;minecraft:cooked_rabbit;Gebratenes Kaninchen;64;;;;100
+item;minecraft:cooked_cod;Gebratener Kabeljau;64;;;;100
+item;minecraft:cooked_salmon;Gebratener Lachs;64;;;;100
+item;minecraft:bread;Brot;128;;;;100
+item;minecraft:cookie;Kekse;256;;;;100
+item;minecraft:pumpkin_pie;Kürbiskuchen;64;;;;100
+item;minecraft:apple;Apfel;96;;;;100
+item;create:honeyed_apple;Honigapfel;16;;;;75
+item;create:sweet_roll;Rosinenschnecke;16;;;;100
+item;minecraft:chorus_fruit;Chorous Frucht;64;;;;50
+item;minecraft:sugar;Zucker;64;;;;100
+item;minecraft:wheat;Weizen;128;;;;200
+item;minecraft:pumpkin;Kürbis;64;;;;200
+item;minecraft:melon;Melone;64;;;;200
+item;farmersdelight:cooked_mutton_chops;Gebratene Hammelkoteletts;64;;;;100
+item;farmersdelight:cooked_bacon;Gebratener Speck;64;;;;100
+item;farmersdelight:kelp_roll_slice;Sushi;32;;;;100
+item;farmersdelight:hamburger;Hamburger;16;;;;75
+item;farmersdelight:vegetable_noodles;Gemüsenudeln;16;;;;50
+item;farmersdelight:shepherds_pie_block;Hirtenkuchen;16;;;;100
+item;farmersdelight:rice_roll_medley_block;Gebratene Reisrollen;16;;;;100
+item;croptopia:buttered_toast;Buttertoast;16;;;;100
+item;croptopia:doughnut;Donut;16;;;;100
+item;croptopia:fajitas;Fajitas;24;;;;90
+item;croptopia:ratatouille;Ratatouille;12;;;;50
+item;croptopia:sunny_side_eggs;Spiegelei;32;;;;100
+item;croptopia:pizza;Pizza;16;;;;75
+item;croptopia:beef_wellington;Beef Wellington;16;;;;60
+item;minecraft:beetroot;Rote Beete;256;;;;200
+item;minecraft:potato;Kartoffel;256;;;;200
+item;minecraft:carrot;Karotte;256;;;;200
+item;croptopia:orange;Orange;64;;;;100
+item;croptopia:peach;Pfirsisch;64;;;;100
+item;minecraft:cake;Kuchen;8;;;;100
+item;minecraft:coarse_dirt;Grobe Erde;256;;;;100
+item;minecraft:fern;Farn;128;;;;100
+item;minecraft:grass;Grass;128;;;;100
+item;minecraft:grass_block;Grassblock;512;;;;100
+item;minecraft:dirt;Erde;1024;;;;100
+item;minecraft:azalea_leaves;Azaleenlaub;128;;;;100
+item;minecraft:flowering_azalea_leaves;Blühendes Azaleenlaub;64;;;;100
+item;minecraft:poppy;Mohn;64;;;;100
+item;minecraft:dandelion;Löwenzahn;64;;;;100
+item;minecraft:glow_lichen;Leuchtflechten;128;;;;100
+item;minecraft:moss_block;Moosblock;512;;;;100
+item;minecraft:moss_carpet;Moosteppich;256;;;;100
+item;minecraft:mossy_cobblestone;Bemooster Bruchstein;256;;;;100
+item;minecraft:cobblestone;Bruchstein;2048;;;;250
+item;minecraft:mossy_stone_bricks;Bemooste Steinziegel;256;;;;100
+item;minecraft:cracked_stone_bricks;Rissige Steinziegel;256;;;;100
+item;minecraft:big_dripleaf;Großes Tropfblad;64;;;;100
+item;minecraft:small_dripleaf;Kleines Tropfblatt;64;;;;100
+item;minecraft:vine;Ranken;128;;;;100
+item;minecraft:oak_sapling;Eichensetzling;128;;;;100
+item;minecraft:birch_sapling;Birkensetzling;128;;;;100
+item;minecraft:spruce_sapling;Fichtensetzling;128;;;;100
+item;minecraft:jungle_sapling;Tropensetzling;128;;;;100
+item;minecraft:acacia_sapling;Akaziensetzling;128;;;;100
+item;minecraft:dark_oak_sapling;Schwarzeichensetzling;128;;;;100
+item;minecraft:cherry_sapling;Kirschsetzling;256;;;;100
+item;minecraft:mangrove_propagule;Mangrovenkeimling;256;;;;100
+item;minecraft:oak_leaves;Eichenlaub;256;;;;100
+item;minecraft:birch_leaves;Birkenlaub;256;;;;100
+item;minecraft:spruce_leaves;Fichtenlaub;256;;;;100
+item;minecraft:jungle_leaves;Tropenbaumlaub;256;;;;100
+item;minecraft:acacia_leaves;Akazienlaub;256;;;;100
+item;minecraft:dark_oak_leaves;Schwarzeichenlaub;256;;;;100
+item;minecraft:cherry_leaves;Kirschlaub;256;;;;100
+item;minecraft:mangrove_leaves;Mangrovenlaub;256;;;;100
+item;minecraft:azalea;Azalee;64;;;;100
+item;minecraft:flowering_azalea;Blühende Azalee;64;;;;100
+item;minecraft:lantern;Laterne;64;;;;100
+item;minecraft:shroomlight;Pilzlicht;64;;;;75
+item;irons_spellbooks:firefly_jar;Firefly Jar;16;;;;100
+item;minecraft:flower_pot;Blumentopf;32;;;;100
+item;minecraft:packed_mud;Fester Schlamm;256;;;;100
+item;minecraft:lily_pad;Seerosenblatt;32;;;;100
+item;minecraft:beacon;Leuchtfeuer;1;;;;20
+item;minecraft:lodestone;Leitstein;2;;;;20
+item;minecraft:end_crystal;Enderkristall;16;;;;50
+item;minecraft:respawn_anchor;Seelenanker;8;;;;50
+item;minecraft:enchanting_table;Verzauberungstisch;8;;;;75
+item;minecraft:book;Buch;256;;;;100
+item;minecraft:ender_chest;Endertruhe;10;;;;100
+item;minecraft:calibrated_sculk_sensor;Kalibrierter Sculksensor;12;;;;50
+item;minecraft:tnt;TNT;64;;;;100
+item;minecraft:torch;Fackel;512;;;;100
+item;minecraft:chain;Kette;192;;;;100
+item;minecraft:candle;Kerze;128;;;;100
+item;minecraft:cobblestone;Stein;2048;;;;250
+item;minecraft:cobbled_deepslate;Tiefenschiefer;2048;;;;200
+item;minecraft:sand;Sand;2048;;;;100
+item;minecraft:sandstone;Sandstein;1024;;;;100
+item;minecraft:red_sand;Roter Sand;512;;;;100
+item;minecraft:terracotta;Terracotta;512;;;;100
+item;minecraft:netherrack;Netherrack;2048;;;;100
+item;minecraft:end_stone;Endstein;1024;;;;100
+item;minecraft:soul_sand;Seelensand;512;;;;100
+item;minecraft:dirt;Erde;2048;;;;250
+item;minecraft:mud;Schlamm;512;;;;100
+item;minecraft:rooted_dirt;Wurzelerde;32;;;;100
+item;minecraft:tuff;Tuffstein;512;;;;100
+item;minecraft:andesite;Andesite;1024;;;;100
+item;minecraft:diorite;Diorit;1024;;;;100
+item;minecraft:granite;Grannit;1024;;;;100
+item;minecraft:basalt;Basalt;2048;;;;100
+item;minecraft:gravel;Kies;2048;;;;200
+item;minecraft:calcite;Kalzit;128;;;;100
+item;minecraft:blackstone;Schwarzstein;512;;;;100
+item;minecraft:gilded_blackstone;Golddurchzogener Schwarzstein;8;;;;100
+item;minecraft:grass_block;Grassblock;512;;;;100
+item;minecraft:obsidian;Obsidian;128;;;;100
+item;minecraft:dripstone_block;Tropfstesinblock;64;;;;100
+item;minecraft:pointed_dripstone;Spitzer Tropfstein;64;;;;100
+item;minecraft:clay;Lehm;512;;;;100
+item;minecraft:quartz;Netherquarz;128;;;;100
+item;create:asurine;Asurin;512;;;;100
+item;create:crimsite;Karmesit;512;;;;100
+item;create:veridium;Veridium;512;;;;100
+item;create:ochrum;Ockrum;512;;;;100
+item;create:limestone;Kalkstein;512;;;;100
+item;create:scoria;Schlacke;512;;;;100
+item;create:scorchia;Scorchia;512;;;;100
+item;minecraft:amethyst_block;Amethystblock;512;;;;100
+item;minecraft:ancient_debris;Antiker Schrott;6;;;;100
+item;minecraft:magma_block;Magmablock;256;;;;100
+item;minecraft:sculk;Skulk;256;;;;100
+item;minecraft:iron_ingot;Eisen;128;;;;350
+item;minecraft:copper_ingot;Kupfer;192;;;;300
+item;minecraft:gold_ingot;Gold;64;;;;250
+item;minecraft:netherite_ingot;Netherit;1;;;;75
+item;minecraft:coal;Kohle;128;;;;250
+item;minecraft:charcoal;Holzkohle;128;;;;100
+item;minecraft:diamond;Diamant;16;;;;100
+item;minecraft:emerald;Smaragd;64;;;;100
+item;create:zinc_ingot;Zink;128;;;;150
+item;minecraft:redstone;Redstone;128;;;;150
+item;minecraft:lapis_lazuli;Lapis;64;;;;150
+item;minecraft:leather_helmet;Lederkappe;8;;;;100
+item;minecraft:leather_chestplate;Lederjacke;8;;;;100
+item;minecraft:leather_leggings;Lederhose;8;;;;100
+item;minecraft:leather_boots;Lederstiefel;8;;;;100
+item;minecraft:iron_helmet;Eisenhelm;16;;;;100
+item;minecraft:iron_chestplate;Eisenharnisch;16;;;;100
+item;minecraft:iron_leggings;Eisenbeinschutz;16;;;;100
+item;minecraft:iron_boots;Eisenstiefel;16;;;;100
+item;minecraft:golden_helmet;Goldhelm;8;;;;100
+item;minecraft:golden_chestplate;Goldharnisch;8;;;;100
+item;minecraft:golden_leggings;Goldbeinschutz;8;;;;100
+item;minecraft:golden_boots;Goldstiefel;8;;;;100
+item;minecraft:diamond_helmet;Diamanthelm;6;;;;100
+item;minecraft:diamond_chestplate;Diamantharnisch;6;;;;100
+item;minecraft:diamond_leggings;Diamantbeinschutz;6;;;;100
+item;minecraft:diamond_boots;Diamantstiefel;6;;;;100
+item;minecraft:iron_pickaxe;Eisenspitzhacke;16;;;;100
+item;minecraft:iron_axe;Eisenaxt;16;;;;100
+item;minecraft:iron_hoe;Eisenhacke;16;;;;100
+item;minecraft:iron_shovel;Eisenschaufel;16;;;;100
+item;minecraft:iron_sword;Eisenschwert;16;;;;100
+item;minecraft:golden_pickaxe;Goldspitzhacke;12;;;;100
+item;minecraft:golden_axe;Goldaxt;12;;;;100
+item;minecraft:golden_hoe;Goldhacke;12;;;;100
+item;minecraft:golden_shovel;Goldschaufel;12;;;;100
+item;minecraft:golden_sword;Goldschwert;12;;;;100
+item;minecraft:diamond_pickaxe;Diamantspitzhacke;6;;;;100
+item;minecraft:diamond_axe;Diamantaxt;6;;;;100
+item;minecraft:diamond_hoe;Diamanthacke;6;;;;100
+item;minecraft:diamond_shovel;Diamantschaufel;6;;;;100
+item;minecraft:diamond_sword;Diamantschwert;6;;;;100
+item;minecraft:chainmail_helmet;Kettenhaube;18;;;;100
+item;minecraft:chainmail_chestplate;Kettenhemd;18;;;;100
+item;minecraft:chainmail_leggings;Kettenhose;18;;;;100
+item;minecraft:chainmail_boots;Kettenstiefel;18;;;;100
+item;minecraft:firework_rocket;Feuerwerksrakete;128;;;;100
+item;born_in_chaos_v1:seedof_chaos;Seed of Chaos;16;;;;75
+item;minecraft:bone;Knochen;128;;;;100
+item;create:belt_connector;Förderband;32;;;;100
+item;minecraft:wither_skeleton_skull;Wither Skelettschädel;4;;;;75
+item;minecraft:blaze_rod;Lohenrute;32;;;;75
+item;botania:life_essence;Essenz des Ewigen Leben;2;;;;25
+item;minecraft:nether_wart;Netherwarze;64;;;;75
+item;minecraft:honey_bottle;Honigflasche;32;;;;100
+item;minecraft:honeycomb;Honigwabe;32;;;;100
+item;deeperdarker:warden_carapace;Warden Carapce;1;;;;25
+item;supplementaries:present;Geschenk;32;;;;100
+item;minecraft:arrow;Pfeil;512;;;;100
+item;minecraft:shield;Schild;24;;;;100
+item;irons_spellbooks:blank_rune;Blank Runestone;3;;;;50
+item;irons_spellbooks:cinder_essence;Cinder Essence;8;;;;60
+item;irons_spellbooks:dragonskin;Drachenhaut;2;;;;25
+item;born_in_chaos_v1:fused_bone;Fused Bone;16;;;;100
+item;minecraft:jack_o_lantern;Kürbislaterne;32;;;;100
+item;minecraft:sea_pickle;Meeresgurke;64;;;;100
+item;minecraft:end_rod;Endstab;16;;;;50
+item;minecraft:spyglass;Fernglas;16;;;;100
+item;minecraft:map;Leere Karte;32;;;;100
+item;born_in_chaos_v1:nightmare_stalker_skull;Nightmare Stalker Skull;1;;;;50
+item;create:crushing_wheel;Mahlwerk;8;;;;80
+item;create:blaze_burner;Lohenbrenner;16;;;;75
+item;create:mechanical_arm;Mechanischer Arm;16;;;;100
+item;born_in_chaos_v1:nightmare_claw;Nightmare Stalker Claw;2;;;;50
+item;born_in_chaos_v1:phantom_powder;Phantom Powder;8;;;;75
+item;minecraft:magma_cream;Magmacreme;64;;;;100
+item;minecraft:slime_ball;Schleimball;64;;;;100
+item;born_in_chaos_v1:dark_rod;Dark Rod;8;;;;100
+item;born_in_chaos_v1:shattered_skull;Shattered Skull;4;;;;100
+item;born_in_chaos_v1:fire_dust;Fire Light Dust;8;;;;100
+item;minecraft:shulker_shell;Shilker-Shale;8;;;;50
+item;minecraft:feather;Feder;64;;;;100
+item;minecraft:egg;Ei;64;;;;100
+item;minecraft:cobweb;Spinnennetz;16;;;;100
+item;minecraft:bookshelf;Bücherregal;32;;;;100
+item;minecraft:ender_eye;Enderauge;8;;;;50
+item;minecraft:target;Zielblock;32;;;;100
+item;minecraft:bricks;Ziegelsteine;512;;;;100
+item;minecraft:sculk_catalyst;Sculk-Katalysator;4;;;;50
+item;minecolonies:gate_wood;Holztor;8;;;;15
+item;minecolonies:gate_iron;Eisentor;8;;;;15
+item;minecolonies:plate_armor_helmet;Plattenhelm;4;;;;15
+item;minecolonies:plate_armor_chest;Plattenpanzer;4;;;;15
+item;minecolonies:plate_armor_legs;Plattenhose;4;;;;15
+item;minecraft:dead_bush;Toter Busch;128;;;;100
+item;minecolonies:plate_armor_helmet;Plattenhelm;4;;;;15
+item;minecraft:bamboo;Bambus;512;;;;100
+item;minecraft:spore_blossom;Sporenblüte;4;;;;100
+item;minecraft:amethyst_cluster;Amethysthaufen;32;;;;100
+item;minecraft:campfire;Lagerfeuer;128;;;;100
+item;irons_spellbooks:common_ink;Common Ink;16;;;;100
+item;irons_spellbooks:uncommon_ink;Uncommon Ink;12;;;;100
+item;irons_spellbooks:rare_ink;Rare Ink;8;;;;100
+item;irons_spellbooks:epic_ink;Epic Ink;4;;;;100
+item;irons_spellbooks:legendary_ink;Legendary Ink;1;;;;100
+item;minecraft:gunpowder;Schwarzpulver;128;;;;100
+item;born_in_chaos_v1:orbofthe_summoner;Orb of the Summoner;4;;;;100
+item;born_in_chaos_v1:monster_skin;Monster Skin;32;;;;100
+item;born_in_chaos_v1:fangofthe_hound_leader;Fang of the Hound Leader;1;;;;50
+item;born_in_chaos_v1:lifestealer_skull;Lifestealer Skull;1;;;;50
+item;minecraft:player_head;Spielerkopf;1;;;;100
+item;minecraft:lava_bucket;Lavaeimer;24;;;;100
+item;minecraft:glass;Glass;512;;;;100
+item;minecraft:tinted_glass;Getöntes Glas;128;;;;100
+item;create:brass_ingot;Messing;64;;;;75
+item;minecraft:purpur_block;Purpur Block;256;;;;25
+item;prettypipes:pipe;Röhre;256;;;;100
+item;minecraft:skeleton_skull;Skelettschädel;1;;;;50
+item;minecraft:creeper_head;Creeperschädel;1;;;;50
+item;minecraft:glow_ink_sac;Leuchttintenbeutel;32;;;;100
+item;born_in_chaos_v1:wood_splitter_axe;Holzaxt;2;;;;100
+item;born_in_chaos_v1:diamond_termite_shard;Diamanttermintenscherbe;16;;;;100
+item;irons_spellbooks:tarnished_helmet;Tarnished Crown;4;;;;100
+item;born_in_chaos_v1:mesh_door;Mesh Door;2;;;;100
+item;createaddition:electrum_ingot;Electrum;8;;;;75
+item;irons_spellbooks:hogskin;Hogskin;16;;;;75
+item;graveyard:corruption;Korruption;16;;;;100
+item;minecraft:wither_rose;Wither Rose;16;;;;50
+item;farmersdelight:straw;Wither Rose;64;;;;100
+item;born_in_chaos_v1:trident_hayfork;Pitchfork;2;;;;75
+item;born_in_chaos_v1:staff_of_magic_arrows;Staff of Magic Arrows;2;;;;75
+item;deeperdarker:soul_crystal;Soul Crystal;4;;;;75
+item;deeperdarker:soul_dust;Soul Dust;16;;;;75
+item;deeperdarker:sculk_bone;Sculk Bone;32;;;;75
+item;deeperdarker:resonarium;Resonarium;32;;;;75
+item;deeperdarker:bloom_berries;Bloom Berries;256;;;;75
+item;deeperdarker:echo_sapling;Echo Sappling;128;;;;75
+item;deeperdarker:sculk_stone;Sculk Stone;2048;;;;75
+item;deeperdarker:gloomslate;Gloomslate;2048;;;;75
+item;deeperdarker:sculk_gleam;Sculk Gleam;128;;;;75
+item;deeperdarker:echo_log;Echo Log;256;;;;75
+item;deeperdarker:gloomy_cactus;Gloomy Cactus;64;;;;75
+item;born_in_chaos_v1:gnawed_bones;Gnawed Bones;16;;;;100
