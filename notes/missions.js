@@ -64,7 +64,7 @@ let ticksPerSecond = 20;
 let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
 
-function rng(min, max) {
+function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -100,10 +100,10 @@ function generateSummonPos(player) {
     return { x: summonX, z: summonZ, y: summonY };
 }
 
-function summonPlayerCoin(event, playerName, amountMin, amountMax) {
+function summonQERewardAtPlayer(event, playerName, amountMin, amountMax) {
     let min = amountMin === undefined ? 1 : amountMin;
     let max = amountMax === undefined ? 1 : amountMax;
-    let amount = rng(min, max);
+    let amount = randomInt(min, max);
     event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${rewardItem}",Count:${amount}}}`);
     event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
 }
@@ -111,7 +111,7 @@ function summonPlayerCoin(event, playerName, amountMin, amountMax) {
 function summonPosCoin(event, pos, amountMin, amountMax) {
     let min = amountMin === undefined ? 1 : amountMin;
     let max = amountMax === undefined ? 1 : amountMax;
-    let amount = rng(min, max);
+    let amount = randomInt(min, max);
     event.server.runCommandSilent(`summon minecraft:item ${pos.x} ${pos.y} ${pos.z} {Item:{id:"${rewardItem}",Count:${amount}}}`);
     event.server.runCommandSilent(`particle supplementaries:confetti ${pos.x} ${pos.y} ${pos.z} 0 0 0 0.1 100`);
 }
@@ -129,13 +129,13 @@ function ticksToTime(ticks, withColor) {
 
 function startEvent(event) {
     if (!currentEvent || currentEvent.endTick < event.server.tickCount) {
-        const ev = getWeightedObject(events);
+        const ev = getWeightedRandomItem(events);
         this.currentEvent = ev.action(event);
         this.currentEvent.startEvent(event);
     }
 }
 
-function getWeightedObject(objects) {
+function getWeightedRandomItem(objects) {
     let totalWeight = 0;
     for (let object of objects) {
         totalWeight += object.weight;
@@ -196,10 +196,10 @@ const HUNT_EVENT = {
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
-        currentEvent.targetMonster = getWeightedObject(validHuntTargets);
+        currentEvent.targetMonster = getWeightedRandomItem(validHuntTargets);
         if (currentEvent.targetMonster.id === '*') {
             currentEvent.wild = true;
         }
@@ -213,10 +213,10 @@ const HUNT_EVENT = {
         currentEvent.total = 0;
 
         if (currentEvent.multiplayer) {
-            currentEvent.targetAmount = rng(event.server.players.length, currentEvent.targetMonster.amount * event.server.players.length);
+            currentEvent.targetAmount = randomInt(event.server.players.length, currentEvent.targetMonster.amount * event.server.players.length);
             event.server.tell(`§6[${currentEvent.name}]§f Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${currentEvent.targetMonster?.name || 'Gegner'}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}`);
         } else {
-            currentEvent.targetAmount = rng(1, currentEvent.targetMonster.amount);
+            currentEvent.targetAmount = randomInt(1, currentEvent.targetMonster.amount);
             event.server.tell(`§6[${currentEvent.name}]§f Derjenige, der zuerst §6${currentEvent.targetAmount}x ${currentEvent.targetMonster?.name || 'Gegner'}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}`);
         }
     },
@@ -266,11 +266,11 @@ const HUNT_EVENT = {
         if (currentEvent.multiplayer) {
             event.server.tell(`§6[${currentEvent.name}]§f §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
             hunters.forEach(hunter => {
-                summonPlayerCoin(event, hunter);
+                summonQERewardAtPlayer(event, hunter);
             });
         } else {
             event.server.tell(`§6[${currentEvent.name}]§f  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
-            summonPlayerCoin(event, winnerName);
+            summonQERewardAtPlayer(event, winnerName);
         }
         currentEvent = undefined;
     },
@@ -352,7 +352,7 @@ const PRESENT_EVENT = {
         let players = event.server.players;
         event.server.tell(`§fEs gibt eine §6Geschenkte Mission§f für jeden!`);
         for (let player of players) {
-            summonPlayerCoin(event, player.username);
+            summonQERewardAtPlayer(event, player.username);
         }
         currentEvent.stopEvent();
     },
@@ -373,10 +373,10 @@ const PLANT_EVENT = {
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
         
-        currentEvent.targetAmount = rng(event.server.players.length * 20, event.server.players.length * 128);
+        currentEvent.targetAmount = randomInt(event.server.players.length * 20, event.server.players.length * 128);
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
 
@@ -447,7 +447,7 @@ const PLANT_EVENT = {
 
         event.server.tell(`§6[${currentEvent.name}]§f §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${participantNames.join('§f, §a')}§f\n${getTimeStats(event)}`);
         participants.forEach(hunter => {
-            summonPlayerCoin(event, hunter);
+            summonQERewardAtPlayer(event, hunter);
         });
         currentEvent = undefined;
     },
@@ -471,10 +471,10 @@ const MINE_EVENT = {
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
         
-        currentEvent.targetAmount = rng(event.server.players.length * 128, event.server.players.length * 1024);
+        currentEvent.targetAmount = randomInt(event.server.players.length * 128, event.server.players.length * 1024);
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
 
@@ -526,7 +526,7 @@ const MINE_EVENT = {
 
         event.server.tell(`§6[${currentEvent.name}]§f §aBergleute gerettet!§f\n  -> Teilnehmer: §a${participantNames.join('§f, §a')}§f\n${getTimeStats(event)}`);
         participants.forEach(hunter => {
-            summonPlayerCoin(event, hunter);
+            summonQERewardAtPlayer(event, hunter);
         });
         currentEvent = undefined;
     },
@@ -557,12 +557,12 @@ const RACE_EVENT = {
     },
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = rng(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
-        let posX = spawnPosition.x + rng(-raceMaxDistance, raceMaxDistance);
-        let posY = rng(-50, 200);
-        let posZ = spawnPosition.z + rng(-raceMaxDistance, raceMaxDistance);
+        let posX = spawnPosition.x + randomInt(-raceMaxDistance, raceMaxDistance);
+        let posY = randomInt(-50, 200);
+        let posZ = spawnPosition.z + randomInt(-raceMaxDistance, raceMaxDistance);
         currentEvent.targetPos = { x: posX, y: posY, z: posZ };
 
         // event.server.tell(`§fWer zuerst bei §6${toChatPosition(currentEvent.targetPos, true)}§f ist, gewinnt! Ihr habt ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}§f Zeit.\n  -> ${toMapPosition('Rennen', currentEvent.targetPos, 'minecraft:overworld')}`);
@@ -574,7 +574,7 @@ const RACE_EVENT = {
             const distance = Math.round(getDistance(currentEvent.targetPos, p.blockPosition()));
             if (distance < 3) {
                 event.server.tell(`§6[${currentEvent.name}]§f §a${p.username}§f hat das Rennen gewonnen!\n${getTimeStats(event)}`);
-                summonPlayerCoin(event, String(p.username));
+                summonQERewardAtPlayer(event, String(p.username));
                 currentEvent = undefined;
             } else if (distance < 75) {
                 event.server.tell(`§6[${currentEvent.name}]§f §a${p.username}§f ist fast am Ziel! Nur noch ${Math.round(getDistance(currentEvent.targetPos, p.blockPosition()))}m!`);

@@ -8,8 +8,6 @@ const defaults = {
     minCoins: 8,
     weight: 25
 }
-const outFileMarker = '// ------------------ ALL MISSIONS ------------------';
-
 
 
 const args = process.argv.slice(2);
@@ -38,22 +36,24 @@ allCsvFiles.forEach(file => {
             maxCoins: parseInt(mission.maxCoins) || ((parseInt(mission.minCoins) || defaults.minCoins) * 2),
             weight: parseInt(mission.weight) || defaults.weight,
         }
+        if(item.weight === 0) return;
         out.push(`ALL_MISSIONS.push(${JSON.stringify(item)});`)
     });
 });
 
+console.log('Combining Files...');
+const quests = readFileSync('kubejs/quests.js').toString();
+const relevantMissionCount = out.filter(line => !line.startsWith('//') && line.trim().length > 0).length;
+const lineString = out.join('\n');
 
+const fileContent = `${quests}\n\n${lineString}`;
+
+console.log(`Writing Quests and ${relevantMissionCount} Missions to ${outFile}`);
 if (outFile === 'out/missions.js') {
-    console.log(`Writing ${out.filter(line => !line.startsWith('//') && line.trim().length > 0).length} Missions to ${outFile}`);
     mkdirSync('out', { recursive: true });
-    writeFileSync('out/missions.js', out.join('\n'));
-} else {
-    console.log(`Reading ${outFile} and looking for marker...`);
-    const finds = readFileSync(outFile).toString().split(outFileMarker);
-    console.log(`Writing ${out.filter(line => !line.startsWith('//') && line.trim().length > 0).length} Missions to ${outFile}`);
-    writeFileSync(outFile, `${finds[0]}${outFileMarker}\n\n${out.join('\n')}\n`);
-}
-
+    
+} 
+writeFileSync(outFile, fileContent);
 
 
 function parseCSV(file, missionIdKey) {

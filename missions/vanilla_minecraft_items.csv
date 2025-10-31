@@ -1,235 +1,235 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;minecraft:heart_of_the_sea;Herz des Meeres;1;2;6;12;10
-item;minecraft:beacon;Leuchtfeuer;1;2;8;16;10
-item;minecraft:elytra;Elytra;1;1;8;24;10
-item;minecraft:lodestone;Leitstein;1;3;8;16;10
-item;minecraft:nautilus_shell;Nautilusschale;1;2;8;16;10
-item;minecraft:netherite_upgrade_smithing_template;Schmiedevorlage;1;2;8;16;15
-item;minecraft:ghast_tear;Ghastträne;8;16;6;12;20
-item;minecraft:purpur_block;Purpur Block;128;256;6;12;25
-item;minecraft:shulker_shell;Schulker;8;32;6;12;15
-item;minecraft:calibrated_sculk_sensor;Kalibrierter Sculksensor;12;24;6;12;15
-item;minecraft:chorus_fruit;Chorous Frucht;64;256;6;12;15
-item;minecraft:creeper_head;Creeperschädel;1;2;6;16;15
-item;minecraft:dragon_breath;Drachenatem;32;128;6;12;15
-item;minecraft:dragon_head;Drachenkopf;1;2;8;16;15
-item;minecraft:echo_shard;Echo Scherbe;16;64;6;12;15
-item;minecraft:end_crystal;Enderkristall;8;16;6;12;15
-item;minecraft:end_rod;Endstab;16;64;6;12;15
-item;minecraft:ender_eye;Enderauge;8;24;6;12;15
-item;minecraft:nautilus_shell;Nautilusschale;1;4;6;12;15
-item;minecraft:phantom_membrane;Phantomhaut;8;32;6;12;15
-item;minecraft:rabbit_foot;Hasenfuß;1;8;6;12;15
-item;minecraft:respawn_anchor;Seelenanker;8;16;6;12;15
-item;minecraft:sculk_catalyst;Sculk-Katalysator;4;24;6;12;15
-item;minecraft:skeleton_skull;Skelettschädel;1;2;6;12;15
-item;minecraft:wither_rose;Wither Rose;16;32;6;12;15
-item;minecraft:blaze_rod;Lohenrute;32;128;6;12;20
-item;minecraft:enchanting_table;Verzauberungstisch;2;8;6;12;20
-item;minecraft:nether_wart;Netherwarze;64;256;6;12;20
-item;minecraft:netherite_ingot;Netherit;1;3;8;16;20
-item;minecraft:shroomlight;Pilzlicht;32;128;6;12;20
-item;minecraft:wither_skeleton_skull;Wither Skelettschädel;2;6;6;12;20
-item;minecraft:ender_pearl;Ender Perle;8;32;6;12;20
-item;minecraft:acacia_log;Akazienstamm;512;;6;12;100
-item;minecraft:acacia_sapling;Akaziensetzling;64;256;6;12;25
-item;minecraft:amethyst_block;Amethystblock;64;512;6;12;25
-item;minecraft:amethyst_cluster;Amethysthaufen;16;64;6;12;25
-item;minecraft:ancient_debris;Antiker Schrott;2;10;6;12;25
-item;minecraft:andesite;Andesite;512;1024;6;12;100
-item;minecraft:anvil;Amboss;8;32;6;12;25
-item;minecraft:apple;Apfel;32;128;6;12;25
-item;minecraft:arrow;Pfeil;256;1024;6;12;25
-item;minecraft:azalea;Azalee;64;128;6;12;25
-item;minecraft:azalea_leaves;Azaleenlaub;128;256;6;12;25
-item;minecraft:baked_potato;Ofenkartoffel;128;512;6;12;25
-item;minecraft:bamboo;Bambus;256;1024;6;12;25
-item;minecraft:barrel;Fass;32;256;6;12;25
-item;minecraft:basalt;Basalt;1024;2048;6;12;100
-item;minecraft:big_dripleaf;Großes Tropfblad;16;64;6;12;25
-item;minecraft:birch_leaves;Birkenlaub;256;512;6;12;25
-item;minecraft:birch_sapling;Birkensetzling;32;256;6;12;25
-item;minecraft:blackstone;Schwarzstein;256;1024;6;12;50
-item;minecraft:bone;Knochen;48;512;6;12;25
-item;minecraft:book;Buch;32;512;6;12;25
-item;minecraft:bookshelf;Bücherregal;32;64;6;12;25
-item;minecraft:bread;Brot;64;256;6;12;25
-item;minecraft:bricks;Ziegelsteine;128;512;6;12;25
-item;minecraft:cake;Kuchen;8;16;6;12;25
-item;minecraft:calcite;Kalzit;64;256;6;12;25
-item;minecraft:campfire;Lagerfeuer;64;256;6;12;25
-item;minecraft:candle;Kerze;16;256;6;12;25
-item;minecraft:chain;Kette;64;512;6;12;25
-item;minecraft:chainmail_boots;Kettenstiefel;6;24;6;12;25
-item;minecraft:chainmail_chestplate;Kettenhemd;6;24;6;12;25
-item;minecraft:chainmail_helmet;Kettenhaube;6;24;6;12;25
-item;minecraft:chainmail_leggings;Kettenhose;6;24;6;12;25
-item;minecraft:charcoal;Holzkohle;64;256;6;12;25
-item;minecraft:cherry_leaves;Kirschlaub;128;512;6;12;25
-item;minecraft:cherry_sapling;Kirschsetzling;64;256;6;12;25
-item;minecraft:chest;Truhe;64;256;6;12;25
-item;minecraft:clay;Lehm;128;1024;6;12;25
-item;minecraft:coarse_dirt;Grobe Erde;128;512;6;12;25
-item;minecraft:cobweb;Spinnennetz;8;32;6;12;25
-item;minecraft:comparator;Komparator;16;64;6;12;25
-item;minecraft:cooked_beef;Steak;32;128;6;12;25
-item;minecraft:cooked_chicken;Gebratenes Hühnchen;32;128;6;12;25
-item;minecraft:cooked_cod;Gebratener Kabeljau;32;128;6;12;25
-item;minecraft:cooked_mutton;Gebratenes Hammelfleisch;32;128;6;12;25
-item;minecraft:cooked_porkchop;Gebratenes Schweinefleisch;32;128;6;12;25
-item;minecraft:cooked_rabbit;Gebratenes Kaninchen;32;128;6;12;25
-item;minecraft:cooked_salmon;Gebratener Lachs;32;128;6;12;25
-item;minecraft:cookie;Kekse;128;512;6;12;25
-item;minecraft:cracked_stone_bricks;Rissige Steinziegel;125;512;6;12;25
-item;minecraft:crafting_table;Werkbank;128;512;6;12;25
-item;minecraft:crimson_stem;Karmesinstiel;64;256;6;12;25
-item;minecraft:dandelion;Löwenzahn;32;128;6;12;25
-item;minecraft:dark_oak_leaves;Schwarzeichenlaub;256;512;6;12;25
-item;minecraft:dark_oak_sapling;Schwarzeichensetzling;64;128;6;12;25
-item;minecraft:daylight_detector;Tageslichtsensor;32;256;6;12;25
-item;minecraft:dead_bush;Toter Busch;32;512;6;12;25
-item;minecraft:diamond;Diamant;8;24;6;12;25
-item;minecraft:diamond_axe;Diamantaxt;2;8;6;12;25
-item;minecraft:diamond_boots;Diamantstiefel;2;8;6;12;25
-item;minecraft:diamond_chestplate;Diamantharnisch;2;8;6;12;25
-item;minecraft:diamond_helmet;Diamanthelm;2;8;6;12;25
-item;minecraft:diamond_hoe;Diamanthacke;2;8;6;12;25
-item;minecraft:diamond_leggings;Diamantbeinschutz;2;8;6;12;25
-item;minecraft:diamond_pickaxe;Diamantspitzhacke;2;8;6;12;25
-item;minecraft:diamond_shovel;Diamantschaufel;2;8;6;12;25
-item;minecraft:diamond_sword;Diamantschwert;2;8;6;12;25
-item;minecraft:diorite;Diorit;512;2048;6;12;25
-item;minecraft:dirt;Erde;512;2048;6;12;25
-item;minecraft:dispenser;Werfer;16;64;6;12;25
-item;minecraft:dripstone_block;Tropfsteinblock;16;128;6;12;25
-item;minecraft:egg;Ei;8;128;6;12;25
-item;minecraft:emerald;Smaragd;8;64;6;12;25
-item;minecraft:end_stone;Endstein;512;2048;6;12;50
-item;minecraft:ender_chest;Endertruhe;4;16;6;12;25
-item;minecraft:feather;Feder;32;128;6;12;25
-item;minecraft:fern;Farn;32;256;6;12;25
-item;minecraft:firework_rocket;Feuerwerksrakete;32;256;6;12;25
-item;minecraft:flower_pot;Blumentopf;32;128;6;12;25
-item;minecraft:flowering_azalea;Blühende Azalee;32;128;6;12;25
-item;minecraft:flowering_azalea_leaves;Blühendes Azaleenlaub;32;96;6;12;25
-item;minecraft:furnace;Ofen;256;512;6;12;25
-item;minecraft:gilded_blackstone;Golddurchzogener Schwarzstein;8;16;6;12;25
-item;minecraft:glass;Glass;256;1024;6;12;25
-item;minecraft:glow_ink_sac;Leuchttintenbeutel;32;128;6;12;25
-item;minecraft:glow_lichen;Leuchtflechten;32;256;6;12;25
-item;minecraft:golden_axe;Goldaxt;4;24;6;12;25
-item;minecraft:golden_boots;Goldstiefel;4;24;6;12;25
-item;minecraft:golden_carrot;Goldene Karotte;4;24;6;12;25
-item;minecraft:golden_chestplate;Goldharnisch;4;18;6;12;25
-item;minecraft:golden_helmet;Goldhelm;4;24;6;12;25
-item;minecraft:golden_hoe;Goldhacke;4;24;6;12;25
-item;minecraft:golden_leggings;Goldbeinschutz;4;20;6;12;25
-item;minecraft:golden_pickaxe;Goldspitzhacke;4;24;6;12;25
-item;minecraft:golden_shovel;Goldschaufel;4;24;6;12;25
-item;minecraft:golden_sword;Goldschwert;4;24;6;12;25
-item;minecraft:granite;Grannit;512;2048;6;12;25
-item;minecraft:grass;Grass;32;256;6;12;25
-item;minecraft:grass_block;Grassblock;64;512;6;12;25
-item;minecraft:gunpowder;Schwarzpulver;32;256;6;12;25
-item;minecraft:honey_bottle;Honigflasche;16;64;6;12;25
-item;minecraft:honeycomb;Honigwabe;16;64;6;12;25
-item;minecraft:hopper;Trichter;16;128;6;12;25
-item;minecraft:iron_axe;Eisenaxt;8;28;6;12;25
-item;minecraft:iron_boots;Eisenstiefel;8;28;6;12;25
-item;minecraft:iron_chestplate;Eisenharnisch;8;24;6;12;25
-item;minecraft:iron_helmet;Eisenhelm;8;28;6;12;25
-item;minecraft:iron_hoe;Eisenhacke;8;28;6;12;25
-item;minecraft:iron_leggings;Eisenbeinschutz;8;24;6;12;25
-item;minecraft:iron_pickaxe;Eisenspitzhacke;8;28;6;12;25
-item;minecraft:iron_shovel;Eisenschaufel;8;28;6;12;25
-item;minecraft:iron_sword;Eisenschwert;8;28;6;12;25
-item;minecraft:jack_o_lantern;Kürbislaterne;16;64;6;12;25
-item;minecraft:jungle_leaves;Tropenbaumlaub;64;512;6;12;25
-item;minecraft:jungle_sapling;Tropensetzling;64;256;6;12;25
-item;minecraft:ladder;Leiter;256;1024;6;12;25
-item;minecraft:lantern;Laterne;64;512;6;12;25
-item;minecraft:lava_bucket;Lavaeimer;16;32;6;12;25
-item;minecraft:leather;Leder;32;128;6;12;25
-item;minecraft:leather_boots;Lederstiefel;6;16;6;12;25
-item;minecraft:leather_chestplate;Lederjacke;6;14;6;12;25
-item;minecraft:leather_helmet;Lederkappe;6;16;6;12;25
-item;minecraft:leather_leggings;Lederhose;6;14;6;12;25
-item;minecraft:lily_pad;Seerosenblatt;16;64;6;12;25
-item;minecraft:magma_block;Magmablock;64;256;6;12;25
-item;minecraft:magma_cream;Magmacreme;32;256;6;12;25
-item;minecraft:mangrove_leaves;Mangrovenlaub;128;256;6;12;25
-item;minecraft:mangrove_log;Mangrovenstamm;256;1024;6;12;100
-item;minecraft:mangrove_propagule;Mangrovenkeimling;32;128;6;12;25
-item;minecraft:map;Leere Karte;16;64;6;12;25
-item;minecraft:moss_block;Moosblock;128;512;6;12;25
-item;minecraft:moss_carpet;Moosteppich;128;512;6;12;25
-item;minecraft:mossy_cobblestone;Bemooster Bruchstein;128;512;6;12;25
-item;minecraft:mossy_stone_bricks;Bemooste Steinziegel;128;512;6;12;25
-item;minecraft:mud;Schlamm;256;1024;6;12;25
-item;minecraft:name_tag;Nametag;2;8;6;12;25
-item;minecraft:netherrack;Netherrack;1024;4096;6;12;25
-item;minecraft:oak_leaves;Eichenlaub;64;256;6;12;25
-item;minecraft:oak_sapling;Eichensetzling;64;128;6;12;25
-item;minecraft:observer;Beobachter;128;256;6;12;25
-item;minecraft:obsidian;Obsidian;32;128;6;12;50
-item;minecraft:packed_mud;Fester Schlamm;128;512;6;12;25
-item;minecraft:player_head;Spielerkopf;1;1;6;12;25
-item;minecraft:pointed_dripstone;Spitzer Tropfstein;64;256;6;12;25
-item;minecraft:poppy;Mohn;32;128;6;12;25
-item;minecraft:prismarine_shard;Prismarinscherbe;32;256;6;12;25
-item;minecraft:pumpkin_pie;Kürbiskuchen;32;256;6;12;25
-item;minecraft:quartz;Netherquarz;128;512;6;12;100
-item;minecraft:rail;Schiene;256;1024;6;12;25
-item;minecraft:red_sand;Roter Sand;256;1024;6;12;25
-item;minecraft:rooted_dirt;Wurzelerde;8;64;6;12;25
-item;minecraft:sand;Sand;1024;4096;6;12;100
-item;minecraft:sandstone;Sandstein;256;1024;6;12;25
-item;minecraft:scaffolding;Gerüst;256;1024;6;12;25
-item;minecraft:sculk;Skulk;128;512;6;12;25
-item;minecraft:sea_pickle;Meeresgurke;64;256;6;12;25
-item;minecraft:shield;Schild;24;48;6;12;25
-item;minecraft:slime_ball;Schleimball;64;256;6;12;25
-item;minecraft:small_dripleaf;Kleines Tropfblatt;32;128;6;12;25
-item;minecraft:soul_sand;Seelensand;512;2048;6;12;100
-item;minecraft:spider_eye;Spinnenauge;32;128;6;12;25
-item;minecraft:spore_blossom;Sporenblüte;2;8;6;12;25
-item;minecraft:spruce_leaves;Fichtenlaub;64;256;6;12;25
-item;minecraft:spruce_sapling;Fichtensetzling;64;128;6;12;25
-item;minecraft:spyglass;Fernglas;16;32;6;12;25
-item;minecraft:sticky_piston;Klebriger Kolben;128;512;6;12;25
-item;minecraft:stone_bricks;Steinziegel;512;1024;6;12;25
-item;minecraft:sugar;Zucker;64;256;6;12;25
-item;minecraft:target;Zielblock;32;64;6;12;25
-item;minecraft:terracotta;Terracotta;256;768;6;12;100
-item;minecraft:tinted_glass;Getöntes Glas;64;128;6;12;25
-item;minecraft:tnt;TNT;32;128;6;12;25
-item;minecraft:torch;Fackel;512;1024;6;12;100
-item;minecraft:totem_of_undying;Totem der Unsterblichkeit;1;4;7;14;25
-item;minecraft:tuff;Tuffstein;256;1024;6;12;100
-item;minecraft:vine;Ranken;128;256;6;12;25
-item;minecraft:warped_stem;Wirrstiel;128;512;6;12;100
-item;minecraft:acacia_leaves;Akazienlaub;64;256;6;12;25
-item;minecraft:cherry_log;Kirschstamm;512;2048;6;12;100
-item;minecraft:dark_oak_log;Schwarzeichenstamm;1024;2048;6;12;100
-item;minecraft:lapis_lazuli;Lapis;64;256;6;12;100
-item;minecraft:redstone;Redstone;128;512;6;12;100
-item;minecraft:rotten_flesh;Verottendes Fleisch;32;256;6;12;100
-item;minecraft:beetroot;Rote Beete;128;512;6;12;50
-item;minecraft:birch_log;Birkenstamm;256;1024;6;12;100
-item;minecraft:carrot;Karotte;128;512;6;12;50
-item;minecraft:cobbled_deepslate;Tiefenschiefer;1024;4096;6;12;100
-item;minecraft:gravel;Kies;512;2048;6;12;100
-item;minecraft:melon;Melone;32;128;6;12;50
-item;minecraft:potato;Kartoffel;64;256;6;12;50
-item;minecraft:pumpkin;Kürbis;32;128;6;12;50
-item;minecraft:wheat;Weizen;64;256;6;12;50
-item;minecraft:coal;Kohle;32;256;6;12;100
-item;minecraft:cobblestone;Bruchstein;1024;4096;6;12;100
-item;minecraft:stone;Stein;1024;4096;6;12;100
+item;minecraft:acacia_log;Akazienstamm;512;;6;12;250
+item;minecraft:andesite;Andesite;512;1024;6;12;250
+item;minecraft:basalt;Basalt;1024;2048;6;12;250
+item;minecraft:mangrove_log;Mangrovenstamm;256;1024;6;12;250
+item;minecraft:quartz;Netherquarz;128;512;6;12;250
+item;minecraft:sand;Sand;1024;4096;6;12;250
+item;minecraft:soul_sand;Seelensand;512;2048;6;12;250
+item;minecraft:terracotta;Terracotta;256;768;6;12;250
+item;minecraft:torch;Fackel;512;1024;6;12;250
+item;minecraft:tuff;Tuffstein;256;1024;6;12;250
+item;minecraft:warped_stem;Wirrstiel;128;512;6;12;250
+item;minecraft:cherry_log;Kirschstamm;512;2048;6;12;250
+item;minecraft:dark_oak_log;Schwarzeichenstamm;1024;2048;6;12;250
+item;minecraft:lapis_lazuli;Lapis;64;256;6;12;250
+item;minecraft:redstone;Redstone;128;512;6;12;250
+item;minecraft:rotten_flesh;Verottendes Fleisch;32;256;6;12;250
+item;minecraft:birch_log;Birkenstamm;256;1024;6;12;250
+item;minecraft:cobbled_deepslate;Tiefenschiefer;1024;4096;6;12;250
+item;minecraft:gravel;Kies;512;2048;6;12;250
+item;minecraft:coal;Kohle;32;256;6;12;250
+item;minecraft:cobblestone;Bruchstein;1024;4096;6;12;250
+item;minecraft:stone;Stein;1024;4096;6;12;250
+item;minecraft:dirt;Erde;512;2048;6;12;250
+item;minecraft:gold_ingot;Gold;32;128;6;12;250
+item;minecraft:jungle_log;Tropenbaumstamm;256;2048;6;12;250
+item;minecraft:copper_ingot;Kupfer;64;768;6;12;250
+item;minecraft:oak_log;Eichenstamm;256;1536;6;12;250
+item;minecraft:spruce_log;Fichtenstamm;256;2048;6;12;250
+item;minecraft:iron_ingot;Eisen;64;512;6;12;250
+item;minecraft:blackstone;Schwarzstein;256;1024;6;12;150
+item;minecraft:end_stone;Endstein;512;2048;6;12;150
+item;minecraft:obsidian;Obsidian;32;128;6;12;150
+item;minecraft:beetroot;Rote Beete;128;512;6;12;150
+item;minecraft:carrot;Karotte;128;512;6;12;150
+item;minecraft:melon;Melone;32;128;6;12;150
+item;minecraft:potato;Kartoffel;64;256;6;12;150
+item;minecraft:pumpkin;Kürbis;32;128;6;12;150
+item;minecraft:wheat;Weizen;64;256;6;12;150
+item;minecraft:purpur_block;Purpur Block;128;256;6;12;100
+item;minecraft:acacia_sapling;Akaziensetzling;64;256;6;12;100
+item;minecraft:amethyst_block;Amethystblock;64;512;6;12;100
+item;minecraft:amethyst_cluster;Amethysthaufen;16;64;6;12;100
+item;minecraft:ancient_debris;Antiker Schrott;2;10;6;12;100
+item;minecraft:anvil;Amboss;8;32;6;12;100
+item;minecraft:apple;Apfel;32;128;6;12;100
+item;minecraft:arrow;Pfeil;256;1024;6;12;100
+item;minecraft:azalea;Azalee;64;128;6;12;100
+item;minecraft:azalea_leaves;Azaleenlaub;128;256;6;12;100
+item;minecraft:baked_potato;Ofenkartoffel;128;512;6;12;100
+item;minecraft:bamboo;Bambus;256;1024;6;12;100
+item;minecraft:barrel;Fass;32;256;6;12;100
+item;minecraft:big_dripleaf;Großes Tropfblad;16;64;6;12;100
+item;minecraft:birch_leaves;Birkenlaub;256;512;6;12;100
+item;minecraft:birch_sapling;Birkensetzling;32;256;6;12;100
+item;minecraft:bone;Knochen;48;512;6;12;100
+item;minecraft:book;Buch;32;512;6;12;100
+item;minecraft:bookshelf;Bücherregal;32;64;6;12;100
+item;minecraft:bread;Brot;64;256;6;12;100
+item;minecraft:bricks;Ziegelsteine;128;512;6;12;100
+item;minecraft:cake;Kuchen;8;16;6;12;100
+item;minecraft:calcite;Kalzit;64;256;6;12;100
+item;minecraft:campfire;Lagerfeuer;64;256;6;12;100
+item;minecraft:candle;Kerze;16;256;6;12;100
+item;minecraft:chain;Kette;64;512;6;12;100
+item;minecraft:chainmail_boots;Kettenstiefel;6;24;6;12;100
+item;minecraft:chainmail_chestplate;Kettenhemd;6;24;6;12;100
+item;minecraft:chainmail_helmet;Kettenhaube;6;24;6;12;100
+item;minecraft:chainmail_leggings;Kettenhose;6;24;6;12;100
+item;minecraft:charcoal;Holzkohle;64;256;6;12;100
+item;minecraft:cherry_leaves;Kirschlaub;128;512;6;12;100
+item;minecraft:cherry_sapling;Kirschsetzling;64;256;6;12;100
+item;minecraft:chest;Truhe;64;256;6;12;100
+item;minecraft:clay;Lehm;128;1024;6;12;100
+item;minecraft:coarse_dirt;Grobe Erde;128;512;6;12;100
+item;minecraft:cobweb;Spinnennetz;8;32;6;12;100
+item;minecraft:comparator;Komparator;16;64;6;12;100
+item;minecraft:cooked_beef;Steak;32;128;6;12;100
+item;minecraft:cooked_chicken;Gebratenes Hühnchen;32;128;6;12;100
+item;minecraft:cooked_cod;Gebratener Kabeljau;32;128;6;12;100
+item;minecraft:cooked_mutton;Gebratenes Hammelfleisch;32;128;6;12;100
+item;minecraft:cooked_porkchop;Gebratenes Schweinefleisch;32;128;6;12;100
+item;minecraft:cooked_rabbit;Gebratenes Kaninchen;32;128;6;12;100
+item;minecraft:cooked_salmon;Gebratener Lachs;32;128;6;12;100
+item;minecraft:cookie;Kekse;128;512;6;12;100
+item;minecraft:cracked_stone_bricks;Rissige Steinziegel;125;512;6;12;100
+item;minecraft:crafting_table;Werkbank;128;512;6;12;100
+item;minecraft:crimson_stem;Karmesinstiel;64;256;6;12;100
+item;minecraft:dandelion;Löwenzahn;32;128;6;12;100
+item;minecraft:dark_oak_leaves;Schwarzeichenlaub;256;512;6;12;100
+item;minecraft:dark_oak_sapling;Schwarzeichensetzling;64;128;6;12;100
+item;minecraft:daylight_detector;Tageslichtsensor;32;256;6;12;100
+item;minecraft:dead_bush;Toter Busch;32;512;6;12;100
+item;minecraft:diamond;Diamant;8;24;6;12;100
+item;minecraft:diamond_axe;Diamantaxt;2;8;6;12;100
+item;minecraft:diamond_boots;Diamantstiefel;2;8;6;12;100
+item;minecraft:diamond_chestplate;Diamantharnisch;2;8;6;12;100
+item;minecraft:diamond_helmet;Diamanthelm;2;8;6;12;100
+item;minecraft:diamond_hoe;Diamanthacke;2;8;6;12;100
+item;minecraft:diamond_leggings;Diamantbeinschutz;2;8;6;12;100
+item;minecraft:diamond_pickaxe;Diamantspitzhacke;2;8;6;12;100
+item;minecraft:diamond_shovel;Diamantschaufel;2;8;6;12;100
+item;minecraft:diamond_sword;Diamantschwert;2;8;6;12;100
+item;minecraft:diorite;Diorit;512;2048;6;12;100
 item;minecraft:dirt;Erde;512;2048;6;12;100
-item;minecraft:gold_ingot;Gold;32;128;6;12;100
-item;minecraft:jungle_log;Tropenbaumstamm;256;2048;6;12;100
-item;minecraft:copper_ingot;Kupfer;64;768;6;12;100
-item;minecraft:oak_log;Eichenstamm;256;1536;6;12;100
-item;minecraft:spruce_log;Fichtenstamm;256;2048;6;12;100
-item;minecraft:iron_ingot;Eisen;64;512;6;12;100
+item;minecraft:dispenser;Werfer;16;64;6;12;100
+item;minecraft:dripstone_block;Tropfsteinblock;16;128;6;12;100
+item;minecraft:egg;Ei;8;128;6;12;100
+item;minecraft:emerald;Smaragd;8;64;6;12;100
+item;minecraft:ender_chest;Endertruhe;4;16;6;12;100
+item;minecraft:feather;Feder;32;128;6;12;100
+item;minecraft:fern;Farn;32;256;6;12;100
+item;minecraft:firework_rocket;Feuerwerksrakete;32;256;6;12;100
+item;minecraft:flower_pot;Blumentopf;32;128;6;12;100
+item;minecraft:flowering_azalea;Blühende Azalee;32;128;6;12;100
+item;minecraft:flowering_azalea_leaves;Blühendes Azaleenlaub;32;96;6;12;100
+item;minecraft:furnace;Ofen;256;512;6;12;100
+item;minecraft:gilded_blackstone;Golddurchzogener Schwarzstein;8;16;6;12;100
+item;minecraft:glass;Glass;256;1024;6;12;100
+item;minecraft:glow_ink_sac;Leuchttintenbeutel;32;128;6;12;100
+item;minecraft:glow_lichen;Leuchtflechten;32;256;6;12;100
+item;minecraft:golden_axe;Goldaxt;4;24;6;12;100
+item;minecraft:golden_boots;Goldstiefel;4;24;6;12;100
+item;minecraft:golden_carrot;Goldene Karotte;4;24;6;12;100
+item;minecraft:golden_chestplate;Goldharnisch;4;18;6;12;100
+item;minecraft:golden_helmet;Goldhelm;4;24;6;12;100
+item;minecraft:golden_hoe;Goldhacke;4;24;6;12;100
+item;minecraft:golden_leggings;Goldbeinschutz;4;20;6;12;100
+item;minecraft:golden_pickaxe;Goldspitzhacke;4;24;6;12;100
+item;minecraft:golden_shovel;Goldschaufel;4;24;6;12;100
+item;minecraft:golden_sword;Goldschwert;4;24;6;12;100
+item;minecraft:granite;Grannit;512;2048;6;12;100
+item;minecraft:grass;Grass;32;256;6;12;100
+item;minecraft:grass_block;Grassblock;64;512;6;12;100
+item;minecraft:gunpowder;Schwarzpulver;32;256;6;12;100
+item;minecraft:honey_bottle;Honigflasche;16;64;6;12;100
+item;minecraft:honeycomb;Honigwabe;16;64;6;12;100
+item;minecraft:hopper;Trichter;16;128;6;12;100
+item;minecraft:iron_axe;Eisenaxt;8;28;6;12;100
+item;minecraft:iron_boots;Eisenstiefel;8;28;6;12;100
+item;minecraft:iron_chestplate;Eisenharnisch;8;24;6;12;100
+item;minecraft:iron_helmet;Eisenhelm;8;28;6;12;100
+item;minecraft:iron_hoe;Eisenhacke;8;28;6;12;100
+item;minecraft:iron_leggings;Eisenbeinschutz;8;24;6;12;100
+item;minecraft:iron_pickaxe;Eisenspitzhacke;8;28;6;12;100
+item;minecraft:iron_shovel;Eisenschaufel;8;28;6;12;100
+item;minecraft:iron_sword;Eisenschwert;8;28;6;12;100
+item;minecraft:jack_o_lantern;Kürbislaterne;16;64;6;12;100
+item;minecraft:jungle_leaves;Tropenbaumlaub;64;512;6;12;100
+item;minecraft:jungle_sapling;Tropensetzling;64;256;6;12;100
+item;minecraft:ladder;Leiter;256;1024;6;12;100
+item;minecraft:lantern;Laterne;64;512;6;12;100
+item;minecraft:lava_bucket;Lavaeimer;16;32;6;12;100
+item;minecraft:leather;Leder;32;128;6;12;100
+item;minecraft:leather_boots;Lederstiefel;6;16;6;12;100
+item;minecraft:leather_chestplate;Lederjacke;6;14;6;12;100
+item;minecraft:leather_helmet;Lederkappe;6;16;6;12;100
+item;minecraft:leather_leggings;Lederhose;6;14;6;12;100
+item;minecraft:lily_pad;Seerosenblatt;16;64;6;12;100
+item;minecraft:magma_block;Magmablock;64;256;6;12;100
+item;minecraft:magma_cream;Magmacreme;32;256;6;12;100
+item;minecraft:mangrove_leaves;Mangrovenlaub;128;256;6;12;100
+item;minecraft:mangrove_propagule;Mangrovenkeimling;32;128;6;12;100
+item;minecraft:map;Leere Karte;16;64;6;12;100
+item;minecraft:moss_block;Moosblock;128;512;6;12;100
+item;minecraft:moss_carpet;Moosteppich;128;512;6;12;100
+item;minecraft:mossy_cobblestone;Bemooster Bruchstein;128;512;6;12;100
+item;minecraft:mossy_stone_bricks;Bemooste Steinziegel;128;512;6;12;100
+item;minecraft:mud;Schlamm;256;1024;6;12;100
+item;minecraft:name_tag;Nametag;2;8;6;12;100
+item;minecraft:netherrack;Netherrack;1024;4096;6;12;100
+item;minecraft:oak_leaves;Eichenlaub;64;256;6;12;100
+item;minecraft:oak_sapling;Eichensetzling;64;128;6;12;100
+item;minecraft:observer;Beobachter;128;256;6;12;100
+item;minecraft:packed_mud;Fester Schlamm;128;512;6;12;100
+item;minecraft:player_head;Spielerkopf;1;1;6;12;100
+item;minecraft:pointed_dripstone;Spitzer Tropfstein;64;256;6;12;100
+item;minecraft:poppy;Mohn;32;128;6;12;100
+item;minecraft:prismarine_shard;Prismarinscherbe;32;256;6;12;100
+item;minecraft:pumpkin_pie;Kürbiskuchen;32;256;6;12;100
+item;minecraft:rail;Schiene;256;1024;6;12;100
+item;minecraft:red_sand;Roter Sand;256;1024;6;12;100
+item;minecraft:rooted_dirt;Wurzelerde;8;64;6;12;100
+item;minecraft:sandstone;Sandstein;256;1024;6;12;100
+item;minecraft:scaffolding;Gerüst;256;1024;6;12;100
+item;minecraft:sculk;Skulk;128;512;6;12;100
+item;minecraft:sea_pickle;Meeresgurke;64;256;6;12;100
+item;minecraft:shield;Schild;24;48;6;12;100
+item;minecraft:slime_ball;Schleimball;64;256;6;12;100
+item;minecraft:small_dripleaf;Kleines Tropfblatt;32;128;6;12;100
+item;minecraft:spider_eye;Spinnenauge;32;128;6;12;100
+item;minecraft:spore_blossom;Sporenblüte;2;8;6;12;100
+item;minecraft:spruce_leaves;Fichtenlaub;64;256;6;12;100
+item;minecraft:spruce_sapling;Fichtensetzling;64;128;6;12;100
+item;minecraft:spyglass;Fernglas;16;32;6;12;100
+item;minecraft:sticky_piston;Klebriger Kolben;128;512;6;12;100
+item;minecraft:stone_bricks;Steinziegel;512;1024;6;12;100
+item;minecraft:sugar;Zucker;64;256;6;12;100
+item;minecraft:target;Zielblock;32;64;6;12;100
+item;minecraft:tinted_glass;Getöntes Glas;64;128;6;12;100
+item;minecraft:tnt;TNT;32;128;6;12;100
+item;minecraft:totem_of_undying;Totem der Unsterblichkeit;1;4;7;14;100
+item;minecraft:vine;Ranken;128;256;6;12;100
+item;minecraft:acacia_leaves;Akazienlaub;64;256;6;12;100
+item;minecraft:ghast_tear;Ghastträne;8;16;6;12;100
+item;minecraft:blaze_rod;Lohenrute;32;128;6;12;100
+item;minecraft:enchanting_table;Verzauberungstisch;2;8;6;12;100
+item;minecraft:nether_wart;Netherwarze;64;256;6;12;100
+item;minecraft:netherite_ingot;Netherit;1;3;8;16;100
+item;minecraft:shroomlight;Pilzlicht;32;128;6;12;100
+item;minecraft:wither_skeleton_skull;Wither Skelettschädel;2;6;6;12;100
+item;minecraft:ender_pearl;Ender Perle;8;32;6;12;100
+item;minecraft:netherite_upgrade_smithing_template;Schmiedevorlage;1;2;8;16;75
+item;minecraft:shulker_shell;Schulker;8;32;6;12;75
+item;minecraft:calibrated_sculk_sensor;Kalibrierter Sculksensor;12;24;6;12;75
+item;minecraft:chorus_fruit;Chorous Frucht;64;256;6;12;75
+item;minecraft:creeper_head;Creeperschädel;1;2;6;16;75
+item;minecraft:dragon_breath;Drachenatem;32;128;6;12;75
+item;minecraft:dragon_head;Drachenkopf;1;2;8;16;75
+item;minecraft:echo_shard;Echo Scherbe;16;64;6;12;75
+item;minecraft:end_crystal;Enderkristall;8;16;6;12;75
+item;minecraft:end_rod;Endstab;16;64;6;12;75
+item;minecraft:ender_eye;Enderauge;8;24;6;12;75
+item;minecraft:nautilus_shell;Nautilusschale;1;4;6;12;75
+item;minecraft:phantom_membrane;Phantomhaut;8;32;6;12;75
+item;minecraft:rabbit_foot;Hasenfuß;1;8;6;12;75
+item;minecraft:respawn_anchor;Seelenanker;8;16;6;12;75
+item;minecraft:sculk_catalyst;Sculk-Katalysator;4;24;6;12;75
+item;minecraft:skeleton_skull;Skelettschädel;1;2;6;12;75
+item;minecraft:wither_rose;Wither Rose;16;32;6;12;75
+item;minecraft:heart_of_the_sea;Herz des Meeres;1;2;6;12;50
+item;minecraft:beacon;Leuchtfeuer;1;2;8;16;50
+item;minecraft:elytra;Elytra;1;1;8;24;50
+item;minecraft:lodestone;Leitstein;1;3;8;16;50
+item;minecraft:nautilus_shell;Nautilusschale;1;2;8;16;50

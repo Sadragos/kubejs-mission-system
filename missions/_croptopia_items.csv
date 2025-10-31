@@ -1,1 +1,8 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;tomato;Tomate;32;128;6;12;25
+item;onion;Zwiebeln;32;128;6;12;25
+item;cabbage;Salat;32;128;6;12;25
+item;corn;Mais;32;128;6;12;25
+item;bell_pepper;Paprika;32;128;6;12;25
+item;garlic;Knoblauch;32;128;6;12;25
+item;soybean;Soyabohnen;32;128;6;12;25

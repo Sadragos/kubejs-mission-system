@@ -1,13 +1,13 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;minecolonies:gate_iron;Eisentor;8;32;6;12;15
-item;minecolonies:gate_wood;Holztor;8;32;6;12;15
-item;minecolonies:plate_armor_chest;Plattenpanzer;2;8;6;12;15
-item;minecolonies:plate_armor_helmet;Plattenhelm;2;8;6;12;15
-item;minecolonies:plate_armor_helmet;Plattenhelm;2;8;6;12;15
-item;minecolonies:plate_armor_legs;Plattenhose;2;8;6;12;15
-item;minecolonies:chiefsword;Häuptlingsschwert;1;4;6;12;20
-item;minecolonies:ancienttome;Antiker Wälzer;1;6;6;12;20
-item;minecolonies:scroll_buff;Heilige Schriftrolle der Regeneration;1;6;6;12;20
-item;minecolonies:iron_scimitar;Eisensäbel;1;4;6;12;20
-item;minecolonies:pharaoscepter;Pharao Zepter;1;4;6;12;20
-item;minecolonies:spear;Speer;1;4;6;12;20
+item;minecolonies:gate_iron;Eisentor;8;32;6;12;25
+item;minecolonies:gate_wood;Holztor;8;32;6;12;25
+item;minecolonies:plate_armor_chest;Plattenpanzer;2;8;6;12;25
+item;minecolonies:plate_armor_helmet;Plattenhelm;2;8;6;12;25
+item;minecolonies:plate_armor_helmet;Plattenhelm;2;8;6;12;25
+item;minecolonies:plate_armor_legs;Plattenhose;2;8;6;12;25
+item;minecolonies:chiefsword;Häuptlingsschwert;1;4;6;12;50
+item;minecolonies:ancienttome;Antiker Wälzer;1;6;6;12;50
+item;minecolonies:scroll_buff;Heilige Schriftrolle der Regeneration;1;6;6;12;50
+item;minecolonies:iron_scimitar;Eisensäbel;1;4;6;12;50
+item;minecolonies:pharaoscepter;Pharao Zepter;1;4;6;12;50
+item;minecolonies:spear;Speer;1;4;6;12;50

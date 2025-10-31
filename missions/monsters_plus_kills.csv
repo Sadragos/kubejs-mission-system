@@ -1,0 +1,11 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+kill;monsterplus:abyssologer;;1;6;6;12;100
+kill;monsterplus:ancient_hero;;1;4;8;16;100
+kill;monsterplus:crystal_zombie;;8;32;6;12;100
+kill;monsterplus:desert_acolyte;;8;32;6;12;100
+kill;monsterplus:desert_sorceress;;8;32;6;12;100
+kill;monsterplus:glow_skeleton;;8;32;6;12;100
+kill;monsterplus:overgrown_skeleton;;8;32;6;12;100
+kill;monsterplus:spectral_skeleton;;8;32;6;12;100
+kill;monsterplus:spectral_skull;;8;32;6;12;100
+kill;monsterplus:swamp_zombie;;8;32;6;12;100
