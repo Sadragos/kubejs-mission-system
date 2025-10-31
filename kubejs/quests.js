@@ -230,7 +230,7 @@ ItemEvents.rightClicked(missionToken, event => {
         let playerProgress = getPlayerProgress(event.player, mission.type);
         console.log("prog" + playerProgress);
         let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
-        let alteredMaxCoins = Math.ceil(mission.maxCoins * playerProgress);
+        let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins+1);
         let alteredMinAmount = Math.ceil(mission.min * playerProgress);
         let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
         console.log("minCoins: " + alteredMinCoins + " maxCoins: " + alteredMaxCoins + " minAmount: " + alteredMinAmount + " maxAmount: " + alteredMaxAmount);

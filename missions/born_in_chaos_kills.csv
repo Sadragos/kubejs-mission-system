@@ -16,11 +16,11 @@ kill;born_in_chaos_v1:dread_hound;;8;16;6;12;100
 kill;born_in_chaos_v1:fallen_chaos_knight;;4;12;6;12;100
 kill;born_in_chaos_v1:glutton_fish;;8;16;6;12;100
 kill;born_in_chaos_v1:infernal_spirit;;8;16;6;12;100
-kill;born_in_chaos_v1:lifestealer;;1;2;8;16;100
+kill;born_in_chaos_v1:lifestealer;;1;2;8;16;90
 kill;born_in_chaos_v1:maggot;;16;32;4;12;100
 kill;born_in_chaos_v1:missioner;;1;2;8;16;100
 kill;born_in_chaos_v1:mother_spider;;1;2;8;16;100
-kill;born_in_chaos_v1:nightmare_stalker;;1;3;8;16;150
+kill;born_in_chaos_v1:nightmare_stalker;;1;3;8;16;90
 kill;born_in_chaos_v1:phantom_creeper;;6;12;6;12;100
 kill;born_in_chaos_v1:restless_spirit;;8;16;6;12;100
 kill;born_in_chaos_v1:scarlet_persecutor;;4;16;6;12;100

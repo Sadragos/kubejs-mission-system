@@ -1,5 +1,5 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;minecraft:acacia_log;Akazienstamm;512;;6;12;250
+item;minecraft:acacia_log;Akazienstamm;512;1024;6;12;250
 item;minecraft:andesite;Andesite;512;1024;6;12;250
 item;minecraft:basalt;Basalt;1024;2048;6;12;250
 item;minecraft:mangrove_log;Mangrovenstamm;256;1024;6;12;250
@@ -52,7 +52,7 @@ item;minecraft:bamboo;Bambus;256;1024;6;12;100
 item;minecraft:barrel;Fass;32;256;6;12;100
 item;minecraft:big_dripleaf;Großes Tropfblad;16;64;6;12;100
 item;minecraft:birch_leaves;Birkenlaub;256;512;6;12;100
-item;minecraft:birch_sapling;Birkensetzling;32;256;6;12;100
+item;minecraft:birch_sapling;Birkensetzling;64;256;6;12;100
 item;minecraft:bone;Knochen;48;512;6;12;100
 item;minecraft:book;Buch;32;512;6;12;100
 item;minecraft:bookshelf;Bücherregal;32;64;6;12;100
@@ -88,7 +88,7 @@ item;minecraft:crafting_table;Werkbank;128;512;6;12;100
 item;minecraft:crimson_stem;Karmesinstiel;64;256;6;12;100
 item;minecraft:dandelion;Löwenzahn;32;128;6;12;100
 item;minecraft:dark_oak_leaves;Schwarzeichenlaub;256;512;6;12;100
-item;minecraft:dark_oak_sapling;Schwarzeichensetzling;64;128;6;12;100
+item;minecraft:dark_oak_sapling;Schwarzeichensetzling;64;256;6;12;100
 item;minecraft:daylight_detector;Tageslichtsensor;32;256;6;12;100
 item;minecraft:dead_bush;Toter Busch;32;512;6;12;100
 item;minecraft:diamond;Diamant;8;24;6;12;100
@@ -170,7 +170,7 @@ item;minecraft:mud;Schlamm;256;1024;6;12;100
 item;minecraft:name_tag;Nametag;2;8;6;12;100
 item;minecraft:netherrack;Netherrack;1024;4096;6;12;100
 item;minecraft:oak_leaves;Eichenlaub;64;256;6;12;100
-item;minecraft:oak_sapling;Eichensetzling;64;128;6;12;100
+item;minecraft:oak_sapling;Eichensetzling;64;256;6;12;100
 item;minecraft:observer;Beobachter;128;256;6;12;100
 item;minecraft:packed_mud;Fester Schlamm;128;512;6;12;100
 item;minecraft:player_head;Spielerkopf;1;1;6;12;100
