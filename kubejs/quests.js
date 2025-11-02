@@ -12,7 +12,7 @@ const missionToken = 'kubejs:mission_scroll';
 // Regex
 const typeRegEx = /Auftrag: (.+?) §6\d+x .+§r/
 const nameRegEx = /Auftrag: .+? §6\d+x (.+)§r/
-const coinsRegex = /Belohnung: §6(\d+) Coins/
+const coinsRegex = /Belohnung: §6(\d+) Coins?/
 const itemRegex = /Ziel: (.+)/
 const erstelltRegex = /Erstellt: (.+)/
 const playerRegex = /Von: (.+)/
@@ -20,7 +20,7 @@ const levelRegex = /Level: (.+) ?%/
 
 // Missionen
 let avgMissionsPerHour = 0.5;
-let avgMissionPerHourPlayer = 0.3;
+let avgMissionPerHourPlayer = 0.2;
 let missionSummonMaxPlayerDist = 16 * 8;
 let rewardItem = 'kubejs:mission_scroll';
 let checkInterval = 100;
@@ -34,13 +34,14 @@ let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
 
 // Schwierigkeit
-let playTimeTarget = 20 * 60 * 60 * 24 * 2;     // 2 Tage
+let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
 let mobKillsTarget = 10000;
 
 //----------------------
 // Caches
 //----------------------
 let currentEvent;
+let logget_in_players = [];
 
 
 //----------------------
@@ -66,6 +67,7 @@ const MISSION_TYPE_ITEM = {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben!`);
             stack.count = 0;
             finishMission(event, player, dataItem);
+            console.log(JSON.stringify(dataItem, null, 2))
         }
     }
 };
@@ -145,7 +147,13 @@ const HUNT_EVENT = {
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
         let targetName = currentEvent.targetMonster?.name || 'Gegner';
-        currentEvent.targetAmount = currentEvent.wild ? randomInt(10, 100) : randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max);
+        let playermodsum = 0;
+        for (let player of event.server.players) {
+            playermodsum += getPlayerProgress(player, 'kill');
+        }
+        let playermod = playermodsum / event.server.players.length;
+        currentEvent.targetAmount = currentEvent.wild ? randomInt(10, 100) : Math.ceil(randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) / 2);
+        currentEvent.targetAmount = Math.ceil(currentEvent.targetAmount * playermod);
 
         if (currentEvent.multiplayer) {
             currentEvent.targetAmount *= event.server.players.length;
@@ -156,9 +164,7 @@ const HUNT_EVENT = {
     },
 
     handleDeath(event) {
-        const entityName = event.entity.type.toString().toLowerCase();
-        if (currentEvent.targetMonster && entityName.indexOf(currentEvent.targetMonster.item) === -1) return;
-        else if (!currentEvent.targetMonster && !getMissionByType('kill').some(mission => entityName.indexOf(mission.item) !== -1)) return;
+        if (!isValidKill(event.entity, currentEvent.targetMonster?.item)) return;
 
         let player = event.source.player;
         let killer = String(player.username);
@@ -230,7 +236,7 @@ ItemEvents.rightClicked(missionToken, event => {
         let playerProgress = getPlayerProgress(event.player, mission.type);
         console.log("prog" + playerProgress);
         let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
-        let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins+1);
+        let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
         let alteredMinAmount = Math.ceil(mission.min * playerProgress);
         let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
         console.log("minCoins: " + alteredMinCoins + " maxCoins: " + alteredMaxCoins + " minAmount: " + alteredMinAmount + " maxAmount: " + alteredMaxAmount);
@@ -256,7 +262,6 @@ EntityEvents.death(event => {
         currentEvent.handleDeath(event);
     }
 
-    let died = event.entity.type.toString().toLowerCase();
     let player = event.source.player;
     let inventory = player.inventory;
     let searchItem = Item.of(missionItem);
@@ -265,7 +270,7 @@ EntityEvents.death(event => {
         let item = inventory.getItem(i);
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
-            if (data.type.id === MISSION_TYPE_KILL.id && died.indexOf(data.item) !== -1) {
+            if (data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
                 if (data.currentDamage === 1) {
                     player.tell(`§aDu hast den letzten Kill für den Auftrag §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishMission(event, player, data);
@@ -521,7 +526,7 @@ function summonQERewardAtPlayer(event, playerName, amountMin, amountMax) {
     let min = amountMin === undefined ? 1 : amountMin;
     let max = amountMax === undefined ? 1 : amountMax;
     let amount = randomInt(min, max);
-    event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${rewardItem}",Count:${amount}}}`);
+    event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${rewardItem}",count:${amount}}}`);
     event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
 }
 
@@ -537,6 +542,52 @@ function getPlayerProgress(player, missionType) {
     if (missionType === 'kill') return killsPercent;
     return playtimePercent;
 }
+
+function isValidKill(mob, target) {
+    const entityName = mob.type.toString().toLowerCase();
+    if (target === undefined) return getMissionByType('kill').some(mission => entityName.indexOf(mission.item) !== -1);
+    return entityName.indexOf(target) > -1;
+}
+
+// ----------------------
+// Daily
+// ----------------------
+const dailyMessage = [
+    "§aHallo USERNAME! Schön dass du da bist. Hier, geh schaffen!",
+    "§aHi USERNAME! Willkommen zurück! Hier, eine kleine Aufgabe für dich!",
+    "§aOh, da bist du ja, USERNAME. Könntest du das hier für mich erledigen?",
+    "§aHey Username, wie wär es, wenn du das hier für mich machst?",
+    "§aNeuer Tag, neuer Job. Hol ihn dir, USERNAME!",
+    "§aHallo USERNAME! Ein kleiner gruß für dich.",
+    "§aHoffentlich bist du fit, USERNAME. Es gibt nämlich Arbeit.",
+    "§aHey, wie gehts USERNAME? Zeit für ne Mission?",
+    "§aHallo USERNAME! Langweilig? Bitteschön!",
+    "§aMöp. Arbeit für USERNAME."
+];
+PlayerEvents.loggedIn(event => {
+    setTimeout(() => {
+        if (event.player === undefined) return;
+        if (!event.server.players.some(p => p.username === event.player.username)) return;
+        let currentDateString = new Date().toISOString().split('T')[0];
+        let playerStage = event.player.stages.has("daily_mission_" + currentDateString);
+        let yesterdayDateString = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0];
+        let yesterdayStage = event.player.stages.has("daily_mission_" + yesterdayDateString);
+
+        if (!playerStage) {
+            event.player.stages.add("daily_mission_" + currentDateString);
+            let message = dailyMessage[randomInt(0, dailyMessage.length - 1)];
+            message = message.replace("USERNAME", event.player.username);
+            event.player.tell(message);
+            let min = 2;
+            let max = 4;
+            if (!yesterdayStage) {
+                min = 3;
+                max = 6;
+            }
+            summonQERewardAtPlayer(event, event.player.username, min, max);
+        }
+    }, 30000);
+});
 
 // ------------------ ALL MISSIONS ------------------
 
