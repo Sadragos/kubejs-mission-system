@@ -18,7 +18,7 @@ kill;born_in_chaos_v1:glutton_fish;;8;16;6;12;100
 kill;born_in_chaos_v1:infernal_spirit;;8;16;6;12;100
 kill;born_in_chaos_v1:lifestealer;;1;2;8;16;90
 kill;born_in_chaos_v1:maggot;;16;32;4;12;250
-kill;born_in_chaos_v1:missioner;;1;2;8;16;100
+kill;born_in_chaos_v1:missioner;Missionar;1;2;8;16;100
 kill;born_in_chaos_v1:mother_spider;;1;2;8;16;100
 kill;born_in_chaos_v1:nightmare_stalker;;1;3;8;16;90
 kill;born_in_chaos_v1:phantom_creeper;;6;12;6;12;100
@@ -37,3 +37,4 @@ kill;born_in_chaos_v1:zombie_fisherman;;6;12;6;12;100
 kill;born_in_chaos_v1:zombie_lumberjack;;6;12;6;12;100
 kill;born_in_chaos_v1:mr_pumpkin;;2;8;6;12;75
 kill;born_in_chaos_v1:mrs_pumpkin;;2;8;6;12;75
+kill;nightmare,missioner,lifestealer;Böse Überaschung;2;8;8;16;100
