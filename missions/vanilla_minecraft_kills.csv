@@ -35,5 +35,5 @@ kill;minecraft:wither;;1;2;16;24;75
 kill;minecraft:zoglin;;8;16;6;12;100
 kill;minecraft:zombie;;8;64;6;12;250
 kill;minecraft:zombified_piglin;;8;64;6;12;100
-kill;zombie,skeleton,husk,stray,knight;Untote;128;256;6;12;1000
-kill;*;Gegner;128;512;6;12;2000
+kill;zombie,skeleton,husk,stray,knight,corpse,bone;Untote;128;256;6;12;1500
+kill;*;Gegner;128;512;6;12;3000
