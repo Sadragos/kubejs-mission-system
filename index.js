@@ -5,8 +5,7 @@ const seedrandom = require('seedrandom');
 // Config
 const defaults = {
     minAmount: 64,
-    minCoins: 8,
-    weight: 25
+    minCoins: 8
 }
 
 
@@ -34,9 +33,9 @@ allCsvFiles.forEach(file => {
             max: parseInt(mission.maxAmount) || ((parseInt(mission.minAmount) || defaults.minAmount) * 2),
             minCoins: parseInt(mission.minCoins) || defaults.minCoins,
             maxCoins: parseInt(mission.maxCoins) || ((parseInt(mission.minCoins) || defaults.minCoins) * 2),
-            weight: parseInt(mission.weight) || defaults.weight,
+            weight: parseInt(mission.weight),
         }
-        if(item.weight === 0) return;
+        if(!item.weight) return;
         out.push(`ALL_MISSIONS.push(${JSON.stringify(item)});`)
     });
 });
