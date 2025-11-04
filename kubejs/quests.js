@@ -19,7 +19,7 @@ const playerRegex = /Von: (.+)/
 const levelRegex = /Level: (.+) ?%/
 
 // Missionen
-let avgMissionsPerHour = 0.5;
+let avgMissionsPerHour = 500000;
 let avgMissionPerHourPlayer = 0.2;
 let missionSummonMaxPlayerDist = 16 * 8;
 let rewardItem = 'kubejs:mission_scroll';
@@ -131,13 +131,9 @@ const HUNT_EVENT = {
         currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
-        currentEvent.wild = randomInt(0, 100) <= 25;
         currentEvent.multiplayer = randomInt(0, 100) <= 50;
-        if (!currentEvent.wild) {
-            currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
-        } else {
-            currentEvent.targetMonster = undefined;
-        }
+        currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
+        currentEvent.wild = currentEvent.targetMonster.item === '*';
 
         if (currentEvent.wild && currentEvent.multiplayer) currentEvent.name = 'Gemätzel'
         else if (currentEvent.wild && !currentEvent.multiplayer) currentEvent.name = 'Wilde Jagd';
@@ -146,7 +142,7 @@ const HUNT_EVENT = {
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
-        let targetName = currentEvent.targetMonster?.name || 'Gegner';
+        let targetName = currentEvent.targetMonster.name;
         let playermodsum = 0;
         for (let player of event.server.players) {
             playermodsum += getPlayerProgress(player, 'kill');
@@ -234,12 +230,10 @@ ItemEvents.rightClicked(missionToken, event => {
     try {
         let mission = getRandomMission();
         let playerProgress = getPlayerProgress(event.player, mission.type);
-        console.log("prog" + playerProgress);
         let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
         let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
         let alteredMinAmount = Math.ceil(mission.min * playerProgress);
         let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
-        console.log("minCoins: " + alteredMinCoins + " maxCoins: " + alteredMaxCoins + " minAmount: " + alteredMinAmount + " maxAmount: " + alteredMaxAmount);
         giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress);
         event.item.count = event.item.count - 1;
     } catch (e) {
@@ -336,7 +330,7 @@ function removeFromInventory(player, searchItem, amount) {
 
     for (let i = 0; i < size && remaining > 0; i++) {
         let invItem = inv.getItem(i);
-        if (invItem.id.indexOf(searchItem) !== -1) {
+        if (isValidItem(invItem.id, searchItem, 'item')) {
             let take = Math.min(remaining, invItem.count);
             invItem.count -= take;
             remaining -= take;
@@ -543,10 +537,22 @@ function getPlayerProgress(player, missionType) {
     return playtimePercent;
 }
 
+function isAnyValidKill(mob) {
+    return getMissionByType('kill').some(mission => isValidItem(mob, mission.item))
+}
+
 function isValidKill(mob, target) {
     const entityName = mob.type.toString().toLowerCase();
-    if (target === undefined) return getMissionByType('kill').some(mission => entityName.indexOf(mission.item) !== -1);
-    return entityName.indexOf(target) > -1;
+    if (target === undefined || target === '*') return isAnyValidKill(entityName);
+    return isValidItem(entityName, target);
+}
+
+function isValidItem(item, missionItem) {
+    let options = missionItem.split(',');
+    for(let i = 0; i < options.length; i++) {
+        if(item.indexOf(options[i]) !== -1) return true;
+    }
+    return false;
 }
 
 // ----------------------
