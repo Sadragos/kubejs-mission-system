@@ -37,4 +37,7 @@ kill;born_in_chaos_v1:zombie_fisherman;;6;12;6;12;100
 kill;born_in_chaos_v1:zombie_lumberjack;;6;12;6;12;100
 kill;born_in_chaos_v1:mr_pumpkin;;2;8;6;12;75
 kill;born_in_chaos_v1:mrs_pumpkin;;2;8;6;12;75
-kill;nightmare,missioner,lifestealer;Böse Überaschung;2;8;8;16;100
+kill;nightmare,missioner,lifestealer;Böse Überaschung;2;8;8;16;150
+kill;born_in_chaos_v1:senor_pumpkin;;2;8;6;12;75
+kill;born_in_chaos_v1:pumpkin_bruiser;;1;4;8;16;5
+kill;born_in_chaos_v1:pumpkin_dunce;;2;16;8;16;20

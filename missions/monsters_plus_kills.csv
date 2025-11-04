@@ -9,3 +9,6 @@ kill;monsterplus:overgrown_skeleton;;8;32;6;12;100
 kill;monsterplus:spectral_skeleton;;8;32;6;12;100
 kill;monsterplus:spectral_skull;;4;16;6;12;100
 kill;monsterplus:swamp_zombie;;8;32;6;12;100
+kill;monsterplus:demon_eye;;4;16;6;12;100
+kill;monsterplus:ender_eye;;4;16;6;12;75
+kill;monsterplus:opalescent_eye;;4;16;6;12;75
