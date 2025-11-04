@@ -19,7 +19,7 @@ const playerRegex = /Von: (.+)/
 const levelRegex = /Level: (.+) ?%/
 
 // Missionen
-let avgMissionsPerHour = 500000;
+let avgMissionsPerHour = 0.5;
 let avgMissionPerHourPlayer = 0.2;
 let missionSummonMaxPlayerDist = 16 * 8;
 let rewardItem = 'kubejs:mission_scroll';
