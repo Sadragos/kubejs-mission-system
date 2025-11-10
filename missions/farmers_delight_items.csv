@@ -1,0 +1,18 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;farmersdelight:melon_juice;Melonensaft;64;256;6;12;100
+item;farmersdelight:apple_cider;Apfelwein;64;256;6;12;100
+item;farmersdelight:skillet;Bratpfanne;16;64;6;12;100
+item;farmersdelight:cooking_pot;Kochtopf;16;64;6;12;100
+item;farmersdelight:smoked_ham;Räucherschinken;16;64;6;12;100
+item;farmersdelight:sweet_berry_cheesecake;Süßbeerenkäsekuchen;8;32;6;12;100
+item;farmersdelight:fruit_salad;Fruchtsalat;16;64;6;12;100
+item;farmersdelight:barbecue_stick;Barbecuespieß;8;64;6;12;100
+item;hamburger;Hamburger;8;64;6;12;100
+item;farmersdelight:stuffed_potato;Gefüllte Kartoffel;16;64;6;12;100
+item;farmersdelight:salmon_roll;Lachsrolle;16;64;6;12;100
+item;farmersdelight:kelp_roll;Seetangrolle;16;96;6;12;100
+item;farmersdelight:grilled_salmon;Gegrillter Lachs;8;64;6;12;100
+item;farmersdelight:roast_chicken_block;Backhähnchen;8;32;6;12;100
+item;farmersdelight:stuffed_pumpkin_block;Gefüllter Kürbis;8;48;6;12;100
+item;shepherds_pie;Hirtenkuchen;8;32;6;12;100
+item;farmersdelight:honey_glazed_ham_block;Honigglasierter Schinken;8;48;6;12;100

@@ -1,0 +1,26 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;tomato;Tomate;32;128;6;12;100
+item;onion;Zwiebeln;32;128;6;12;100
+item;cabbage;Salat;32;128;6;12;100
+item;corn;Mais;32;128;6;12;100
+item;bell_pepper;Paprika;32;128;6;12;100
+item;garlic;Knoblauch;32;128;6;12;100
+item;soybean;Soyabohnen;32;128;6;12;100
+item;croptopia:tomato_juice;Tomatensaft;32;256;6;12;100
+item;croptopia:cranberry_juice;Cranberry Saft;32;256;6;12;100
+item;croptopia:pecan_pie;Pekanuss-Kuchen;8;64;6;12;100
+item;croptopia:cherry_pie;Kirschkuchen;8;64;6;12;100
+item;croptopia:coffee;Kaffee;16;96;6;12;100
+item;croptopia:fruit_salad;Obstsalat;16;64;6;12;100
+item;croptopia:tofuburger;Tofuburger;16;64;6;12;100
+item;croptopia:taco;Taco;8;48;6;12;100
+item;croptopia:figgy_pudding;Figgy Pudding;8;48;6;12;100
+item;sushi;Sushi;8;64;6;12;100
+item;croptopia:beef_wellington;Filet Wellington;8;48;6;12;100
+item;croptopia:toast;Toast;16;200;6;12;100
+item;croptopia:fruit_cake;Fruit Cake;8;48;6;12;100
+item;croptopia:tostada;Tostada;8;64;6;12;100
+item;croptopia:fajitas;Fajitas;8;48;6;12;100
+item;croptopia:supreme_pizza;Supreme Pizza;8;48;6;12;100
+item;croptopia:macaron;Macaron;16;64;6;12;100
+item;croptopia:croque_madame;;8;48;6;12;100

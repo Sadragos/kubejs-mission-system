@@ -50,14 +50,14 @@ kill;sunken;;8;64;6;12;75
 kill;swamp_skeleton;;8;64;6;12;75
 kill;swamp_zombie;;8;64;6;12;75
 kill;luminous_nether:basalt_executioner;;;;;;
-kill;luminous_nether:crimson_walker;;;;;;
+kill;luminous_nether:crimson_walker;;8;64;6;12;75
 kill;luminous_nether:cultist_archer;;;;;;
 kill;luminous_nether:cultist_rider;;;;;;
 kill;luminous_nether:ember;;;;;;
 kill;luminous_nether:gilded_cultist;;;;;;
 kill;luminous_nether:glider;;;;;;
 kill;luminous_nether:guzzleghast;;;;;;
-kill;luminous_nether:mushlin_bumper;;;;;;
+kill;luminous_nether:mushlin_bumper;;8;32;6;12;75
 kill;luminous_nether:mushlin_king_2;;;;;;
 kill;luminous_nether:mushlin_king_3;;;;;;
 kill;luminous_nether:mushlin_king;;;;;;
