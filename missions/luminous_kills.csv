@@ -56,7 +56,7 @@ kill;luminous_nether:cultist_rider;;;;;;
 kill;luminous_nether:ember;;;;;;
 kill;luminous_nether:gilded_cultist;;;;;;
 kill;luminous_nether:glider;;;;;;
-kill;luminous_nether:guzzleghast;;;;;;
+kill;luminous_nether:guzzleghast;;8;64;6;12;75
 kill;luminous_nether:mushlin_bumper;;8;32;6;12;75
 kill;luminous_nether:mushlin_king_2;;;;;;
 kill;luminous_nether:mushlin_king_3;;;;;;

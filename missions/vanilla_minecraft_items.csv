@@ -233,3 +233,5 @@ item;minecraft:beacon;Leuchtfeuer;1;2;8;16;50
 item;minecraft:elytra;Elytra;1;1;8;24;50
 item;minecraft:lodestone;Leitstein;1;3;8;16;50
 item;minecraft:nautilus_shell;Nautilusschale;1;2;8;16;50
+item;bricks;Ziegel;512;2048;6;12;400
+item;_log;Baumstamm;512;2048;6;12;800

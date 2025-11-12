@@ -10,8 +10,8 @@ const missionItem = 'kubejs:mission';
 const missionToken = 'kubejs:mission_scroll';
 
 // Regex
-const typeRegEx = /Auftrag: (.+?) §6\d+x .+§r/
-const nameRegEx = /Auftrag: .+? §6\d+x (.+)§r/
+const typeRegEx = /Auftrag: (.+?) §6(\d+[x|m] )?.+§r/
+const nameRegEx = /Auftrag: .+? §6\d+[x|m] ?(.+)§r/
 const coinsRegex = /Belohnung: §6(\d+) Coins?/
 const itemRegex = /Ziel: (.+)/
 const erstelltRegex = /Erstellt: (.+)/
@@ -50,7 +50,7 @@ let logget_in_players = [];
 const MISSION_TYPE_ITEM = {
     id: 'item',
     text: '§aSende§r',
-    weight: 2,
+    weight: 6,
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem du ${name} im Inventar hast und mit dem Auftrag-Item rechtsklickst.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -75,7 +75,7 @@ const MISSION_TYPE_ITEM = {
 const MISSION_TYPE_KILL = {
     id: 'kill',
     text: '§4Töte§r',
-    weight: 1,
+    weight: 4,
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem dieses Auftrag-Item im Inventar hast, während du ${name} tötest.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -90,7 +90,39 @@ const MISSION_TYPE_KILL = {
     }
 };
 
-const MISSION_TYPES = [MISSION_TYPE_ITEM, MISSION_TYPE_KILL];
+const MISSION_TYPE_JOUNREY = {
+    id: 'journey',
+    text: '§bReise§r',
+    weight: 1,
+    hint: (name, item) => `Bringe diesen Auftrag nach ${item} und rechtsklicke ihn dort. Du kannst ihn so rechtsklicken um einen Wegpunkt zu erzeugen.`,
+    rightClickHandler: (event, dataItem, stack) => {
+        let player = event.player;
+        let isNear = false;
+        let parts = dataItem.item.replace(/[\[\]\s]/g, "").split(",");
+        let targetPos = { x: parseInt(parts[0]), y: 0, z: parseInt(parts[1]) };
+
+        let dx = targetPos.x - player.position().x;
+        let dz = targetPos.z - player.position().z;
+        let dist = Math.floor(Math.sqrt(dx * dx + dz * dz));
+        if (dist < 3) {
+            isNear = true;
+        }
+        stack.damage = dist;
+
+        if (isNear) {
+            event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
+            player.tell(`§aDu bist da. Die Gilde ist dir sehr dankbar!`);
+            stack.count = 0;
+            finishMission(event, player, dataItem);
+        } else {
+            event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
+            event.server.runCommandSilent(`jm waypoint temp create "${dataItem.name}" minecraft:overworld ${targetPos.x} 64 ${targetPos.z} gold ${player.username}`);
+            player.tell(`§cDu bist noch ${dist} Meter entfernt.`);
+        }
+    }
+};
+
+const MISSION_TYPES = [MISSION_TYPE_JOUNREY,MISSION_TYPE_ITEM, MISSION_TYPE_KILL];
 const ALL_MISSIONS = [];
 
 //----------------------
@@ -218,7 +250,65 @@ const HUNT_EVENT = {
     }
 }
 
-const ALL_QUICK_EVENTS = [PRESENT_EVENT, HUNT_EVENT];
+const THIEF_EVENT = {
+    name: 'Gilden-Dieb',
+    weight: 2,
+    startEvent(event) {
+        let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
+        if (players.length === 0) {
+            currentEvent.stopEvent();
+            return;
+        }
+        let player = players[Math.floor(Math.random() * players.length)];
+
+        let summonPos = generateSummonPos(player);
+        let mobOptions = ['minecraft:zombie', 'minecraft:skeleton', 'minecraft:husk', 'minecraft:pillager', 'minecraft:evoker', 'minecraft:vindicator', 'minecraft:wither_skeleton'];
+        let pickedOption = mobOptions[Math.floor(Math.random() * mobOptions.length)];
+        let materials = ['iron', 'iron', 'iron', 'golden', 'diamond']
+        let material = materials[Math.floor(Math.random() * materials.length)];
+        let weaponOptions = [rewardItem, rewardItem, rewardItem, rewardItem, rewardItem, `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
+        let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
+        event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Tokens geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
+        event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${rewardItem}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
+        event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:slow_falling 120`);
+        event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:strength infinite 2`);
+        event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:resistance infinite 2`);
+        event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:glowing infinite`);
+        event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:speed infinite`);
+        markPosition(event, summonPos, currentEvent.name);
+        currentEvent.stopEvent();
+    },
+    stopEvent(event) {
+        currentEvent = undefined;
+    }
+}
+
+const AIRDROP_EVENT = {
+    name: 'Frachtverlust',
+    weight: 1,
+    startEvent(event) {
+        let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
+        if (players.length === 0) {
+            currentEvent.stopEvent();
+            return;
+        }
+        let player = players[Math.floor(Math.random() * players.length)];
+
+        let summonPos = generateSummonPos(player);
+        let options = ['Eine Flugmaschiene', 'Ein Gyrokopter', 'Eine Drohne', 'Ein betrunkener Pilot', 'Ein fliegender Kurier', 'Eine Eule', 'Ein wahnsinniger Flieger', 'Ein Transportflieger'];
+        let pickedOption = options[Math.floor(Math.random() * options.length)];
+        event.server.tell(`§6[${currentEvent.name}]§f ${pickedOption} hat bei §a${toChatPosition(summonPos)}§f Fracht verloren.`);
+        event.server.runCommandSilent(`summon minecraft:item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"${rewardItem}",Count:1}}`);
+        event.server.runCommandSilent(`effect give @e[type=minecraft:item] minecraft:slow_falling 120`);
+        markPosition(event, summonPos, currentEvent.name);
+        currentEvent.stopEvent();
+    },
+    stopEvent(event) {
+        currentEvent = undefined;
+    }
+}
+
+const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT];
 
 
 //----------------------
@@ -254,6 +344,9 @@ EntityEvents.death(event => {
     if (!event.source?.player?.username) return;
     if (currentEvent?.handleDeath) {
         currentEvent.handleDeath(event);
+    }
+    if (event.entity.hasCustomName() && event.entity.getCustomName().getString() == 'Gilden-Dieb') {
+        event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
     }
 
     let player = event.source.player;
@@ -340,18 +433,32 @@ function removeFromInventory(player, searchItem, amount) {
 }
 
 function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod) {
+    if (type == MISSION_TYPE_JOUNREY.id) {
+        let base = { x: Math.floor(event.player.position().x), y: Math.floor(event.player.position().y), z: Math.floor(event.player.position().z) };
+        let angle = Math.random() * Math.PI * 2;
+        let targetPos = {
+            x: Math.floor(base.x + Math.cos(angle) * amount),
+            y: base.y,
+            z: Math.floor(base.z + Math.sin(angle) * amount)
+        };
+        item = toChatPosition(targetPos);
+    }
     event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
 }
 
 function generateMissionTitle(type, name, amount) {
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
-    return `Auftrag: ${missionType.text} §6${amount}x ${name}§r`;
+    let unit = 'x';
+    if (type === MISSION_TYPE_JOUNREY.id) {
+        unit = 'm';
+    }
+    return `Auftrag: ${missionType.text} §6${amount}${unit} ${name}§r`;
 }
 
 function generateMissionLore(type, coins, erstellt, item, name, playername, mod) {
     mod = mod || 1;
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
-    let hint = missionType.hint(name);
+    let hint = missionType.hint(name, item);
     return `Belohnung: §6${coins} Coin${coins === 1 ? '' : 's'}§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}\nLevel: ${(mod * 100).toFixed(2)}%`;
 }
 
@@ -431,8 +538,8 @@ function getMissionByType(type) {
 }
 
 function getRandomMission() {
-    const missionType = getWeightedRandomItem(MISSION_TYPES);
-    const relevantMissions = getMissionByType(missionType.id);
+    let missionType = getWeightedRandomItem(MISSION_TYPES);
+    let relevantMissions = getMissionByType(missionType.id);
     return getWeightedRandomItem(relevantMissions);
 }
 
@@ -459,12 +566,17 @@ function toChatPosition(pos, includeY) {
 function generateSummonPos(player) {
     let posX = player.blockPosition().x;
     let posZ = player.blockPosition().z;
-    let distX = Math.floor((Math.random() - 0.5) * 2 * missionSummonMaxPlayerDist);
-    let distZ = Math.floor((Math.random() - 0.5) * 2 * missionSummonMaxPlayerDist);
-    let summonX = posX + distX;
-    let summonZ = posZ + distZ;
+    let offsetPos = randomPositionOffset({ x: posX, z: posZ, y: 280 }, 0, missionSummonMaxPlayerDist);
+    let summonX = offsetPos.x;
+    let summonZ = offsetPos.z;
     let summonY = 280;
     return { x: summonX, z: summonZ, y: summonY };
+}
+
+function randomPositionOffset(position, minDistance, maxDistance) {
+    let offsetX = Math.floor((Math.random() - 0.5) * 2 * (maxDistance - minDistance) + minDistance);
+    let offsetZ = Math.floor((Math.random() - 0.5) * 2 * (maxDistance - minDistance) + minDistance);
+    return { x: position.x + offsetX, z: position.z + offsetZ, y: position.y };
 }
 
 
@@ -549,10 +661,19 @@ function isValidKill(mob, target) {
 
 function isValidItem(item, missionItem) {
     let options = missionItem.split(',');
-    for(let i = 0; i < options.length; i++) {
-        if(item.indexOf(options[i]) !== -1) return true;
+    for (let i = 0; i < options.length; i++) {
+        if (item.indexOf(options[i]) !== -1) return true;
     }
     return false;
+}
+
+function markPosition(event, summonPos, waypointName) {
+    event.server.runCommandSilent(`particle minecraft:campfire_signal_smoke ${summonPos.x} ${summonPos.y} ${summonPos.z} 0 400 0 0 500 force`);
+    event.server.runCommandSilent(`particle minecraft:totem_of_undying ${summonPos.x} ${summonPos.y} ${summonPos.z} 0 400 0 0 1000 force`);
+    if (waypointName !== undefined) {
+        event.server.runCommandSilent(`jm waypoint delete "${waypointName}" @a`);
+        event.server.runCommandSilent(`jm waypoint temp create "${waypointName}" minecraft:overworld ${summonPos.x} 64 ${summonPos.z} green @a`);
+    }
 }
 
 // ----------------------
@@ -596,4 +717,6 @@ PlayerEvents.loggedIn(event => {
 });
 
 // ------------------ ALL MISSIONS ------------------
+
+
 
