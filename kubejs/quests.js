@@ -67,7 +67,6 @@ const MISSION_TYPE_ITEM = {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben!`);
             stack.count = 0;
             finishMission(event, player, dataItem);
-            console.log(JSON.stringify(dataItem, null, 2))
         }
     }
 };
