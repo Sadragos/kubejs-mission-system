@@ -163,7 +163,7 @@ const HUNT_EVENT = {
         currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
-        currentEvent.multiplayer = randomInt(0, 100) <= 50;
+        currentEvent.multiplayer = randomInt(0, 100) <= 70;
         currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
         currentEvent.wild = currentEvent.targetMonster.item === '*';
 
