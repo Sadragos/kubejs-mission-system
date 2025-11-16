@@ -1,0 +1,15 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;forbidden_arcanus:soul;;8;16;6;12;100
+item;forbidden_arcanus:corrupt_soul;;2;8;6;12;100
+item;forbidden_arcanus:enchanted_soul;;1;4;6;12;100
+item;forbidden_arcanus:soulless_sand;;32;128;6;12;100
+item;forbidden_arcanus:darkstone;;256;2048;6;12;100
+item;forbidden_arcanus:arcane_crystal;;32;64;6;12;100
+item;forbidden_arcanus:mundabitur_dust;;16;64;6;12;100
+item;forbidden_arcanus:corrupti_dust;;16;64;6;12;100
+item;forbidden_arcanus:dark_nether_star;;1;2;8;16;100
+item;forbidden_arcanus:xpetrified_orb;;8;64;6;12;100
+item;forbidden_arcanus:edelwood_log;;8;16;6;12;100
+item;forbidden_arcanus:ender_pearl_fragment;;8;32;6;12;100
+item;forbidden_arcanus:rune;;8;32;6;12;100
+item;forbidden_arcanus:stellarite_piece;;1;2;8;16;100

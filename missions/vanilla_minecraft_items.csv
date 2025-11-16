@@ -237,3 +237,5 @@ item;bricks;Ziegel;512;2048;6;12;400
 item;_log;Baumstamm;512;2048;6;12;800
 item;minecraft:heavy_core;Schwerer Kern;1;2;8;16;100
 item;disc;Schallplatte;2;6;7;14;100
+item;minecraft:trial_key;Prüfungsschlüssel;2;8;6;12;100
+item;minecraft:ominous_trial_key;Unheilvoller Prüfungsschlüssel;1;6;7;14;100
