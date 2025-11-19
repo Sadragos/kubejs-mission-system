@@ -32,6 +32,7 @@ let missionMaxTime = missionMinTime + (20 * 60 * 15)
 let ticksPerSecond = 20;
 let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
+let curseChance = 0.05;
 
 // Schwierigkeit
 let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
@@ -42,6 +43,7 @@ let mobKillsTarget = 10000;
 //----------------------
 let currentEvent;
 let logget_in_players = [];
+let unlucky = false;
 
 
 //----------------------
@@ -121,7 +123,25 @@ const MISSION_TYPE_JOUNREY = {
     }
 };
 
-const MISSION_TYPES = [MISSION_TYPE_JOUNREY,MISSION_TYPE_ITEM, MISSION_TYPE_KILL];
+const MISSION_TYPE_MISSIONS = {
+    id: 'missions',
+    text: '§eHelfe bei§r',
+    weight: 1,
+    hint: (name, item) => `Helfe dem Server, in dem du ${name}-Events zum Erfolg bringst während diese Mission in deinem Inventar hast.`,
+    rightClickHandler: (event, dataItem, stack) => {
+        let player = event.player;
+        let need = dataItem.currentDamage;
+        player.tell(`§cDir fehlen noch §6${need}x Events§c.`);
+
+        if (remaining === 0) {
+            player.tell(`§aDu hast alle benötigten Events abgeschlossen!`);
+            stack.count = 0;
+            finishMission(event, player, dataItem);
+        }
+    }
+};
+
+const MISSION_TYPES = [MISSION_TYPE_JOUNREY, MISSION_TYPE_ITEM, MISSION_TYPE_KILL, MISSION_TYPE_MISSIONS];
 const ALL_MISSIONS = [];
 
 //----------------------
@@ -129,6 +149,7 @@ const ALL_MISSIONS = [];
 //----------------------
 const PRESENT_EVENT = {
     name: 'Geschenkt',
+    id: 'present',
     weight: 1,
     startEvent(event) {
         let players = event.server.players;
@@ -144,6 +165,7 @@ const PRESENT_EVENT = {
 }
 
 const HUNT_EVENT = {
+    id: 'hunt',
     weight: 4,
     name: undefined,
     startTick: undefined,
@@ -156,6 +178,7 @@ const HUNT_EVENT = {
     multiplayer: undefined,
     wild: undefined,
     total: undefined,
+    label: undefined,
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
@@ -171,6 +194,8 @@ const HUNT_EVENT = {
         else if (!currentEvent.wild && currentEvent.multiplayer) currentEvent.name = 'Treibjagd';
         else currentEvent.name = 'Kopfgeldjagd';
 
+        currentEvent.label = unlucky ? `§4[${currentEvent.name}]§f` : `§6[${currentEvent.name}]§f`;
+
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
         let targetName = currentEvent.targetMonster.name;
@@ -184,9 +209,9 @@ const HUNT_EVENT = {
 
         if (currentEvent.multiplayer) {
             currentEvent.targetAmount *= event.server.players.length;
-            event.server.tell(`§6[${currentEvent.name}]§f Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
+            event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
         } else {
-            event.server.tell(`§6[${currentEvent.name}]§f Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
+            event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
         }
     },
 
@@ -198,7 +223,7 @@ const HUNT_EVENT = {
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
 
-        event.server.tell(`§6[${currentEvent.name}]§f §a${killer}§f macht kill §a${currentEvent.multiplayer ? currentEvent.total : currentEvent.actionTable.get(killer)}§f / §a${currentEvent.targetAmount}`);
+        event.server.tell(`${currentEvent.label} §a${killer}§f macht kill §a${currentEvent.multiplayer ? currentEvent.total : currentEvent.actionTable.get(killer)}§f / §a${currentEvent.targetAmount}`);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -226,21 +251,33 @@ const HUNT_EVENT = {
 
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
-            event.server.tell(`§6[${currentEvent.name}]§f §cZeit ist abgelaufen!`);
+            if (unlucky) {
+                let effects = ['minecraft:slowness 300', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
+                event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
+                event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
+                event.server.runCommandSilent(`effect give @a minecraft:unluck 300 2`);
+                unlucky = false;
+            } else {
+                event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
+            }
             currentEvent = undefined;
             return;
         }
 
 
         if (currentEvent.multiplayer) {
-            event.server.tell(`§6[${currentEvent.name}]§f §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label} §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
             hunters.forEach(hunter => {
                 summonQERewardAtPlayer(event, hunter);
+                checkForHelperMission(event, hunter, HUNT_EVENT.id);
             });
         } else {
-            event.server.tell(`§6[${currentEvent.name}]§f  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label}  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
             summonQERewardAtPlayer(event, winnerName);
+            checkForHelperMission(event, winnerName, HUNT_EVENT.id);
         }
+        unlucky = false;
         currentEvent = undefined;
     },
 
@@ -251,6 +288,7 @@ const HUNT_EVENT = {
 
 const THIEF_EVENT = {
     name: 'Gilden-Dieb',
+    id: 'thief',
     weight: 2,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
@@ -284,6 +322,7 @@ const THIEF_EVENT = {
 
 const AIRDROP_EVENT = {
     name: 'Frachtverlust',
+    id: 'airdrop',
     weight: 1,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
@@ -317,13 +356,20 @@ const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT]
 // Neue Mission würfeln
 ItemEvents.rightClicked(missionToken, event => {
     try {
-        let mission = getRandomMission();
-        let playerProgress = getPlayerProgress(event.player, mission.type);
-        let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
-        let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
-        let alteredMinAmount = Math.ceil(mission.min * playerProgress);
-        let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
-        giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress);
+
+        if (Math.random() < curseChance) {
+            event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
+            unlucky = true;
+            startEvent(event, HUNT_EVENT.id, true);
+        } else {
+            let mission = getRandomMission();
+            let playerProgress = getPlayerProgress(event.player, mission.type);
+            let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
+            let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
+            let alteredMinAmount = Math.ceil(mission.min * playerProgress);
+            let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
+            giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress);
+        }
         event.item.count = event.item.count - 1;
     } catch (e) {
         event.player.tell(`§cEs konnte keine Mission erzeugt werden! Versuch es nochmal.`);
@@ -346,6 +392,7 @@ EntityEvents.death(event => {
     }
     if (event.entity.hasCustomName() && event.entity.getCustomName().getString() == 'Gilden-Dieb') {
         event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
+        checkForHelperMission(event, event.source.player.username, THIEF_EVENT.id);
     }
 
     let player = event.source.player;
@@ -463,10 +510,11 @@ function generateMissionLore(type, coins, erstellt, item, name, playername, mod)
 
 function finishMission(event, player, data) {
     let playerName = player.username;
+    let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     player.tell(`§aDer Auftrag ist abgeschlossen und du erhälst deine §6${data.coins} Coins§a Belohnung!`)
     event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${coinItem}",count:${data.coins}}}`);
     event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
-    event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}x ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
+    event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
 }
 
 function parseMissionInfo(itemStack) {
@@ -590,9 +638,9 @@ function ticksToTime(ticks, withColor) {
     return `${hours.toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
 }
 
-function startEvent(event) {
-    if (!currentEvent || currentEvent.endTick < event.server.tickCount) {
-        const ev = getWeightedRandomItem(ALL_QUICK_EVENTS);
+function startEvent(event, typeFilter, force) {
+    if (!currentEvent || currentEvent.endTick < event.server.tickCount || force) {
+        let ev = getWeightedRandomItem(ALL_QUICK_EVENTS.filter(e => !typeFilter || e.id === typeFilter));
         this.currentEvent = ev;
         this.currentEvent.startEvent(event);
     }
@@ -612,7 +660,7 @@ function tickTimeColor(ticks) {
 
 function getTimeRemaining(event, fortschritt) {
     fortschritt = fortschritt === undefined ? false : fortschritt;
-    let result = `§6[${currentEvent.name}]§f Verbleibende Zeit: ${tickTimeColor(currentEvent.endTick - event.server.tickCount)}${ticksToTime(currentEvent.endTick - event.server.tickCount)}§f.`;
+    let result = `${currentEvent.label || `§6[${currentEvent.name}]§f`} Verbleibende Zeit: ${tickTimeColor(currentEvent.endTick - event.server.tickCount)}${ticksToTime(currentEvent.endTick - event.server.tickCount)}§f.`;
     if (fortschritt) result += ` Fortschritt: §a${currentEvent.total} / ${currentEvent.targetAmount}§f.`;
     event.server.tell(result);
 }
@@ -672,6 +720,31 @@ function markPosition(event, summonPos, waypointName) {
     if (waypointName !== undefined) {
         event.server.runCommandSilent(`jm waypoint delete "${waypointName}" @a`);
         event.server.runCommandSilent(`jm waypoint temp create "${waypointName}" minecraft:overworld ${summonPos.x} 64 ${summonPos.z} green @a`);
+    }
+}
+
+function checkForHelperMission(event, username, type) {
+    let player = event.server.players.find(p => p.username === username);
+    if (player === undefined) return;
+    let inventory = player.inventory;
+    let searchItem = Item.of(missionItem);
+
+    for (let i = 0; i < inventory.getContainerSize(); i++) {
+        let item = inventory.getItem(i);
+        if (item.is(searchItem)) {
+            let data = parseMissionInfo(item);
+            if (data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
+                if (data.currentDamage === 1) {
+                    player.tell(`§aDu hast die letzte Mission für §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
+                    finishMission(event, player, data);
+                    item.count = 0;
+                } else {
+                    data.currentDamage--;
+                    item.setDamage(data.currentDamage);
+                    player.tell(`§a${generateMissionTitle(data.type.id, data.name, data.maxDamage)}§a - verbleibend: §6${data.currentDamage}§a.`);
+                }
+            }
+        }
     }
 }
 
