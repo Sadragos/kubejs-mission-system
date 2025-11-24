@@ -1,7 +1,6 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
 kill;minecraft:blaze;Lohe;8;64;6;12;100
 kill;minecraft:breeze;Böe;8;32;6;12;100
-kill;minecraft:cave_spider;Höhlenspinne;8;64;6;12;100
 kill;minecraft:creeper;;4;16;6;12;100
 kill;minecraft:drowned;Ertrunkener;8;64;6;12;100
 kill;minecraft:elder_guardian;Großwächter;1;3;16;24;75
@@ -24,7 +23,7 @@ kill;minecraft:silverfish;Silberfisch;8;128;6;12;100
 kill;minecraft:skeleton_horse;;4;16;6;12;100
 kill;minecraft:skeleton;;8;64;6;12;200
 kill;minecraft:slime;Schleim;8;128;6;12;100
-kill;minecraft:spider;Spinne;8;64;6;12;250
+kill;spider;Spinne;8;96;6;12;300
 kill;minecraft:stray;;8;64;6;12;100
 kill;minecraft:vindicator;;4;16;6;12;100
 kill;minecraft:wandering_trader;;1;1;8;16;100

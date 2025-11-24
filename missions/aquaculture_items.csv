@@ -33,4 +33,5 @@ item;aquaculture:red_grouper;Roter Zackenbarsch;6;24;6;16;50
 item;aquaculture:smallmouth_bass;Schwarzbarsch;6;24;6;16;50
 item;aquaculture:synodontis;Synodontie;6;24;6;16;50
 item;aquaculture:tambaqui;Tambaqui;6;24;6;16;50
-item;aquaculture:tuna;Thunfisch;6;24;6;16;50
+item;tuna;Thunfisch;6;24;6;16;50
+item;arapaima,cod,halibut,herring,fish,bluegill,boulti,trout,capitaine,carp,minnow,muskellunge,perch,salmon,paranha,grouper,bass,synodontis,tambaqui,tuna;Fisch;32;128;6;16;400

@@ -77,11 +77,11 @@ item;minecraft:cobweb;Spinnennetz;8;32;6;12;100
 item;minecraft:comparator;Komparator;16;64;6;12;100
 item;minecraft:cooked_beef;Steak;32;128;6;12;100
 item;minecraft:cooked_chicken;Gebratenes Hühnchen;32;128;6;12;100
-item;minecraft:cooked_cod;Gebratener Kabeljau;32;128;6;12;100
+item;minecraft:cooked_cod;Gebratener Kabeljau;32;128;6;12;200
 item;minecraft:cooked_mutton;Gebratenes Hammelfleisch;32;128;6;12;100
 item;minecraft:cooked_porkchop;Gebratenes Schweinefleisch;32;128;6;12;100
 item;minecraft:cooked_rabbit;Gebratenes Kaninchen;32;128;6;12;100
-item;minecraft:cooked_salmon;Gebratener Lachs;32;128;6;12;100
+item;minecraft:cooked_salmon;Gebratener Lachs;32;128;6;12;200
 item;minecraft:cookie;Kekse;128;512;6;12;100
 item;minecraft:cracked_stone_bricks;Rissige Steinziegel;125;512;6;12;100
 item;minecraft:crafting_table;Werkbank;128;512;6;12;100

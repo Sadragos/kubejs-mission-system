@@ -34,6 +34,8 @@ let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
 let curseChance = 0.05;
 const HUNT_SCOREBOARD_NAME = 'quest_hunt_score';
+const MULTIPLAYER_PERCENTAGE = 0.7;
+const MISSION_TARGET_PLAYER_MULT = 0.5;
 
 // Schwierigkeit
 let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
@@ -187,7 +189,7 @@ const HUNT_EVENT = {
         currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
-        currentEvent.multiplayer = randomInt(0, 100) <= 70;
+        currentEvent.multiplayer = randomInt(0, 100) <= (MULTIPLAYER_PERCENTAGE * 100);
         currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
         currentEvent.wild = currentEvent.targetMonster.item === '*';
 
@@ -216,19 +218,19 @@ const HUNT_EVENT = {
         currentEvent.total = 0;
         let targetName = currentEvent.targetMonster.name;
         let playermodsum = 0;
+        let playermult = 0;
         for (let player of event.server.players) {
             playermodsum += getPlayerProgress(player, 'kill');
+            playermult += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
-        currentEvent.targetAmount = currentEvent.wild ? randomInt(10, 100) : Math.ceil(randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) / 2);
-        currentEvent.targetAmount = Math.ceil(currentEvent.targetAmount * playermod);
+        currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) * playermult);
+        currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
 
-        event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${currentEvent.scoreLabel} ${currentEvent.targetAmount}x ${targetName}"`);
-        event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
+        initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, currentEvent.multiplayer);
 
         if (currentEvent.multiplayer) {
             currentEvent.targetAmount *= event.server.players.length;
-            event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
             event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
         } else {
             event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
@@ -243,9 +245,8 @@ const HUNT_EVENT = {
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
 
-        event.server.runCommandSilent(`scoreboard players set ${killer} ${HUNT_SCOREBOARD_NAME} ${currentEvent.actionTable.get(killer)}`);
-        if (currentEvent.multiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} ${currentEvent.total}`);
-        //event.server.tell(`${currentEvent.label} §a${killer}§f macht kill §a${currentEvent.multiplayer ? currentEvent.total : currentEvent.actionTable.get(killer)}§f / §a${currentEvent.targetAmount}`);
+        setScore(event, killer, currentEvent.actionTable.get(killer));
+        setScore(event, 'GESAMT', currentEvent.total);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -289,7 +290,7 @@ const HUNT_EVENT = {
 
 
         if (currentEvent.multiplayer) {
-            event.server.tell(`${currentEvent.label} §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
             hunters.forEach(hunter => {
                 summonQERewardAtPlayer(event, hunter);
                 checkForHelperMission(event, hunter, HUNT_EVENT.id);
@@ -387,7 +388,7 @@ const ITEM_REQUEST_EVENT = {
         let playerMulti = 0;
         for (let player of event.server.players) {
             playermodsum += getPlayerProgress(player);
-            playerMulti += 0.5;
+            playerMulti += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
         currentEvent.startTick = event.server.tickCount;
@@ -396,16 +397,14 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
-        currentEvent.multiplayer = randomInt(0, 100) <= 70;
         currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length));
 
         currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
-        currentEvent.targetAmount = Math.ceil(currentEvent.targetAmount * playermod);
+        currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
         let targetName = currentEvent.targetItem.name;
 
-        event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${currentEvent.scoreLabel} ${currentEvent.targetAmount}x ${targetName}"`);
-        event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
-        event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
+        initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, true);
+
 
         event.server.tell(`${currentEvent.label} Die Gilde hat §6${currentEvent.targetAmount}x ${targetName}§f bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetItem.item}`);
     },
@@ -413,7 +412,6 @@ const ITEM_REQUEST_EVENT = {
         let hunters = [];
         let huntersText = [];
         let winnerCount = 0;
-        let winnerName = undefined;
 
         for (let [key, data] of currentEvent.actionTable) {
             hunters.push(key);
@@ -432,7 +430,7 @@ const ITEM_REQUEST_EVENT = {
         }
 
 
-        event.server.tell(`${currentEvent.label} §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+        event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
         hunters.forEach(hunter => {
             summonQERewardAtPlayer(event, hunter);
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
@@ -496,8 +494,8 @@ ItemEvents.rightClicked('minecraft:bowl', event => {
         currentEvent.actionTable.set(playername, (currentEvent.actionTable.get(playername) || 0) + take);
         currentEvent.total += take;
 
-        event.server.runCommandSilent(`scoreboard players set ${playername} ${HUNT_SCOREBOARD_NAME} ${currentEvent.actionTable.get(playername)}`);
-        event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} ${currentEvent.total}`);
+        setScore(event, playername, currentEvent.actionTable.get(playername));
+        setScore(event, 'GESAMT', currentEvent.total);
 
         if (currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -583,6 +581,16 @@ ServerEvents.tick(event => {
 //----------------------
 // Helper
 //----------------------
+
+function initScoreboard(event, title, isMultiplayer) {
+    event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${title}"`);
+    event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
+    if(isMultiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
+}
+
+function setScore(event, playername, score) {
+    event.server.runCommandSilent(`scoreboard players set ${playername} ${HUNT_SCOREBOARD_NAME} ${score}`);
+}
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
