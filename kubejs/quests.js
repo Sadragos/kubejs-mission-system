@@ -33,6 +33,7 @@ let ticksPerSecond = 20;
 let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
 let curseChance = 0.05;
+const HUNT_SCOREBOARD_NAME = 'quest_hunt_score';
 
 // Schwierigkeit
 let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
@@ -179,6 +180,7 @@ const HUNT_EVENT = {
     wild: undefined,
     total: undefined,
     label: undefined,
+    scoreLabel: undefined,
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
@@ -189,12 +191,26 @@ const HUNT_EVENT = {
         currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
         currentEvent.wild = currentEvent.targetMonster.item === '*';
 
-        if (currentEvent.wild && currentEvent.multiplayer) currentEvent.name = 'Gemätzel'
-        else if (currentEvent.wild && !currentEvent.multiplayer) currentEvent.name = 'Wilde Jagd';
-        else if (!currentEvent.wild && currentEvent.multiplayer) currentEvent.name = 'Treibjagd';
-        else currentEvent.name = 'Kopfgeldjagd';
+        if (currentEvent.wild && currentEvent.multiplayer) {
+            currentEvent.name = 'Gemätzel';
+            currentEvent.scoreLabel = '[G]';
+        }
+        else if (currentEvent.wild && !currentEvent.multiplayer) {
+            currentEvent.name = 'Wilde Jagd';
+            currentEvent.scoreLabel = '[W]';
+        }
+        else if (!currentEvent.wild && currentEvent.multiplayer) {
+            currentEvent.name = 'Treibjagd';
+            currentEvent.scoreLabel = '[T]';
+        }
+        else {
+            currentEvent.name = 'Kopfgeldjagd';
+            currentEvent.scoreLabel = '[K]';
+        }
 
         currentEvent.label = unlucky ? `§4[${currentEvent.name}]§f` : `§6[${currentEvent.name}]§f`;
+        currentEvent.scoreLabel = unlucky ? `§4${currentEvent.scoreLabel}§f` : `§6${currentEvent.scoreLabel}§f`;
+
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -207,8 +223,12 @@ const HUNT_EVENT = {
         currentEvent.targetAmount = currentEvent.wild ? randomInt(10, 100) : Math.ceil(randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) / 2);
         currentEvent.targetAmount = Math.ceil(currentEvent.targetAmount * playermod);
 
+        event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${currentEvent.scoreLabel} ${currentEvent.targetAmount}x ${targetName}"`);
+        event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
+
         if (currentEvent.multiplayer) {
             currentEvent.targetAmount *= event.server.players.length;
+            event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
             event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
         } else {
             event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
@@ -223,7 +243,9 @@ const HUNT_EVENT = {
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
 
-        event.server.tell(`${currentEvent.label} §a${killer}§f macht kill §a${currentEvent.multiplayer ? currentEvent.total : currentEvent.actionTable.get(killer)}§f / §a${currentEvent.targetAmount}`);
+        event.server.runCommandSilent(`scoreboard players set ${killer} ${HUNT_SCOREBOARD_NAME} ${currentEvent.actionTable.get(killer)}`);
+        if (currentEvent.multiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} ${currentEvent.total}`);
+        //event.server.tell(`${currentEvent.label} §a${killer}§f macht kill §a${currentEvent.multiplayer ? currentEvent.total : currentEvent.actionTable.get(killer)}§f / §a${currentEvent.targetAmount}`);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -283,7 +305,7 @@ const HUNT_EVENT = {
 
     timeNotification(event) {
         getTimeRemaining(event, currentEvent.multiplayer);
-    }
+    },
 }
 
 const THIEF_EVENT = {
@@ -346,7 +368,83 @@ const AIRDROP_EVENT = {
     }
 }
 
-const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT];
+const ITEM_REQUEST_EVENT = {
+    name: 'Bestellung',
+    id: 'request',
+    weight: 2,
+    startTick: undefined,
+    endTick: undefined,
+    missionTime: undefined,
+
+    targetItem: undefined,
+    targetAmount: undefined,
+    actionTable: undefined,
+    label: '§6[Bestellung]§f',
+    scoreLabel: '§6[B]§f',
+    total: 0,
+    startEvent(event) {
+        let playermodsum = 0;
+        let playerMulti = 0;
+        for (let player of event.server.players) {
+            playermodsum += getPlayerProgress(player);
+            playerMulti += 0.5;
+        }
+        let playermod = playermodsum / event.server.players.length;
+        currentEvent.startTick = event.server.tickCount;
+        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
+        currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
+        currentEvent.total = 0;
+        currentEvent.actionTable = new Map();
+
+        currentEvent.multiplayer = randomInt(0, 100) <= 70;
+        currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length));
+
+        currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
+        currentEvent.targetAmount = Math.ceil(currentEvent.targetAmount * playermod);
+        let targetName = currentEvent.targetItem.name;
+
+        event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${currentEvent.scoreLabel} ${currentEvent.targetAmount}x ${targetName}"`);
+        event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
+        event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
+
+        event.server.tell(`${currentEvent.label} Die Gilde hat §6${currentEvent.targetAmount}x ${targetName}§f bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetItem.item}`);
+    },
+    stopEvent(event) {
+        let hunters = [];
+        let huntersText = [];
+        let winnerCount = 0;
+        let winnerName = undefined;
+
+        for (let [key, data] of currentEvent.actionTable) {
+            hunters.push(key);
+            huntersText.push(`${key} (${data})`);
+            if (data > winnerCount) {
+                winnerCount = data;
+                winnerName = key;
+            }
+        }
+
+        let failed = currentEvent.total < currentEvent.targetAmount;
+        if (failed) {
+            event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
+            currentEvent = undefined;
+            return;
+        }
+
+
+        event.server.tell(`${currentEvent.label} §aEvent war Erolfgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+        hunters.forEach(hunter => {
+            summonQERewardAtPlayer(event, hunter);
+            checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
+        });
+        currentEvent = undefined;
+    },
+    timeNotification(event) {
+        getTimeRemaining(event, currentEvent.multiplayer);
+    },
+}
+
+const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT, ITEM_REQUEST_EVENT];
 
 
 //----------------------
@@ -382,6 +480,30 @@ ItemEvents.rightClicked(missionItem, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
     data.type.rightClickHandler(event, data, stack);
+});
+
+// Items für Mission abgeben
+ItemEvents.rightClicked('minecraft:bowl', event => {
+    if (!currentEvent || currentEvent.id !== ITEM_REQUEST_EVENT.id) return
+    let player = event.player;
+    let take = removeFromInventory(player, currentEvent.targetItem.item, currentEvent.targetAmount - currentEvent.total);
+
+    if (take === 0) {
+        player.tell(`§cDu hast kein ${currentEvent.targetItem.name} im Inventar.`);
+    } else {
+        player.tell(`§aDu hast §6${take}x ${currentEvent.targetItem.name}§a zur Gilde geschickt!`);
+        let playername = String(player.username);
+        currentEvent.actionTable.set(playername, (currentEvent.actionTable.get(playername) || 0) + take);
+        currentEvent.total += take;
+
+        event.server.runCommandSilent(`scoreboard players set ${playername} ${HUNT_SCOREBOARD_NAME} ${currentEvent.actionTable.get(playername)}`);
+        event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} ${currentEvent.total}`);
+
+        if (currentEvent.total >= currentEvent.targetAmount) {
+            currentEvent.stopEvent(event);
+        }
+    }
+    event.cancel();
 });
 
 // Etwas stirbt
@@ -430,11 +552,17 @@ ServerEvents.tick(event => {
                 currentEvent = undefined;
             }
         } else {
+            const scoreboard = event.server.getScoreboard();
+            if (scoreboard.getObjective(HUNT_SCOREBOARD_NAME) !== null) {
+                event.server.runCommandSilent(`scoreboard objectives remove ${HUNT_SCOREBOARD_NAME}`);
+                return;
+            }
             let playerCount = event.server.players.length;
             let bonusChance = playerCount * avgMissionPerHourPlayer;
             let totalMissionsPerHous = avgMissionsPerHour + bonusChance;
             let missionChance = totalMissionsPerHous / (ticksPerHour / checkInterval);
             let chance = Math.random();
+
 
             if (chance < missionChance) {
                 startEvent(event);
@@ -443,14 +571,13 @@ ServerEvents.tick(event => {
     }
     if (currentEvent?.timeNotification) {
         let interval = announceIntervalSeconds;
-        if ((currentEvent.endTick - event.server.tickCount) < 20 * 20) interval = 5;
-        else if ((currentEvent.endTick - event.server.tickCount) < 90 * 20) interval = 20;
+        if ((currentEvent.endTick - event.server.tickCount) < 15 * 20) interval = 5;
+        else if ((currentEvent.endTick - event.server.tickCount) < 80 * 20) interval = 20;
         if (event.server.tickCount % (interval * 20) === 0) {
             currentEvent.timeNotification(event);
         }
     }
 });
-
 
 
 //----------------------
@@ -789,6 +916,3 @@ PlayerEvents.loggedIn(event => {
 });
 
 // ------------------ ALL MISSIONS ------------------
-
-
-
