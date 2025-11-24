@@ -555,7 +555,9 @@ ServerEvents.tick(event => {
                 event.server.runCommandSilent(`scoreboard objectives remove ${HUNT_SCOREBOARD_NAME}`);
                 return;
             }
+            
             let playerCount = event.server.players.length;
+            if(playerCount === 0) return;
             let bonusChance = playerCount * avgMissionPerHourPlayer;
             let totalMissionsPerHous = avgMissionsPerHour + bonusChance;
             let missionChance = totalMissionsPerHous / (ticksPerHour / checkInterval);
