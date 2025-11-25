@@ -25,7 +25,7 @@ let missionSummonMaxPlayerDist = 16 * 8;
 let rewardItem = 'kubejs:mission_scroll';
 let checkInterval = 100;
 let announceIntervalSeconds = 60;
-let missionMinTime = 20 * 60 * 5;
+let missionMinTime = 20 * 60 * 10;
 let missionMaxTime = missionMinTime + (20 * 60 * 15)
 
 // Sonstiges
@@ -35,7 +35,7 @@ let ticksPerHour = ticksPerMinute * 60;
 let curseChance = 0.05;
 const HUNT_SCOREBOARD_NAME = 'quest_hunt_score';
 const MULTIPLAYER_PERCENTAGE = 0.7;
-const MISSION_TARGET_PLAYER_MULT = 0.5;
+const MISSION_TARGET_PLAYER_MULT = 0.35;
 
 // Schwierigkeit
 let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
@@ -86,7 +86,7 @@ const MISSION_TYPE_KILL = {
         let need = dataItem.currentDamage;
         player.tell(`§cDir fehlen noch §6${need}x ${dataItem.name}§c.`);
 
-        if (remaining === 0) {
+        if (need === 0) {
             player.tell(`§aDu hast alle benötigten §6${dataItem.name}§a umgebracht!`);
             stack.count = 0;
             finishMission(event, player, dataItem);
@@ -255,7 +255,6 @@ const HUNT_EVENT = {
     },
 
     stopEvent(event) {
-
         // get the entry with the highest count from  actionTable
         let hunters = [];
         let huntersText = [];
@@ -284,6 +283,7 @@ const HUNT_EVENT = {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
             }
             currentEvent = undefined;
+            removeScoreboard(event);
             return;
         }
 
@@ -301,6 +301,7 @@ const HUNT_EVENT = {
         }
         unlucky = false;
         currentEvent = undefined;
+        removeScoreboard(event);
     },
 
     timeNotification(event) {
@@ -410,21 +411,17 @@ const ITEM_REQUEST_EVENT = {
     stopEvent(event) {
         let hunters = [];
         let huntersText = [];
-        let winnerCount = 0;
 
         for (let [key, data] of currentEvent.actionTable) {
             hunters.push(key);
             huntersText.push(`${key} (${data})`);
-            if (data > winnerCount) {
-                winnerCount = data;
-                winnerName = key;
-            }
         }
 
         let failed = currentEvent.total < currentEvent.targetAmount;
         if (failed) {
             event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
             currentEvent = undefined;
+            removeScoreboard(event);
             return;
         }
 
@@ -435,6 +432,7 @@ const ITEM_REQUEST_EVENT = {
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
+        removeScoreboard(event);
     },
     timeNotification(event) {
         getTimeRemaining(event, currentEvent.multiplayer);
@@ -455,6 +453,7 @@ ItemEvents.rightClicked(missionToken, event => {
         if (Math.random() < curseChance) {
             event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
             unlucky = true;
+            if(currentEvent) currentEvent.stopEvent();
             startEvent(event, HUNT_EVENT.id, true);
         } else {
             let mission = getRandomMission();
@@ -549,14 +548,9 @@ ServerEvents.tick(event => {
                 currentEvent = undefined;
             }
         } else {
-            const scoreboard = event.server.getScoreboard();
-            if (scoreboard.getObjective(HUNT_SCOREBOARD_NAME) !== null) {
-                event.server.runCommandSilent(`scoreboard objectives remove ${HUNT_SCOREBOARD_NAME}`);
-                return;
-            }
-            
+
             let playerCount = event.server.players.length;
-            if(playerCount === 0) return;
+            if (playerCount === 0) return;
             let bonusChance = playerCount * avgMissionPerHourPlayer;
             let totalMissionsPerHous = avgMissionsPerHour + bonusChance;
             let missionChance = totalMissionsPerHous / (ticksPerHour / checkInterval);
@@ -586,11 +580,15 @@ ServerEvents.tick(event => {
 function initScoreboard(event, title, isMultiplayer) {
     event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${title}"`);
     event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar ${HUNT_SCOREBOARD_NAME}`);
-    if(isMultiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
+    if (isMultiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
 }
 
 function setScore(event, playername, score) {
     event.server.runCommandSilent(`scoreboard players set ${playername} ${HUNT_SCOREBOARD_NAME} ${score}`);
+}
+
+function removeScoreboard(event) {
+    event.server.runCommandSilent(`scoreboard objectives remove ${HUNT_SCOREBOARD_NAME}`);
 }
 
 function randomInt(min, max) {
@@ -922,6 +920,71 @@ PlayerEvents.loggedIn(event => {
             summonQERewardAtPlayer(event, event.player.username, min, max);
         }
     }, 30000);
+});
+
+// ------------------ COMMANDS ----------------------
+// Liste der erlaubten Werte für den Parameter (Tab-Completion)
+ServerEvents.commandRegistry(event => {
+    const { commands: Commands, arguments: Arguments } = event
+    const SUBCOMMANDS = ['abort', 'start']
+
+    // /mycmd [option]
+    event.register(
+        Commands.literal('missions') // Name des Befehls
+            .requires(source => source.hasPermission(2))
+            .then(
+                Commands.argument('action', Arguments.STRING.create(event))
+                    .suggests((ctx, builder) => {
+                        for (const opt of SUBCOMMANDS) builder.suggest(opt)
+                        return builder.buildFuture()
+                    })
+                    .executes(ctx => {
+                        const value = Arguments.STRING.getResult(ctx, 'action')
+                        return runWithAction(ctx.source, value)
+                    })
+            )
+            .then(
+                Commands.literal('start')
+                    .then(
+                        Commands
+                            .argument('type', Arguments.STRING.create(event))
+                            .suggests((ctx, builder) => {
+                                for (const opt of ALL_QUICK_EVENTS) {
+                                    builder.suggest(opt.id)
+                                }
+                                return builder.buildFuture()
+                            })
+                            .executes(ctx => {
+                                const value = Arguments.STRING.getResult(ctx, 'type')
+                                return runStart(ctx.source, value);
+                            })
+                    )
+            )
+    )
+
+    function runWithAction(source, option) {
+        switch(option) {
+            case "abort":
+                if(!currentEvent) {
+                    source.player.tell('§cNo Event running!')
+                } else {
+                    currentEvent.stopEvent(source);
+                }
+            break;
+            default:
+                source.player.tell('§cInvalid Command!');
+        }
+        return 1;
+    }
+
+    function runStart(source, type) {
+        startEvent(source, type);
+        return 1;
+    }
+})
+
+ServerEvents.loaded(event => {
+  removeScoreboard(event);
 });
 
 // ------------------ ALL MISSIONS ------------------
