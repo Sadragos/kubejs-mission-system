@@ -10,7 +10,7 @@ const PRESENT_EVENT = {
         let players = event.server.players;
         event.server.tell(`§fEs gibt eine §6Geschenkte Mission§f für jeden!`);
         for (let player of players) {
-            summonQERewardAtPlayer(event, player.username);
+            summonRewardItem(event, player.username, rewardAmountMin, rewardAmountMax);
         }
         currentEvent.stopEvent();
     },
@@ -95,9 +95,11 @@ const HUNT_EVENT = {
         let killer = String(player.username);
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
+        const pos = `${event.entity.position().x} ${event.entity.position().y+1} ${event.entity.position().z}`;
+        event.server.runCommandSilent(`particle minecraft:totem_of_undying ${pos} 0 0 0 0.1 20`)
 
         setScore(event, killer, currentEvent.actionTable.get(killer));
-        setScore(event, 'GESAMT', currentEvent.total);
+        if(currentEvent.multiplayer) setScore(event, 'GESAMT', currentEvent.total);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -130,6 +132,7 @@ const HUNT_EVENT = {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
                 event.server.runCommandSilent(`effect give @a minecraft:unluck 300 2`);
+                event.server.runCommandSilent(`execute at @a run particle minecraft:ash ~ ~3 ~ 0 0 0 0.1 100`);
                 unlucky = false;
             } else {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
@@ -143,12 +146,15 @@ const HUNT_EVENT = {
         if (currentEvent.multiplayer) {
             event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
             hunters.forEach(hunter => {
-                summonQERewardAtPlayer(event, hunter);
+                summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
                 checkForHelperMission(event, hunter, HUNT_EVENT.id);
+                if(currentEvent.targetMonster.egg) {
+                    summonItem(event, hunter, currentEvent.targetMonster.egg, 1);
+                }
             });
         } else {
             event.server.tell(`${currentEvent.label}  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
-            summonQERewardAtPlayer(event, winnerName);
+            summonRewardItem(event, winnerName, rewardAmountMin, rewardAmountMax);
             checkForHelperMission(event, winnerName, HUNT_EVENT.id);
         }
         unlucky = false;
@@ -280,7 +286,7 @@ const ITEM_REQUEST_EVENT = {
 
         event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
         hunters.forEach(hunter => {
-            summonQERewardAtPlayer(event, hunter);
+            summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
@@ -372,10 +378,9 @@ function startEvent(event, typeFilter, force) {
     }
 }
 
-function summonQERewardAtPlayer(event, playerName, amountMin, amountMax) {
+function summonRewardItem(event, playerName, amountMin, amountMax) {
     let min = amountMin === undefined ? 1 : amountMin;
     let max = amountMax === undefined ? 1 : amountMax;
     let amount = randomInt(min, max);
-    event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${rewardItem}",count:${amount}}}`);
-    event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
+    summonItem(event, playerName, rewardItem, amount);
 }

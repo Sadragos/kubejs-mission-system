@@ -102,6 +102,7 @@ ItemEvents.rightClicked(missionToken, event => {
             unlucky = true;
             if(currentEvent) currentEvent.stopEvent();
             startEvent(event, HUNT_EVENT.id, true);
+            event.server.runCommandSilent(`execute at @a run particle minecraft:ash ~ ~3 ~ 0 0 0 0.1 100`);
         } else {
             let mission = getRandomMission();
             let playerProgress = getPlayerProgress(event.player, mission.type);
@@ -171,7 +172,7 @@ PlayerEvents.loggedIn(event => {
                 min = 3;
                 max = 6;
             }
-            summonQERewardAtPlayer(event, event.player.username, min, max);
+            summonRewardItem(event, event.player.username, min, max);
         }
     }, 30000);
 });

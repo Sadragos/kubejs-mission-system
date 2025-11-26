@@ -5,7 +5,8 @@ const seedrandom = require('seedrandom');
 // Config
 const defaults = {
     minAmount: 64,
-    minCoins: 8
+    minCoins: 8,
+    eggChance: 0
 }
 
 
@@ -34,6 +35,14 @@ allCsvFiles.forEach(file => {
             minCoins: parseInt(mission.minCoins) || defaults.minCoins,
             maxCoins: parseInt(mission.maxCoins) || ((parseInt(mission.minCoins) || defaults.minCoins) * 2),
             weight: parseInt(mission.weight),
+        }
+        if(item.type === 'kill') {
+            if(mission.egg) {
+                item.egg = mission.egg;
+            } else if(!mission.egg && mission.eggChance > 0) {
+                item.egg = `${mission.item}_spawn_egg`;
+            }
+            item.eggChance = parseInt(mission.eggChance) || defaults.eggChance;
         }
         if(!item.weight) return;
         out.push(`ALL_MISSIONS.push(${JSON.stringify(item)});`)

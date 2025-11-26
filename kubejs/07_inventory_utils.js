@@ -14,3 +14,8 @@ function removeFromInventory(player, searchItem, amount) {
     }
     return amount - remaining;
 }
+
+function summonItem(event, playerName, item, amount) {
+    event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${item}",count:${amount}}}`);
+    event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
+}
