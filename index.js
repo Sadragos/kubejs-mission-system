@@ -41,18 +41,26 @@ allCsvFiles.forEach(file => {
 });
 
 console.log('Combining Files...');
-const quests = readFileSync('kubejs/quests.js').toString();
+let fullScript = '';
+
+const scripts = readdirSync('kubejs').filter(f => f.endsWith('.js')).sort();
+scripts.forEach(script => {
+    fullScript += '\n\n\n//---------------------\n';
+    fullScript += `// ${script.replace(/^\d+_/,'').substring(0, script.length - 3)}`;
+    fullScript += '\n//---------------------\n';
+    fullScript += readFileSync(`kubejs/${script}`).toString();
+});
+
+
 const relevantMissionCount = out.filter(line => !line.startsWith('//') && line.trim().length > 0).length;
 const lineString = out.join('\n');
 
-const fileContent = `${quests}\n\n${lineString}`;
+const fileContent = `${fullScript}\n\n${lineString}`;
 
 console.log(`Writing Quests and ${relevantMissionCount} Missions to ${outFile}`);
-if (outFile === 'out/missions.js') {
-    mkdirSync('out', { recursive: true });
-    
-} 
+mkdirSync('out', { recursive: true });
 writeFileSync(outFile, fileContent);
+writeFileSync('out/missions.js', fileContent);
 
 
 function parseCSV(file, missionIdKey) {
