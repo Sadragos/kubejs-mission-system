@@ -51,3 +51,10 @@ const dailyMessage = [
     "§aMöp. Arbeit für USERNAME.",
     "§aIst USERNAME anwesend? Auftrag für USERNAME!"
 ];
+
+// Missions
+const FALLBACK_EGG_CHANCE = 0.2;
+const FALLBACK_MIN_AMOUNT = 64;
+const FALLBACK_MAX_AMOUNT = FALLBACK_MIN_AMOUNT * 3;
+const FALLBACK_MIN_COINS = 6;
+const FALLBACK_MAX_COINS = FALLBACK_MIN_COINS * 2;

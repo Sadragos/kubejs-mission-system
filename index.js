@@ -2,14 +2,6 @@ const { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } = re
 const { parse } = require('path');
 const seedrandom = require('seedrandom');
 
-// Config
-const defaults = {
-    minAmount: 64,
-    minCoins: 8,
-    eggChance: 0
-}
-
-
 const args = process.argv.slice(2);
 const outFile = args[0] || 'out/missions.js';
 
@@ -26,26 +18,20 @@ allCsvFiles.forEach(file => {
     out.push('');
     out.push(`// ${file}`);
     missions.forEach(mission => {
-        const item = {
+        if(!mission.weight) return;
+        let item = {
             type: mission.type,
             item: mission.item,
-            name: mission.name || nameFromItem(mission.item),
-            min: parseInt(mission.minAmount) || defaults.minAmount,
-            max: parseInt(mission.maxAmount) || ((parseInt(mission.minAmount) || defaults.minAmount) * 2),
-            minCoins: parseInt(mission.minCoins) || defaults.minCoins,
-            maxCoins: parseInt(mission.maxCoins) || ((parseInt(mission.minCoins) || defaults.minCoins) * 2),
-            weight: parseInt(mission.weight),
+            weight: parseInt(mission.weight)
         }
-        if(item.type === 'kill') {
-            if(mission.egg) {
-                item.egg = mission.egg;
-            } else if(!mission.egg && mission.eggChance > 0) {
-                item.egg = `${mission.item}_spawn_egg`;
-            }
-            item.eggChance = parseInt(mission.eggChance) || defaults.eggChance;
-        }
-        if(!item.weight) return;
-        out.push(`ALL_MISSIONS.push(${JSON.stringify(item)});`)
+        if(mission.name) item.name = mission.name;
+        if(mission.minAmount) item.min = parseInt(mission.minAmount);
+        if(mission.maxAmount) item.max = parseInt(mission.maxAmount);
+        if(mission.minCoins) item.minCoins = parseInt(mission.minCoins);
+        if(mission.maxCoins) item.maxCoins = parseInt(mission.maxCoins);
+        if(mission.egg) item.egg = mission.egg;
+        if(mission.eggChance) item.eggChance = parseFloat(mission.eggChance);
+        out.push(`addMission(${JSON.stringify(item)});`)
     });
 });
 
@@ -64,7 +50,7 @@ scripts.forEach(script => {
 const relevantMissionCount = out.filter(line => !line.startsWith('//') && line.trim().length > 0).length;
 const lineString = out.join('\n');
 
-const fileContent = `${fullScript}\n\n${lineString}`;
+const fileContent = `${fullScript}\n\n${lineString}\n\ncorrectAllMissions();`;
 
 console.log(`Writing Quests and ${relevantMissionCount} Missions to ${outFile}`);
 mkdirSync('out', { recursive: true });
@@ -90,9 +76,4 @@ function parseCSV(file, missionIdKey) {
         result.push(obj);
     }
     return result;
-}
-
-function nameFromItem(item) {
-    const base = item.indexOf(':') === -1 ? item : item.split(':')[1];
-    return base.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }

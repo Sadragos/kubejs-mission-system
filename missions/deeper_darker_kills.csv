@@ -1,8 +1,8 @@
-type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-kill;deeperdarker:sculk_centipede;;16;64;8;16;50
-kill;deeperdarker:sculk_leech;;16;64;8;16;50
-kill;deeperdarker:sculk_snapper;;16;32;8;16;50
-kill;deeperdarker:shattered;;8;16;8;16;50
-kill;deeperdarker:shriek_worm;;8;16;8;16;50
-kill;deeperdarker:sludge;;32;64;8;16;50
-kill;deeperdarker:stalker;;1;2;10;20;25
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance
+kill;deeperdarker:sculk_centipede;;16;64;8;16;50;;
+kill;deeperdarker:sculk_leech;;16;64;8;16;50;;
+kill;deeperdarker:sculk_snapper;;16;32;8;16;50;;
+kill;deeperdarker:shattered;;8;16;8;16;50;;
+kill;deeperdarker:shriek_worm;;8;16;8;16;50;;
+kill;deeperdarker:sludge;;32;64;8;16;50;;
+kill;deeperdarker:stalker;;1;2;10;20;25;;-1

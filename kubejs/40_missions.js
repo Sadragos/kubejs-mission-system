@@ -91,7 +91,6 @@ const MISSION_TYPE_MISSIONS = {
 };
 
 const MISSION_TYPES = [MISSION_TYPE_JOUNREY, MISSION_TYPE_ITEM, MISSION_TYPE_KILL, MISSION_TYPE_MISSIONS];
-const ALL_MISSIONS = [];
 
 // Neue Mission würfeln
 ItemEvents.rightClicked(missionToken, event => {

@@ -81,10 +81,15 @@ const HUNT_EVENT = {
 
         initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, currentEvent.multiplayer);
 
+        let metaText = `\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`;
+        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
+            metaText = `Bei Erfolg könnten Spawneggs erscheinen!` + metaText;
+            //metaText += `\n  §7-> Egg-ID: ${currentEvent.targetMonster.egg}`;
+        }
         if (currentEvent.multiplayer) {
-            event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
+            event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt! ${metaText}`);
         } else {
-            event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt!\n  -> Zeitlimit ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`);
+            event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt! ${metaText}`);
         }
     },
 
@@ -95,11 +100,11 @@ const HUNT_EVENT = {
         let killer = String(player.username);
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
-        const pos = `${event.entity.position().x} ${event.entity.position().y+1} ${event.entity.position().z}`;
+        const pos = `${event.entity.position().x} ${event.entity.position().y + 1} ${event.entity.position().z}`;
         event.server.runCommandSilent(`particle minecraft:totem_of_undying ${pos} 0 0 0 0.1 20`)
 
         setScore(event, killer, currentEvent.actionTable.get(killer));
-        if(currentEvent.multiplayer) setScore(event, 'GESAMT', currentEvent.total);
+        if (currentEvent.multiplayer) setScore(event, 'GESAMT', currentEvent.total);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -123,6 +128,7 @@ const HUNT_EVENT = {
                 winnerName = key;
             }
         }
+        let averageKills = currentEvent.total / hunters.length;
 
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
@@ -144,18 +150,13 @@ const HUNT_EVENT = {
 
 
         if (currentEvent.multiplayer) {
-            event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n  -> Durchschnittliche Kills: §a${averageKills.toFixed(1)}§f\n${getTimeStats(event)}`);
             hunters.forEach(hunter => {
-                summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
-                checkForHelperMission(event, hunter, HUNT_EVENT.id);
-                if(currentEvent.targetMonster.egg) {
-                    summonItem(event, hunter, currentEvent.targetMonster.egg, 1);
-                }
+                currentEvent.handleWin(event, hunter, true);
             });
         } else {
             event.server.tell(`${currentEvent.label}  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
-            summonRewardItem(event, winnerName, rewardAmountMin, rewardAmountMax);
-            checkForHelperMission(event, winnerName, HUNT_EVENT.id);
+            currentEvent.handleWin(event, winnerName, true);
         }
         unlucky = false;
         currentEvent = undefined;
@@ -165,6 +166,32 @@ const HUNT_EVENT = {
     timeNotification(event) {
         getTimeRemaining(event, currentEvent.multiplayer);
     },
+
+    handleWin(event, hunter, canSpawnEgg) {
+        summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
+        checkForHelperMission(event, hunter, HUNT_EVENT.id);
+        if (!canSpawnEgg) return;
+        let mob = currentEvent.targetMonster;
+        let chance = Math.random();
+        let doSpawn =  chance <= mob.eggChance;
+        if (!doSpawn) return;
+        if (mob.eggChance > 0 && mob.egg) {
+            if (mob.egg.indexOf(',') > -1) {
+                let eggs = mob.egg.split(',');
+                let weightedEggs = eggs.map(egg => {
+                    let otherEggMission = ALL_MISSIONS.find(mission => mission.egg === egg);
+                    return {
+                        item: egg,
+                        weight: otherEggMission.weight * otherEggMission.eggChance,
+                    }
+                });
+                let pickedEgg = getWeightedRandomItem(weightedEggs);
+                summonItem(event, hunter, pickedEgg.item, 1);
+            } else {
+                summonItem(event, hunter, mob.egg, 1);
+            }
+        }
+    }
 }
 
 const THIEF_EVENT = {
