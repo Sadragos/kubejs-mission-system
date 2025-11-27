@@ -25,7 +25,7 @@ function correctMissionInit(mission) {
 
 function correctAllMissions() {
     let killMission = getMissionByType(MISSION_TYPE_KILL.id);
-    let relevantKillMission = killMission.filter(mission => mission.eggChance > 0 && mission.egg && mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1);
+    let relevantKillMission = killMission.filter(mission => mission.eggChance > 0 && mission.egg && mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1);
     let missionToCorrect = killMission.filter(mission => mission.eggChance > 0 && !mission.egg);
     missionToCorrect.forEach(mission => {
         

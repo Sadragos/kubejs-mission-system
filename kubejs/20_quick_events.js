@@ -8,7 +8,7 @@ const PRESENT_EVENT = {
     weight: 1,
     startEvent(event) {
         let players = event.server.players;
-        event.server.tell(`§fEs gibt eine §6Geschenkte Mission§f für jeden!`);
+        event.server.tell(`§fEs gibt eine §aGeschenkte Mission§f für jeden!`);
         for (let player of players) {
             summonRewardItem(event, player.username, rewardAmountMin, rewardAmountMax);
         }
@@ -81,16 +81,41 @@ const HUNT_EVENT = {
 
         initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, currentEvent.multiplayer);
 
-        let metaText = `\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetMonster.item}`;
-        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
-            metaText = `Bei Erfolg könnten Spawneggs erscheinen!` + metaText;
-            //metaText += `\n  §7-> Egg-ID: ${currentEvent.targetMonster.egg}`;
-        }
+        let parts = [{ text: currentEvent.label }];
+        let mobPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
+                    .color('green')
+                    .hover('§lMonsterliste§r\n' + (currentEvent.targetMonster.item === '*' ? 'alle Gegner' : getMoblist(currentEvent.targetMonster.item).map(el => el.item).join(', ')));
+
         if (currentEvent.multiplayer) {
-            event.server.tell(`${currentEvent.label} Alle, die sich an der Vernichtung von §6${currentEvent.targetAmount}x ${targetName}§f beteiligen, werden belohnt! ${metaText}`);
+            parts.push({
+                text: ' Alle, die sich an der Vernichtung von '
+            })
+            parts.push(mobPart);
+            parts.push({
+                text: ' beteiligen, werden belohnt!'
+            })
         } else {
-            event.server.tell(`${currentEvent.label} Derjenige, der zuerst §6${currentEvent.targetAmount}x ${targetName}§f tötet gewinnt! ${metaText}`);
+            parts.push({
+                text: ' Derjenige, der zuerst '
+            })
+            parts.push(mobPart);
+            parts.push({
+                text: ' vernichtet, wird gewinnt!'
+            })
         }
+
+        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
+            parts.push({
+                text: ' Bei Erfolg könnte ein Spawn-Ei erscheinen.'
+            });
+        }
+        parts.push({
+            text: `\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}`
+        });
+        event.server.tell(parts);
+
+
+
     },
 
     handleDeath(event) {
@@ -173,7 +198,7 @@ const HUNT_EVENT = {
         if (!canSpawnEgg) return;
         let mob = currentEvent.targetMonster;
         let chance = Math.random();
-        let doSpawn =  chance <= mob.eggChance;
+        let doSpawn = chance <= mob.eggChance;
         if (!doSpawn) return;
         if (mob.eggChance > 0 && mob.egg) {
             if (mob.egg.indexOf(',') > -1) {
@@ -291,7 +316,7 @@ const ITEM_REQUEST_EVENT = {
         initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, true);
 
 
-        event.server.tell(`${currentEvent.label} Die Gilde hat §6${currentEvent.targetAmount}x ${targetName}§f bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetItem.item}`);
+        event.server.tell(`${currentEvent.label} Die Gilde hat §a${currentEvent.targetAmount}x ${targetName}§f bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetItem.item}`);
     },
     stopEvent(event) {
         let hunters = [];

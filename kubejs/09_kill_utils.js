@@ -7,3 +7,9 @@ function isValidKill(mob, target) {
     if (target === undefined || target === '*') return isAnyValidKill(entityName);
     return validateItem(entityName, target);
 }
+
+function getMoblist(filter) {
+    let killMission = getMissionByType(MISSION_TYPE_KILL.id);
+    let relevantKillMission = killMission.filter(mission => mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1);
+    return relevantKillMission.filter(killMission => filter === '*' || validateItem(killMission.item.replace('!', ''), filter));
+}

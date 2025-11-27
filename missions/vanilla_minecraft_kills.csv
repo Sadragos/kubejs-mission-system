@@ -37,7 +37,7 @@ kill;minecraft:zoglin;;8;16;;;100;;
 kill;minecraft:zombie;;8;64;;;250;;
 kill;minecraft:zombified_piglin;;8;64;;;100;;
 kill;zombi,skeleton,husk,stray,knight,corpse,bone,necromancer,drowned,sunken,skull,soul,ghost;Untote;128;256;;;1500;;0.15
-kill;*;Gegner;128;512;;;3500000;;0.1
+kill;*;Gegner;128;512;;;3500;;0.1
 kill;pillager,vindicator,evoker,ravager,witch;Raider;32;128;;;600;;0.15
 kill;blaze,wither,magma,zoglin,piglin,ghast;Dämonen;32;128;;;400;;0.15
 kill;skeleton;Knochengerüste;32;128;;;600;;0.15
