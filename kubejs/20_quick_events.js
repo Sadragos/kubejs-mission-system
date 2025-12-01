@@ -12,7 +12,7 @@ const PRESENT_EVENT = {
         for (let player of players) {
             summonRewardItem(event, player.username, rewardAmountMin, rewardAmountMax);
         }
-        currentEvent.stopEvent();
+        currentEvent.stopEvent(event);
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -125,8 +125,8 @@ const HUNT_EVENT = {
         let killer = String(player.username);
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
-        const pos = `${event.entity.position().x} ${event.entity.position().y + 1} ${event.entity.position().z}`;
-        event.server.runCommandSilent(`particle minecraft:totem_of_undying ${pos} 0 0 0 0.1 20`)
+
+        summonParticleAtPosition(event, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1);
 
         setScore(event, killer, currentEvent.actionTable.get(killer));
         if (currentEvent.multiplayer) setScore(event, 'GESAMT', currentEvent.total);
@@ -158,12 +158,12 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = ['minecraft:slowness 300', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let effects = ['minecraft:slowness 300','gametechbcs_spellbooks:blackout 180','elixirum:shrink 120 5','irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
                 let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
                 event.server.runCommandSilent(`effect give @a minecraft:unluck 300 2`);
-                event.server.runCommandSilent(`execute at @a run particle minecraft:ash ~ ~3 ~ 0 0 0 0.1 100`);
+                summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
                 unlucky = false;
             } else {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
@@ -226,7 +226,7 @@ const THIEF_EVENT = {
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
         if (players.length === 0) {
-            currentEvent.stopEvent();
+            currentEvent.stopEvent(event);
             return;
         }
         let player = players[Math.floor(Math.random() * players.length)];
@@ -246,7 +246,7 @@ const THIEF_EVENT = {
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:glowing infinite`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:speed infinite`);
         markPosition(event, summonPos, currentEvent.name);
-        currentEvent.stopEvent();
+        currentEvent.stopEvent(event);
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -260,7 +260,7 @@ const AIRDROP_EVENT = {
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
         if (players.length === 0) {
-            currentEvent.stopEvent();
+            currentEvent.stopEvent(event);
             return;
         }
         let player = players[Math.floor(Math.random() * players.length)];
@@ -272,7 +272,7 @@ const AIRDROP_EVENT = {
         event.server.runCommandSilent(`summon minecraft:item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"${rewardItem}",Count:1}}`);
         event.server.runCommandSilent(`effect give @e[type=minecraft:item] minecraft:slow_falling 120`);
         markPosition(event, summonPos, currentEvent.name);
-        currentEvent.stopEvent();
+        currentEvent.stopEvent(event);
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -364,6 +364,7 @@ ItemEvents.rightClicked('minecraft:bowl', event => {
         let playername = String(player.username);
         currentEvent.actionTable.set(playername, (currentEvent.actionTable.get(playername) || 0) + take);
         currentEvent.total += take;
+        summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
 
         setScore(event, playername, currentEvent.actionTable.get(playername));
         setScore(event, 'GESAMT', currentEvent.total);

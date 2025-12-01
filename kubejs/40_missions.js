@@ -13,6 +13,7 @@ const MISSION_TYPE_ITEM = {
         if (remaining > 0) {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben! Du brauchst noch ${remaining} um den Auftrag zu erledigen!`);
             stack.setDamage(remaining);
+            summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
             event.cancel();
         } else {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben!`);
@@ -99,9 +100,9 @@ ItemEvents.rightClicked(missionToken, event => {
         if (Math.random() < curseChance) {
             event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
             unlucky = true;
-            if(currentEvent) currentEvent.stopEvent();
+            if(currentEvent) currentEvent.stopEvent(server);
             startEvent(event, HUNT_EVENT.id, true);
-            event.server.runCommandSilent(`execute at @a run particle minecraft:ash ~ ~3 ~ 0 0 0 0.1 100`);
+            summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
         } else {
             let mission = getRandomMission();
             let playerProgress = getPlayerProgress(event.player, mission.type);
@@ -137,6 +138,7 @@ EntityEvents.death(event => {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
+                summonParticleAtPosition(event, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1);
                 if (data.currentDamage === 1) {
                     player.tell(`§aDu hast den letzten Kill für den Auftrag §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishMission(event, player, data);
@@ -211,8 +213,7 @@ function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     player.tell(`§aDer Auftrag ist abgeschlossen und du erhälst deine §6${data.coins} Coins§a Belohnung!`)
-    event.server.runCommandSilent(`execute at ${playerName} run summon minecraft:item ~ ~ ~ {Item:{id:"${coinItem}",count:${data.coins}}}`);
-    event.server.runCommandSilent(`execute at ${playerName} run particle supplementaries:confetti ~ ~3 ~ 0 0 0 0.1 100`);
+    summonItem(event, playerName, coinItem, data.coins);
     event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
 }
 
@@ -287,6 +288,7 @@ function checkForHelperMission(event, username, type) {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
+                summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
                 if (data.currentDamage === 1) {
                     player.tell(`§aDu hast die letzte Mission für §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishMission(event, player, data);

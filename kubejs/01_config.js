@@ -53,7 +53,7 @@ const dailyMessage = [
 ];
 
 // Missions
-const FALLBACK_EGG_CHANCE = 0.2;
+const FALLBACK_EGG_CHANCE = 0.225;
 const FALLBACK_MIN_AMOUNT = 64;
 const FALLBACK_MAX_AMOUNT = FALLBACK_MIN_AMOUNT * 3;
 const FALLBACK_MIN_COINS = 6;
