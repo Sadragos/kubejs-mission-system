@@ -1,7 +1,7 @@
 const MISSION_TYPE_ITEM = {
     id: 'item',
     text: '§aSende§r',
-    weight: 6,
+    weight: 13,
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem du ${name} im Inventar hast und mit dem Auftrag-Item rechtsklickst.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -26,7 +26,7 @@ const MISSION_TYPE_ITEM = {
 const MISSION_TYPE_KILL = {
     id: 'kill',
     text: '§4Töte§r',
-    weight: 4,
+    weight: 8,
     hint: (name) => `Du kannst diesen Auftrag erfüllen, indem dieses Auftrag-Item im Inventar hast, während du ${name} tötest.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -44,7 +44,7 @@ const MISSION_TYPE_KILL = {
 const MISSION_TYPE_JOUNREY = {
     id: 'journey',
     text: '§bReise§r',
-    weight: 1,
+    weight: 2,
     hint: (name, item) => `Bringe diesen Auftrag nach ${item} und rechtsklicke ihn dort. Du kannst ihn so rechtsklicken um einen Wegpunkt zu erzeugen.`,
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -97,10 +97,9 @@ const MISSION_TYPES = [MISSION_TYPE_JOUNREY, MISSION_TYPE_ITEM, MISSION_TYPE_KIL
 ItemEvents.rightClicked(missionToken, event => {
     try {
 
-        if (Math.random() < curseChance) {
+        if (Math.random() < curseChance && !currentEvent) {
             event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
             unlucky = true;
-            if(currentEvent) currentEvent.stopEvent(server);
             startEvent(event, HUNT_EVENT.id, true);
             summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
         } else {
@@ -110,7 +109,15 @@ ItemEvents.rightClicked(missionToken, event => {
             let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
             let alteredMinAmount = Math.ceil(mission.min * playerProgress);
             let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
-            giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress);
+            let eggChance = 0;
+            if(mission.type === MISSION_TYPE_KILL.id) {
+                let baseEggChance = mission.eggChance || FALLBACK_EGG_CHANCE;
+                if(baseEggChance > -1) {
+                    eggChance = baseEggChance * random(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
+                }
+                console.log(JSON.stringify(mission), baseEggChance, eggChance);
+            }
+            giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress, eggChance);
         }
         event.item.count = event.item.count - 1;
     } catch (e) {
@@ -179,7 +186,8 @@ PlayerEvents.loggedIn(event => {
 });
 
 
-function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod) {
+function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance) {
+    eggChance = eggChance || 0;
     if (type == MISSION_TYPE_JOUNREY.id) {
         let base = { x: Math.floor(event.player.position().x), y: Math.floor(event.player.position().y), z: Math.floor(event.player.position().z) };
         let angle = Math.random() * Math.PI * 2;
@@ -190,7 +198,7 @@ function giveMissionItem(event, type, item, name, amount, reward, erstellt, user
         };
         item = toChatPosition(targetPos);
     }
-    event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
+    event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod, eggChance)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
 }
 
 function generateMissionTitle(type, name, amount) {
@@ -202,11 +210,16 @@ function generateMissionTitle(type, name, amount) {
     return `Auftrag: ${missionType.text} §6${amount}${unit} ${name}§r`;
 }
 
-function generateMissionLore(type, coins, erstellt, item, name, playername, mod) {
+function generateMissionLore(type, coins, erstellt, item, name, playername, mod, eggChance) {
     mod = mod || 1;
+    eggChance = eggChance || 0;
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
     let hint = missionType.hint(name, item);
-    return `Belohnung: §6${coins} Coin${coins === 1 ? '' : 's'}§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}\nLevel: ${(mod * 100).toFixed(2)}%`;
+    let result = `Belohnung: §6${coins} Coin${coins === 1 ? '' : 's'}§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}\nLevel: ${(mod * 100).toFixed(2)}%`;
+    if(eggChance > 0) {
+        result += `\nEi-Chance: ${(eggChance*100).toFixed(2)}%`;
+    }
+    return result;
 }
 
 function finishMission(event, player, data) {

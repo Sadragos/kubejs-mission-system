@@ -44,6 +44,7 @@ ServerEvents.commandRegistry(event => {
                 } else {
                     currentEvent.stopEvent(source);
                 }
+                removeScoreboard(source);
             break;
             default:
                 source.player.tell('§cInvalid Command!');

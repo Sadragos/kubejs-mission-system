@@ -9,5 +9,5 @@ function setScore(event, playername, score) {
 }
 
 function removeScoreboard(event) {
-    event.server.runCommandSilent(`scoreboard objectives remove ${HUNT_SCOREBOARD_NAME}`);
+    event.server.runCommandSilent(`  ${HUNT_SCOREBOARD_NAME}`);
 }

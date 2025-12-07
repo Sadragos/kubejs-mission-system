@@ -158,7 +158,7 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = ['minecraft:slowness 300','gametechbcs_spellbooks:blackout 180','elixirum:shrink 120 5','irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let effects = ['minecraft:slowness 300','gametechbcs_spellbooks:blackout 120','elixirum:shrink 120 5','irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
                 let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);

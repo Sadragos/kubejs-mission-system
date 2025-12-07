@@ -1,0 +1,35 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
+item;undergarden:droopvine;Schlafffrucht;32;128;;;100
+item;undergarden:rogdorium;Rogdorium;8;16;;;100
+item;undergarden:utherium_crystal;Utheriumkristall;4;8;;;100
+item;undergarden:forgotten_ingot;Vergessener Barren;1;4;;;100
+item;undergarden:depthrock;Tiefstein;512;2048;;;100
+item;undergarden:dreadrock;Furchtfels;512;1024;;;100
+item;undergarden:shiverstone;Schlotterstein;256;512;;;100
+item;undergarden:cloggrum_ingot;Cloggrumbarren;16;128;;;100
+item;undergarden:deepsoil;Tieferde;512;2048;;;100
+item;undergarden:glitterkelp;Glitzerseetang;32;128;;;100
+item;undergarden:blood_mushroom;Blutpilz;16;64;;;100
+item;undergarden:ink_mushroom;Tintenpilz;16;64;;;100
+item;undergarden:shimmerweed;Schimmergras;16;64;;;100
+item;undergarden:veil_mushroom;Schleierpilz;16;64;;;100
+item;undergarden:underbeans;Unterbohnen;16;64;;;100
+item;undergarden:indigo_mushroom;Indigopilz;16;64;;;100
+item;undergarden:gloomgourd;Düsterkürbis;8;32;;;100
+item;undergarden:ancient_root;Uralte Wurzel;32;128;;;100
+item;undergarden:puff_mushroom;Puffpilz;16;64;;;100
+item;undergarden:smogstem_sapling;Schmogstielsetzling;8;32;;;100
+item;undergarden:smogstem_log;Schmogstielstamm;32;128;;;100
+item;undergarden:utherium_growth;Utheriumwuchs;32;128;;;100
+item;undergarden:cloggrum_lantern;Cloggrumlaterne;16;64;;;100
+item;undergarden:virulent_mix_bucket;Virulentes Gemisch-Eimer;4;16;;;100
+item;undergarden:wigglewood_sapling;Wackelholzsetzling;16;64;;;100
+item;undergarden:wigglewood_log;Wackelholzstamm;64;256;;;100
+item;undergarden:froststeel_ingot;Froststahlbarren;4;16;;;100
+item;undergarden:regalium_crystal;Regaliumkristall;16;64;;;100
+item;undergarden:grongle_log;Grongelstamm;64;512;;;100
+item;undergarden:grongle_sapling;Grongelsetzling;16;64;;;100
+item;undergarden:gronglet;Grungelchen;8;16;;;100
+item;undergarden:miserabell;Jammerglocke;8;32;;;100
+item;undergarden:butterbunch;Butterbund;8;32;;;100
+item;undergarden:slop_bowl;Schlotzschüssel;8;16;;;100

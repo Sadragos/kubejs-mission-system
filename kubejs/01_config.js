@@ -11,6 +11,7 @@ const itemRegex = /Ziel: (.+)/
 const erstelltRegex = /Erstellt: (.+)/
 const playerRegex = /Von: (.+)/
 const levelRegex = /Level: (.+) ?%/
+const eggChanceRegex = /Ei-Chance: (.+) ?%/
 
 // Missionen
 let avgMissionsPerHour = 0.7;
@@ -53,8 +54,10 @@ const dailyMessage = [
 ];
 
 // Missions
-const FALLBACK_EGG_CHANCE = 0.225;
+const FALLBACK_EGG_CHANCE = 0.25;
 const FALLBACK_MIN_AMOUNT = 64;
 const FALLBACK_MAX_AMOUNT = FALLBACK_MIN_AMOUNT * 3;
 const FALLBACK_MIN_COINS = 6;
 const FALLBACK_MAX_COINS = FALLBACK_MIN_COINS * 2;
+const MISSION_EGG_CHANCE_MULTIPLIER_MIN = -1;
+const MISSION_EGG_CHANCE_MULTIPLIER_MAX = -1;
