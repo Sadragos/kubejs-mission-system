@@ -398,7 +398,6 @@ ServerEvents.tick(event => {
                 currentEvent = undefined;
             }
         } else {
-
             let playerCount = event.server.players.length;
             if (playerCount === 0) return;
             let bonusChance = playerCount * avgMissionPerHourPlayer;
