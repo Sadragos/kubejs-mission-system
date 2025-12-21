@@ -6,5 +6,5 @@ journey;;Kurze Reise;2000;4000;6;12;100
 journey;;Große Reise;4000;8000;8;12;50
 journey;;Welteise;8000;12000;8;14;15
 missions;hunt;Jagd;1;8;10;24;100
-missions;thief;Dieb;1;4;10;24;100
+missions;thief;Dieb;1;4;10;24;50
 missions;request;Bestellung;1;6;10;24;100
