@@ -24,6 +24,7 @@ let announceIntervalSeconds = 60;
 let missionMinTime = 20 * 60 * 10;
 let missionMaxTime = missionMinTime + (20 * 60 * 15)
 let rewardItem = missionToken;
+let missionSwapFee = 2;
 
 // Sonstiges
 let ticksPerSecond = 20;

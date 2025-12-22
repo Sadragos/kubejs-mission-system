@@ -130,7 +130,15 @@ ItemEvents.rightClicked(missionToken, event => {
 ItemEvents.rightClicked(missionItem, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
-    data.type.rightClickHandler(event, data, stack);
+    let offhand = event.player.offHandItem;
+    if(offhand && validateItem(offhand.id, coinItem) && offhand.count >= missionSwapFee) {
+        offhand.count = offhand.count - missionSwapFee;
+        stack.count = 0;
+        event.player.tell(`§aDu hast die Gebühr von §6${missionSwapFee} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
+        event.player.give(Item.of(missionToken, 1));
+    } else {
+        data.type.rightClickHandler(event, data, stack);
+    }
 });
 
 EntityEvents.death(event => {
