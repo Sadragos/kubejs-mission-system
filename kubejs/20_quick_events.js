@@ -320,30 +320,36 @@ const HUNT_EVENT = {
 
     handleWin(event, hunter, canSpawnEgg) {
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
-        handleReward(event, currentEvent.rewards, hunter, bonus);
 
         checkForHelperMission(event, hunter, HUNT_EVENT.id);
-        if (!canSpawnEgg) return;
-        let mob = currentEvent.targetMonster;
-        let chance = Math.random();
-        let doSpawn = chance <= mob.eggChance;
-        if (!doSpawn) return;
-        if (mob.eggChance > 0 && mob.egg) {
-            if (mob.egg.indexOf(',') > -1) {
-                let eggs = mob.egg.split(',');
-                let weightedEggs = eggs.map(egg => {
-                    let otherEggMission = ALL_MISSIONS.find(mission => mission.egg === egg);
-                    return {
-                        item: egg,
-                        weight: otherEggMission.weight * otherEggMission.eggChance,
+        let picked_egg_name;
+        if (canSpawnEgg) {
+            let mob = currentEvent.targetMonster;
+            let chance = Math.random();
+            let doSpawn = chance <= mob.eggChance;
+            if (doSpawn) {
+                if (mob.eggChance > 0 && mob.egg) {
+                    if (mob.egg.indexOf(',') > -1) {
+                        let eggs = mob.egg.split(',');
+                        let weightedEggs = eggs.map(egg => {
+                            let otherEggMission = ALL_MISSIONS.find(mission => mission.egg === egg);
+                            return {
+                                item: egg,
+                                weight: otherEggMission.weight * otherEggMission.eggChance,
+                                name: otherEggMission.name
+                            }
+                        });
+                        let pickedEgg = getWeightedRandomItem(weightedEggs);
+                        picked_egg_name = pickedEgg.name;
+                        summonItem(event, hunter, pickedEgg.item, 1);
+                    } else {
+                        picked_egg_name = mob.name;
+                        summonItem(event, hunter, mob.egg, 1);
                     }
-                });
-                let pickedEgg = getWeightedRandomItem(weightedEggs);
-                summonItem(event, hunter, pickedEgg.item, 1);
-            } else {
-                summonItem(event, hunter, mob.egg, 1);
+                }
             }
         }
+        handleReward(event, currentEvent.rewards, hunter, bonus, picked_egg_name ? [`Spawnei: ${picked_egg_name}`] : []);
     }
 }
 
@@ -505,7 +511,7 @@ const ITEM_REQUEST_EVENT = {
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
         hunters.forEach(hunter => {
-            handleReward(event, currentEvent.rewards, hunter, bonus);
+            handleReward(event, currentEvent.rewards, hunter, bonus, []);
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
@@ -640,7 +646,7 @@ function generateRewards() {
     return rewards;
 }
 
-function handleReward(event, rewards, username, multiplier) {
+function handleReward(event, rewards, username, multiplier, extras) {
     let player = event.server.players.find(p => p.username === username);
     let parts = `§7Durch deine Teilnahme am Event hast du die folgenden Belohnungen erhalten:`;
     for (let reward of rewards) {
@@ -660,6 +666,11 @@ function handleReward(event, rewards, username, multiplier) {
                 summonItem(event, username, missionToken, missions);
                 parts += `\n - ${missions}x Auftrag`;
                 break;
+        }
+    }
+    if (extras) {
+        for (let i = 0; i < extras.length; i++) {
+            parts += `\n - ${extras[i]}`;
         }
     }
     player.tell(parts);

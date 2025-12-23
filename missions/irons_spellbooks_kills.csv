@@ -3,8 +3,9 @@ kill;irons_spellbooks:apothecarist;;1;1;12;24;50;;0.05
 kill;irons_spellbooks:archevoker;;1;1;12;24;50;;0.05
 kill;irons_spellbooks:cryomancer;;1;1;12;24;50;;0.05
 kill;irons_spellbooks:dead_king;Untoter König;1;1;24;32;15;;-1
-kill;irons_spellbooks:ice_spider;;1;4;10;18;100;;0.05
+kill;irons_spellbooks:ice_spider;;1;3;10;18;100;;0.05
 kill;irons_spellbooks:keeper;;2;6;8;18;50;;0.1
 kill;irons_spellbooks:necromancer;;3;12;8;18;100;;0.5
 kill;irons_spellbooks:priest;;1;1;12;24;50;;0.05
 kill;irons_spellbooks:pyromancer;;1;1;12;24;50;;0.05
+kill;irons_spellbooks:citadel_keeper;;4;16;8;16;75;irons_spellbooks:keeper_spawn_egg;0.05
