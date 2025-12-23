@@ -13,18 +13,18 @@ const playerRegex = /Von: (.+)/
 const levelRegex = /Level: (.+) ?%/
 const eggChanceRegex = /Ei-Chance: (.+) ?%/
 
-// Missionen
+// Quick Evens & Missions
 let avgMissionsPerHour = 0.7;
 let avgMissionPerHourPlayer = 0.2;
 let missionSummonMaxPlayerDist = 16 * 8;
-let rewardAmountMin = 1;
-let rewardAmountMax = 1;
 let checkInterval = 100;
 let announceIntervalSeconds = 60;
 let missionMinTime = 20 * 60 * 10;
 let missionMaxTime = missionMinTime + (20 * 60 * 15)
 let rewardItem = missionToken;
 let missionSwapFee = 2;
+let bonusRewardChance = 0.3;
+let maxTimeBonus = 1;
 
 // Sonstiges
 let ticksPerSecond = 20;

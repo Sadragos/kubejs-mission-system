@@ -2,15 +2,134 @@
 let currentEvent;
 let unlucky = false;
 
+let QE_REWARDS = [
+    {
+        id: 'coin',
+        name: 'Coins',
+        minPerPlayer: 4,
+        maxPerPlayer: 6,
+        weight: 100,
+        chance: 1.0
+    }, {
+        id: 'mission',
+        name: 'Aufgabe',
+        minPerPlayer: 1,
+        maxPerPlayer: 1,
+        chance: 0.2
+    }, {
+        id: 'buff',
+        name: 'Buff',
+        chance: 1.0,
+        buffs: [
+            {
+                name: 'Speed',
+                buff: 'minecraft:speed',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 2
+            },
+            {
+                name: 'Dark Ward',
+                buff: 'born_in_chaos_v1:dark_ward',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 1
+            },
+            {
+                name: 'Vitalität',
+                buff: 'apothic_attributes:vitality',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 5
+            },
+            {
+                name: 'Haste',
+                buff: 'minecraft:haste',
+                minDuration: 5,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 3
+            },
+            {
+                name: 'Stärke',
+                buff: 'minecraft:strength',
+                minDuration: 5,
+                maxDuration: 15,
+                minAmplifier: 1,
+                maxAmplifier: 3
+            },
+            {
+                name: 'Resistenz',
+                buff: 'minecraft:resistance',
+                minDuration: 5,
+                maxDuration: 15,
+                minAmplifier: 1,
+                maxAmplifier: 3
+            },
+            {
+                name: 'Regeneration',
+                buff: 'minecraft:regeneration',
+                minDuration: 5,
+                maxDuration: 15,
+                minAmplifier: 1,
+                maxAmplifier: 3
+            },
+            {
+                name: 'Luck',
+                buff: 'minecraft:luck',
+                minDuration: 5,
+                maxDuration: 15,
+                minAmplifier: 1,
+                maxAmplifier: 5
+            },
+            {
+                name: 'Lebenssteigerung',
+                buff: 'minecraft:health_boost',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 10
+            },
+            {
+                name: 'Held',
+                buff: 'minecraft:hero_of_the_village',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 1,
+                maxAmplifier: 1
+            },
+            {
+                name: 'Flügel',
+                buff: 'irons_spellbooks:angel_wings',
+                minDuration: 5,
+                maxDuration: 10,
+                minAmplifier: 1,
+                maxAmplifier: 1
+            },
+            {
+                name: 'Steinhaut',
+                buff: 'malum:stone_ward',
+                minDuration: 10,
+                maxDuration: 15,
+                minAmplifier: 1,
+                maxAmplifier: 1
+            }
+        ]
+    }
+]
+
 const PRESENT_EVENT = {
     name: 'Geschenkt',
     id: 'present',
     weight: 1,
     startEvent(event) {
         let players = event.server.players;
-        event.server.tell(`§fEs gibt eine §aGeschenkte Mission§f für jeden!`);
+        event.server.tell(`§fEin neuer §aAuftrag§f der Gilde für jeden!`);
         for (let player of players) {
-            summonRewardItem(event, player.username, rewardAmountMin, rewardAmountMax);
+            summonRewardItem(event, player.username, 1, 1);
         }
         currentEvent.stopEvent(event);
     },
@@ -35,6 +154,7 @@ const HUNT_EVENT = {
     total: undefined,
     label: undefined,
     scoreLabel: undefined,
+    rewards: [],
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
@@ -65,6 +185,7 @@ const HUNT_EVENT = {
         currentEvent.label = unlucky ? `§4[${currentEvent.name}]§f` : `§6[${currentEvent.name}]§f`;
         currentEvent.scoreLabel = unlucky ? `§4${currentEvent.scoreLabel}§f` : `§6${currentEvent.scoreLabel}§f`;
 
+        currentEvent.rewards = generateRewards();
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -83,8 +204,8 @@ const HUNT_EVENT = {
 
         let parts = [{ text: currentEvent.label }];
         let mobPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
-                    .color('green')
-                    .hover('§lMonsterliste§r\n' + (currentEvent.targetMonster.item === '*' ? 'alle Gegner' : getMoblist(currentEvent.targetMonster.item).map(el => el.item).join(', ')));
+            .color('green')
+            .hover('§lMonsterliste§r\n' + (currentEvent.targetMonster.item === '*' ? 'alle Gegner' : getMoblist(currentEvent.targetMonster.item).map(el => el.item).join(', ')));
 
         if (currentEvent.multiplayer) {
             parts.push({
@@ -100,18 +221,21 @@ const HUNT_EVENT = {
             })
             parts.push(mobPart);
             parts.push({
-                text: ' vernichtet, wird gewinnt!'
+                text: ' vernichtet, gewinnt!'
             })
         }
 
-        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
-            parts.push({
-                text: ' Bei Erfolg könnte ein Spawn-Ei erscheinen.'
-            });
-        }
         parts.push({
             text: `\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}`
         });
+        parts.push({
+            text: `\n  -> Belohnung: ${currentEvent.rewards.map(el => el.display).join(', ')}`
+        });
+        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
+            parts.push({
+                text: `\n  -> Spawn-Ei-Chance: §a${(currentEvent.targetMonster.eggChance * 100).toFixed(0)}%§f`
+            });
+        }
         event.server.tell(parts);
 
 
@@ -158,7 +282,7 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = ['minecraft:slowness 300','gametechbcs_spellbooks:blackout 120','elixirum:shrink 120 5','irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let effects = ['minecraft:slowness 300', 'gametechbcs_spellbooks:blackout 120', 'elixirum:shrink 120 5', 'irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
                 let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
@@ -173,14 +297,15 @@ const HUNT_EVENT = {
             return;
         }
 
-
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        let bonusText = `§a${(bonus*100).toFixed(0)}%§f`;
         if (currentEvent.multiplayer) {
-            event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n  -> Durchschnittliche Kills: §a${averageKills.toFixed(1)}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n  -> Durchschnittliche Kills: §a${averageKills.toFixed(1)}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
             hunters.forEach(hunter => {
                 currentEvent.handleWin(event, hunter, true);
             });
         } else {
-            event.server.tell(`${currentEvent.label}  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+            event.server.tell(`${currentEvent.label}  §a${winnerName}§f gewinnt!\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
             currentEvent.handleWin(event, winnerName, true);
         }
         unlucky = false;
@@ -189,11 +314,14 @@ const HUNT_EVENT = {
     },
 
     timeNotification(event) {
-        getTimeRemaining(event, currentEvent.multiplayer);
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        getTimeRemaining(event, currentEvent.multiplayer, bonus);
     },
 
     handleWin(event, hunter, canSpawnEgg) {
-        summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        handleReward(event, currentEvent.rewards, hunter, bonus);
+
         checkForHelperMission(event, hunter, HUNT_EVENT.id);
         if (!canSpawnEgg) return;
         let mob = currentEvent.targetMonster;
@@ -238,7 +366,7 @@ const THIEF_EVENT = {
         let material = materials[Math.floor(Math.random() * materials.length)];
         let weaponOptions = [rewardItem, rewardItem, rewardItem, rewardItem, rewardItem, `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
         let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
-        event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Tokens geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
+        event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Aufträge geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
         event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${rewardItem}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:slow_falling 120`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:strength infinite 2`);
@@ -293,6 +421,7 @@ const ITEM_REQUEST_EVENT = {
     label: '§6[Bestellung]§f',
     scoreLabel: '§6[B]§f',
     total: 0,
+    rewards: [],
     startEvent(event) {
         let playermodsum = 0;
         let playerMulti = 0;
@@ -307,6 +436,8 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
+        currentEvent.rewards = generateRewards();
+
         currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length));
 
         currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
@@ -315,8 +446,29 @@ const ITEM_REQUEST_EVENT = {
 
         initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, true);
 
+        // TODO
+        let parts = [{ text: currentEvent.label }];
+        let itemPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
+            .color('green')
+            .hover('§lItem ID§r\n' + currentEvent.targetItem.item);
 
-        event.server.tell(`${currentEvent.label} Die Gilde hat §a${currentEvent.targetAmount}x ${targetName}§f bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}\n  §7-> Ziel-ID: ${currentEvent.targetItem.item}`);
+        parts.push({
+            text: ' Die Gilde hat  '
+        })
+        parts.push(itemPart);
+
+        parts.push({
+            text: ' bestellt. Jeder der mittels Holzschale ein paar einsendet, wird belohnt!'
+        });
+
+        parts.push({
+            text: `\n  -> Zeitlimit: ${tickTimeColor(currentEvent.missionTime)}${ticksToTime(currentEvent.missionTime)}`
+        });
+        parts.push({
+            text: `\n  -> Belohnung: ${currentEvent.rewards.map(el => el.display).join(', ')}`
+        });
+        event.server.tell(parts);
+
     },
     stopEvent(event) {
         let hunters = [];
@@ -335,17 +487,19 @@ const ITEM_REQUEST_EVENT = {
             return;
         }
 
-
-        event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}`);
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
+        event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
         hunters.forEach(hunter => {
-            summonRewardItem(event, hunter, rewardAmountMin, rewardAmountMax);
+            handleReward(event, currentEvent.rewards, hunter, bonus);
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
         removeScoreboard(event);
     },
     timeNotification(event) {
-        getTimeRemaining(event, currentEvent.multiplayer);
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        getTimeRemaining(event, false, bonus);
     },
 }
 
@@ -435,4 +589,74 @@ function summonRewardItem(event, playerName, amountMin, amountMax) {
     let max = amountMax === undefined ? 1 : amountMax;
     let amount = randomInt(min, max);
     summonItem(event, playerName, rewardItem, amount);
+}
+
+function generateRewards() {
+    let rewards = [];
+    for (let i = 0; i < QE_REWARDS.length; i++) {
+        let pick = QE_REWARDS[i];
+        if (Math.random() >= pick.chance) continue;
+        if (pick.id === 'buff') {
+            let pickedBuff = pick.buffs[Math.floor(Math.random() * pick.buffs.length)];
+            let preparedBuff = {
+                id: pick.id,
+                buff: pickedBuff.buff,
+                name: pickedBuff.name,
+                duration: randomInt(pickedBuff.minDuration, pickedBuff.maxDuration),
+                amplifier: randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier)
+            };
+            preparedBuff.display = `§a${preparedBuff.duration} Minuten ${preparedBuff.name} ${roman[preparedBuff.amplifier]}§f`;
+            rewards.push(preparedBuff);
+        } else {
+            let existing = rewards.find(r => r.id === pick.id);
+            if (existing) {
+                existing.amount += randomInt(pick.minPerPlayer, pick.maxPerPlayer);
+                existing.display = `§a${existing.amount}x ${existing.name}§f`;
+                continue;
+            }
+            let preparedReward = {
+                id: pick.id,
+                name: pick.name,
+                amount: randomInt(pick.minPerPlayer, pick.maxPerPlayer)
+            }
+            preparedReward.display = `§a${preparedReward.amount}x ${preparedReward.name}§f`;
+            rewards.push(preparedReward);
+        }
+    };
+    return rewards;
+}
+
+function handleReward(event, rewards, username, multiplier) {
+    let player = event.server.players.find(p => p.username === username);
+    let parts = `§7Durch deine Teilnahme am Event hast du die folgenden Belohnungen erhalten:`;
+    for (let reward of rewards) {
+        switch (reward.id) {
+            case 'buff':
+                let duration = Math.ceil(reward.duration * multiplier);
+                event.server.runCommandSilent(`effect give ${username} ${reward.buff} ${duration * 60} ${reward.amplifier}`);
+                parts += `\n - ${duration} Minuten ${reward.name} ${roman[reward.amplifier]}`;
+                break;
+            case 'coin':
+                let coins = Math.ceil(reward.amount * multiplier);
+                summonItem(event, username, coinItem, coins);
+                parts += `\n - ${coins}x Coin`;
+                break;
+            case 'mission':
+                let missions = Math.ceil(reward.amount * multiplier);
+                summonItem(event, username, missionToken, missions);
+                parts += `\n - ${missions}x Auftrag`;
+                break;
+        }
+    }
+    player.tell(parts);
+}
+
+function getTimeBonusMultiplier(startTick, endTick, maxTick) {
+    let duration = endTick - startTick;
+    let maxDuration = maxTick - startTick;
+    let maxBonusDuration = maxDuration / 2;
+    let maxBonusProgress = Math.min(1, duration / maxBonusDuration);
+    let bonusPercentMulti = 1 - maxBonusProgress;
+    let bonus = Math.max(0, maxTimeBonus * bonusPercentMulti);
+    return 1 + bonus;
 }

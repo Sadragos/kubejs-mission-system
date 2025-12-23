@@ -16,3 +16,5 @@ function nameFromItem(item) {
     const base = item.indexOf(':') === -1 ? item : item.split(':')[1];
     return base.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+const roman = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];

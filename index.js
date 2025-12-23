@@ -5,7 +5,7 @@ const seedrandom = require('seedrandom');
 const args = process.argv.slice(2);
 const outFile = args[0] || 'out/missions.js';
 
-console.log('Rading Missions CSV...');
+console.log('Reading Missions CSV...');
 const allCsvFiles = readdirSync('missions').filter(f => f.endsWith('.csv'));
 console.log(`Found ${allCsvFiles.length} CSV Files`);
 

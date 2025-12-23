@@ -6,10 +6,11 @@ function tickTimeColor(ticks) {
     return '§a';
 }
 
-function getTimeRemaining(event, fortschritt) {
+function getTimeRemaining(event, fortschritt, bonus) {
     fortschritt = fortschritt === undefined ? false : fortschritt;
     let result = `${currentEvent.label || `§6[${currentEvent.name}]§f`} Verbleibende Zeit: ${tickTimeColor(currentEvent.endTick - event.server.tickCount)}${ticksToTime(currentEvent.endTick - event.server.tickCount)}§f.`;
     if (fortschritt) result += ` Fortschritt: §a${currentEvent.total} / ${currentEvent.targetAmount}§f.`;
+    if (bonus && bonus > 1) result += ` Zeitbonus: §a${(bonus*100).toFixed(0)}%§f`;
     event.server.tell(result);
 }
 

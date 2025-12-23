@@ -115,7 +115,6 @@ ItemEvents.rightClicked(missionToken, event => {
                 if(baseEggChance > -1) {
                     eggChance = baseEggChance * random(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
                 }
-                console.log(JSON.stringify(mission), baseEggChance, eggChance);
             }
             giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress, eggChance);
         }
@@ -182,13 +181,11 @@ PlayerEvents.loggedIn(event => {
             let message = dailyMessage[randomInt(0, dailyMessage.length - 1)];
             message = message.replace("USERNAME", event.player.username);
             event.player.tell(message);
-            let min = 2;
-            let max = 4;
+            let count = 3;
             if (!yesterdayStage) {
-                min = 3;
-                max = 6;
+                count = 5;
             }
-            summonRewardItem(event, event.player.username, min, max);
+            summonRewardItem(event, event.player.username, count, count);
         }
     }, 30000);
 });
