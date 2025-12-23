@@ -298,7 +298,7 @@ const HUNT_EVENT = {
         }
 
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
-        let bonusText = `§a${(bonus*100).toFixed(0)}%§f`;
+        let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         if (currentEvent.multiplayer) {
             event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n  -> Durchschnittliche Kills: §a${averageKills.toFixed(1)}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
             hunters.forEach(hunter => {
@@ -397,8 +397,23 @@ const AIRDROP_EVENT = {
         let options = ['Eine Flugmaschiene', 'Ein Gyrokopter', 'Eine Drohne', 'Ein betrunkener Pilot', 'Ein fliegender Kurier', 'Eine Eule', 'Ein wahnsinniger Flieger', 'Ein Transportflieger'];
         let pickedOption = options[Math.floor(Math.random() * options.length)];
         event.server.tell(`§6[${currentEvent.name}]§f ${pickedOption} hat bei §a${toChatPosition(summonPos)}§f Fracht verloren.`);
-        event.server.runCommandSilent(`summon minecraft:item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"${rewardItem}",Count:1}}`);
-        event.server.runCommandSilent(`effect give @e[type=minecraft:item] minecraft:slow_falling 120`);
+        let items = [];
+
+        if (Math.random() < 0.2) {
+            items.push(`{slot:0,item:{id:"${rewardItem}",count:1}}`);
+        } else {
+            let item = getWeightedRandomItem(getMissionByType('item').filter(it => it.item.includes(':')));
+            let amount = Math.max(1, randomInt(item.min / 2, item.max / 2));
+            let index = 0;
+            do {
+                let stackAmount = Math.min(64, amount);
+                items.push(`{slot:${index},item:{id:"${item.item}",count:${stackAmount}}}`);
+                amount -= stackAmount;
+                index++;
+            } while (index < 9 && amount > 0);
+        }
+
+        event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"create:cardboard_package_10x12",count:1,components:{"create:package_address":"Frachtverlust","create:package_contents":[${items.join(',')}]}}}`);
         markPosition(event, summonPos, currentEvent.name);
         currentEvent.stopEvent(event);
     },
@@ -446,7 +461,6 @@ const ITEM_REQUEST_EVENT = {
 
         initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, true);
 
-        // TODO
         let parts = [{ text: currentEvent.label }];
         let itemPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
             .color('green')
