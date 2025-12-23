@@ -403,7 +403,7 @@ const AIRDROP_EVENT = {
             items.push(`{slot:0,item:{id:"${rewardItem}",count:1}}`);
         } else {
             let item = getWeightedRandomItem(getMissionByType('item').filter(it => it.item.includes(':')));
-            let amount = Math.max(1, randomInt(item.min / 2, item.max / 2));
+            let amount = Math.max(1, randomInt(item.min / 4, item.max / 4));
             let index = 0;
             do {
                 let stackAmount = Math.min(64, amount);
