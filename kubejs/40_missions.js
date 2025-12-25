@@ -102,6 +102,7 @@ ItemEvents.rightClicked(missionToken, event => {
             unlucky = true;
             startEvent(event, HUNT_EVENT.id, true);
             summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
+            playSoundAtPlayer(event, '@a', 'minecraft:item.totem.use');
         } else {
             let mission = getRandomMission();
             let playerProgress = getPlayerProgress(event.player, mission.type);
@@ -117,6 +118,7 @@ ItemEvents.rightClicked(missionToken, event => {
                 }
             }
             giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress, eggChance);
+            playSoundAtPlayer(event, event.player.username, 'minecraft:item.book.page_turn');
         }
         event.item.count = event.item.count - 1;
     } catch (e) {
@@ -233,6 +235,8 @@ function finishMission(event, player, data) {
     player.tell(`§aDer Auftrag ist abgeschlossen und du erhälst deine §6${data.coins} Coins§a Belohnung!`)
     summonItem(event, playerName, coinItem, data.coins);
     event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
+    // TODO Minecraft Sound finden
+    playSoundAtPlayer(event, playerName, 'advancementplaques:ui.toast.task_complete');
 }
 
 function parseMissionInfo(itemStack) {

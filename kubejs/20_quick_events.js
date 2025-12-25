@@ -108,14 +108,6 @@ let QE_REWARDS = [
                 maxDuration: 10,
                 minAmplifier: 1,
                 maxAmplifier: 1
-            },
-            {
-                name: 'Steinhaut',
-                buff: 'malum:stone_ward',
-                minDuration: 10,
-                maxDuration: 15,
-                minAmplifier: 1,
-                maxAmplifier: 1
             }
         ]
     }
@@ -132,6 +124,7 @@ const PRESENT_EVENT = {
             summonRewardItem(event, player.username, 1, 1);
         }
         currentEvent.stopEvent(event);
+        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -237,9 +230,7 @@ const HUNT_EVENT = {
             });
         }
         event.server.tell(parts);
-
-
-
+        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.6');
     },
 
     handleDeath(event) {
@@ -282,7 +273,7 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = ['minecraft:slowness 300', 'gametechbcs_spellbooks:blackout 120', 'elixirum:shrink 120 5', 'irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let effects = ['minecraft:slowness 300', 'gametechbcs_spellbooks:blackout 90', 'apothic_attributes:grievous 300', 'elixirum:shrink 120 5', 'irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'apothic_attributes:sundering 240', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
                 let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
@@ -294,9 +285,11 @@ const HUNT_EVENT = {
             }
             currentEvent = undefined;
             removeScoreboard(event);
+            playSoundAtPlayer(event, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
 
+        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         if (currentEvent.multiplayer) {
@@ -370,7 +363,7 @@ const THIEF_EVENT = {
         let pickedOption = mobOptions[Math.floor(Math.random() * mobOptions.length)];
         let materials = ['iron', 'iron', 'iron', 'golden', 'diamond']
         let material = materials[Math.floor(Math.random() * materials.length)];
-        let weaponOptions = [rewardItem, rewardItem, rewardItem, rewardItem, rewardItem, `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
+        let weaponOptions = [rewardItem, rewardItem, 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
         let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
         event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Aufträge geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
         event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${rewardItem}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
@@ -381,6 +374,8 @@ const THIEF_EVENT = {
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:speed infinite`);
         markPosition(event, summonPos, currentEvent.name);
         currentEvent.stopEvent(event);
+
+        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.4');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -422,6 +417,7 @@ const AIRDROP_EVENT = {
         event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"create:cardboard_package_10x12",count:1,components:{"create:package_address":"Frachtverlust","create:package_contents":[${items.join(',')}]}}}`);
         markPosition(event, summonPos, currentEvent.name);
         currentEvent.stopEvent(event);
+        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.0');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -488,7 +484,7 @@ const ITEM_REQUEST_EVENT = {
             text: `\n  -> Belohnung: ${currentEvent.rewards.map(el => el.display).join(', ')}`
         });
         event.server.tell(parts);
-
+        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.1');
     },
     stopEvent(event) {
         let hunters = [];
@@ -504,9 +500,11 @@ const ITEM_REQUEST_EVENT = {
             event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
             currentEvent = undefined;
             removeScoreboard(event);
+            playSoundAtPlayer(event, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
 
+        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
@@ -597,6 +595,7 @@ ServerEvents.tick(event => {
 
 
 function startEvent(event, typeFilter, force) {
+    console.log(`Starting Event: ${typeFilter}`);
     if (!currentEvent || currentEvent.endTick < event.server.tickCount || force) {
         let ev = getWeightedRandomItem(ALL_QUICK_EVENTS.filter(e => !typeFilter || e.id === typeFilter));
         this.currentEvent = ev;

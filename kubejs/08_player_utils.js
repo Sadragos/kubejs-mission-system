@@ -10,3 +10,7 @@ function getPlayerProgress(player, missionType) {
     if (missionType === 'kill') return killsPercent;
     return playtimePercent;
 }
+
+function playSoundAtPlayer(event, target, sound) {
+    event.server.runCommandSilent(`execute at ${target} run playsound ${sound} player @a ~ ~ ~ 1 1`);
+}
