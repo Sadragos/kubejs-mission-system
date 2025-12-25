@@ -390,7 +390,7 @@ const THIEF_EVENT = {
 const AIRDROP_EVENT = {
     name: 'Frachtverlust',
     id: 'airdrop',
-    weight: 1,
+    weight: 2,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
         if (players.length === 0) {
@@ -652,17 +652,17 @@ function handleReward(event, rewards, username, multiplier, extras) {
     for (let reward of rewards) {
         switch (reward.id) {
             case 'buff':
-                let duration = Math.ceil(reward.duration * multiplier);
+                let duration = Math.round(reward.duration * multiplier);
                 event.server.runCommandSilent(`effect give ${username} ${reward.buff} ${duration * 60} ${reward.amplifier}`);
                 parts += `\n - ${duration} Minuten ${reward.name} ${roman[reward.amplifier]}`;
                 break;
             case 'coin':
-                let coins = Math.ceil(reward.amount * multiplier);
+                let coins = Math.round(reward.amount * multiplier);
                 summonItem(event, username, coinItem, coins);
                 parts += `\n - ${coins}x Coin`;
                 break;
             case 'mission':
-                let missions = Math.ceil(reward.amount * multiplier);
+                let missions = Math.round(reward.amount * multiplier);
                 summonItem(event, username, missionToken, missions);
                 parts += `\n - ${missions}x Auftrag`;
                 break;
