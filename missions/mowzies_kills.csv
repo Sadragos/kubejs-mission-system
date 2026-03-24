@@ -1,4 +1,4 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
-kill;mowziesmobs:bluff;;8;64;;;100;;;
-kill;mowziesmobs:foliaath;;;;;;;;;
-kill;mowziesmobs:umvuthana;;8;36;7;14;;;-1;
+kill;mowziesmobs:bluff;;8;64;;;100;;;0.2
+kill;mowziesmobs:foliaath;;;;;;;;;0.1
+kill;mowziesmobs:umvuthana;;8;36;7;14;;;-1;0.3

@@ -1,9 +1,9 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
-kill;amazon;Amazone;8;32;6;12;100;;;
-kill;amazonchief;Amazonen-Cheffin;1;6;7;14;100;;0.05;
-kill;barbarian;Barbar;8;32;6;12;100;;;
-kill;pirate;Pirat;8;32;6;12;100;;;
-kill;chiefpirate;Piratenkapitän;1;6;7;14;100;;0.05;
-kill;chiefbarbarian;Barbarenanführer;1;6;7;14;100;;0.05;
-kill;mummy;Mumie;8;32;6;12;100;;;
-kill;pharao;Pharao;1;6;7;14;100;;0.05;
+kill;amazon;Amazone;8;32;6;12;100;;;0.2
+kill;amazonchief;Amazonen-Cheffin;1;6;7;14;100;;0.05;0.5
+kill;barbarian;Barbar;8;32;6;12;100;;;0.2
+kill;pirate;Pirat;8;32;6;12;100;;;0.2
+kill;chiefpirate;Piratenkapitän;1;6;7;14;100;;0.05;0.5
+kill;chiefbarbarian;Barbarenanführer;1;6;7;14;100;;0.05;0.5
+kill;mummy;Mumie;8;32;6;12;100;;;0.2
+kill;pharao;Pharao;1;6;7;14;100;;0.05;0.5
