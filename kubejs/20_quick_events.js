@@ -94,14 +94,6 @@ let QE_REWARDS = [
                 maxAmplifier: 10
             },
             {
-                name: 'Held',
-                buff: 'minecraft:hero_of_the_village',
-                minDuration: 10,
-                maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 1
-            },
-            {
                 name: 'Flügel',
                 buff: 'irons_spellbooks:angel_wings',
                 minDuration: 5,

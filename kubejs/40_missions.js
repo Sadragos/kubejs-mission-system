@@ -103,9 +103,10 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
             startEvent(event, HUNT_EVENT.id, true);
             summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
             playSoundAtPlayer(event, '@a', 'minecraft:item.totem.use');
+            increaseMissionPulled(event.player, 'cursed');
         } else {
             let mission = getRandomMission();
-            let playerProgress = getPlayerProgress(event.player, mission.type);
+            let playerProgress = getPlayerProgress(event.player, mission.type, true);
             let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
             let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
             let alteredMinAmount = Math.ceil(mission.min * playerProgress);
@@ -117,10 +118,21 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
                     eggChance = baseEggChance * random(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
                 }
             }
+            console.log(JSON.stringify({
+                mission: mission,
+                alteredMinAmount: alteredMinAmount,
+                alteredMaxAmount: alteredMaxAmount,
+                alteredMinCoins: alteredMinCoins,
+                alteredMaxCoins: alteredMaxCoins,
+                eggChance: eggChance,
+                playerProgress: playerProgress,
+                playerUsername: event.player.username
+            }));
             giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress, eggChance);
             playSoundAtPlayer(event, event.player.username, 'minecraft:item.book.page_turn');
+            increaseMissionPulled(event.player, mission.type);
         }
-        event.item.count = event.item.count - 1;
+        event.item.shrink(1);
     } catch (e) {
         event.player.tell(`§cEs konnte keine Mission erzeugt werden! Versuch es nochmal.`);
         console.log(e);
@@ -236,7 +248,7 @@ function finishMission(event, player, data) {
     summonItem(event, playerName, COIN_ITEM, data.coins);
     event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
     // TODO Minecraft Sound finden
-    playSoundAtPlayer(event, playerName, 'advancementplaques:ui.toast.task_complete');
+    increaseMissionDoneCount(player, data.type.id);
 }
 
 function parseMissionInfo(itemStack) {
@@ -289,8 +301,7 @@ function parseMissionInfo(itemStack) {
 }
 
 function getMissionByType(type) {
-    // TODO Optimieren!
-    return ALL_MISSIONS.filter(mission => mission.type === type);
+    return MISSIONS_BY_TYPE[type] || [];
 }
 
 function getRandomMission() {

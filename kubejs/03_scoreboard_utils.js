@@ -7,9 +7,9 @@
  * @param {boolean} isMultiplayer - Ob ein GESAMT-Eintrag erstellt werden soll
  */
 function initScoreboard(event, title, isMultiplayer) {
-    event.server.runCommandSilent(`scoreboard objectives add ${HUNT_SCOREBOARD_NAME} dummy "${title}"`);
+    event.server.runCommandSilent(`scoreboard objectives add my_mission_scores dummy "${title}"`);
     event.server.runCommandSilent(`scoreboard objectives setdisplay sidebar my_mission_scores`);
-    if (isMultiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT ${HUNT_SCOREBOARD_NAME} 0`);
+    if (isMultiplayer) event.server.runCommandSilent(`scoreboard players set GESAMT my_mission_scores 0`);
 }
 
 /**

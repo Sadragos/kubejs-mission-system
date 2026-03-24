@@ -35,8 +35,12 @@ const MULTIPLAYER_PERCENTAGE = 0.7;
 const MISSION_TARGET_PLAYER_MULT = 0.35;
 
 // Schwierigkeit
-const PLAY_TIME_TARGET = 20 * 60 * 60 * 24 * 3;     // 3 Tage
-const MOB_KILLS_TARGET = 10000;
+const MISSION_TYPE_GOALS = {
+    item: 400,
+    kill: 250,
+    journey: 60,
+    missions: 40
+};
 
 // Greeting
 const DAILY_MESSAGE = [
@@ -50,7 +54,18 @@ const DAILY_MESSAGE = [
     "§aHey, wie gehts USERNAME? Zeit für ne Mission?",
     "§aHallo USERNAME! Langweilig? Bitteschön!",
     "§aMöp. Arbeit für USERNAME.",
-    "§aIst USERNAME anwesend? Auftrag für dich!"
+    "§aIst USERNAME anwesend? Auftrag für dich!",
+    "§aAh, USERNAME. Perfektes Timing. Ich hab was für dich.",
+    "§aGuten Morgen, USERNAME! Kaffee kann warten, Arbeit nicht.",
+    "§aUSERNAME! Genau die Person, die ich brauchte.",
+    "§aKeine Ausreden, USERNAME. Hier ist deine Mission.",
+    "§aSieh an, USERNAME ist online. Dann kann's ja losgehen.",
+    "§aUSERNAME, du siehst aus als hättest du Lust auf Arbeit. Stimmt's?",
+    "§aFür dich, USERNAME. Frisch eingetroffen.",
+    "§aDu weißt was das bedeutet, USERNAME. An die Arbeit!",
+    "§aWillkommen, USERNAME. Ich hab hier was, das deinen Namen trägt.",
+    "§aUSERNAME ist da! Na dann, hier deine Aufgaben für heute.",
+    "§aHey USERNAME, die Welt rettet sich nicht von allein."
 ];
 
 // Missions

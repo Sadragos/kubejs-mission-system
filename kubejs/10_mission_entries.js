@@ -1,13 +1,19 @@
 /** Globale Liste aller registrierten Missionen. */
 const ALL_MISSIONS = [];
 
+/** Missions nach Typ gecacht: { [type]: Mission[] } */
+const MISSIONS_BY_TYPE = {};
+
 /**
- * Registriert eine Mission in der globalen Liste.
+ * Registriert eine Mission in der globalen Liste und im Typ-Cache.
  * Fehlende Felder werden durch `correctMissionInit` mit Fallback-Werten befüllt.
  * @param {object} mission - Missions-Objekt
  */
 function addMission(mission) {
-    ALL_MISSIONS.push(correctMissionInit(mission));
+    const m = correctMissionInit(mission);
+    ALL_MISSIONS.push(m);
+    if (!MISSIONS_BY_TYPE[m.type]) MISSIONS_BY_TYPE[m.type] = [];
+    MISSIONS_BY_TYPE[m.type].push(m);
 }
 
 /**
