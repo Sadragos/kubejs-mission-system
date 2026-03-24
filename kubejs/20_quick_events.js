@@ -5,14 +5,14 @@ let unlucky = false;
 let QE_REWARDS = [
     {
         id: 'coin',
-        name: 'Coins',
+        name: COIN_ITEM_NAME,
         minPerPlayer: 4,
         maxPerPlayer: 6,
         weight: 100,
         chance: 1.0
     }, {
         id: 'mission',
-        name: 'Aufgabe',
+        name: MISSION_ITEM_NAME,
         minPerPlayer: 1,
         maxPerPlayer: 1,
         chance: 0.1
@@ -185,7 +185,7 @@ const HUNT_EVENT = {
         currentEvent.label = unlucky ? `§4[${currentEvent.name}]§f` : `§6[${currentEvent.name}]§f`;
         currentEvent.scoreLabel = unlucky ? `§4${currentEvent.scoreLabel}§f` : `§6${currentEvent.scoreLabel}§f`;
 
-        currentEvent.rewards = generateRewards();
+        currentEvent.rewards = generateRewards(event);
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -354,9 +354,9 @@ const HUNT_EVENT = {
                             }
                         });
                         let pickedEgg = getWeightedRandomItem(weightedEggs);
-                        spawnEggItem = {item: pickedEgg.item, amount: 1, name: pickedEgg.name};
+                        spawnEggItem = { item: pickedEgg.item, amount: 1, name: pickedEgg.name };
                     } else {
-                        spawnEggItem = {item: mob.egg, amount: 1, name: mob.name};
+                        spawnEggItem = { item: mob.egg, amount: 1, name: mob.name };
                     }
                 }
             }
@@ -462,7 +462,7 @@ const ITEM_REQUEST_EVENT = {
         let playermodsum = 0;
         let playerMulti = 0;
         for (let player of event.server.players) {
-            playermodsum += getPlayerProgress(player);
+            playermodsum += getPlayerProgress(player, 'item');
             playerMulti += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
@@ -472,7 +472,7 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
-        currentEvent.rewards = generateRewards();
+        currentEvent.rewards = generateRewards(event);
 
         currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length));
 
@@ -623,14 +623,7 @@ function startEvent(event, typeFilter, force) {
     }
 }
 
-function summonRewardItem(event, playerName, amountMin, amountMax) {
-    let min = amountMin === undefined ? 1 : amountMin;
-    let max = amountMax === undefined ? 1 : amountMax;
-    let amount = randomInt(min, max);
-    summonItem(event, playerName, REWARD_ITEM, amount);
-}
-
-function generateRewards() {
+function generateRewards(event) {
     let rewards = [];
     for (let i = 0; i < QE_REWARDS.length; i++) {
         let pick = QE_REWARDS[i];
@@ -648,15 +641,16 @@ function generateRewards() {
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
+            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getPlayerProgress(event.server, currentEvent.id));
             if (existing) {
-                existing.amount += randomInt(pick.minPerPlayer, pick.maxPerPlayer);
+                existing.amount += amount;
                 existing.display = `§a${existing.amount}x ${existing.name}§f`;
                 continue;
             }
             let preparedReward = {
                 id: pick.id,
                 name: pick.name,
-                amount: randomInt(pick.minPerPlayer, pick.maxPerPlayer)
+                amount: amount
             }
             preparedReward.display = `§a${preparedReward.amount}x ${preparedReward.name}§f`;
             rewards.push(preparedReward);
@@ -670,7 +664,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
     let items = [];
     let buffs = [];
     let coins = 0;
-    if(spawnEggItem) items.push(spawnEggItem);
+    if (spawnEggItem) items.push(spawnEggItem);
 
     let parts = `§7Durch deine Teilnahme am Event hast du die folgenden Belohnungen erhalten:`;
     for (let reward of rewards) {
@@ -684,11 +678,11 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
-                items.push({item: MISSION_ITEM, amount: missions, name: MISSION_ITEM_NAME});
+                items.push({ item: MISSION_TOKEN, amount: missions, name: MISSION_ITEM_NAME });
                 break;
         }
     }
-    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: Math.ceil(coins/2) });
+    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: Math.ceil(coins / 2) });
 }
 
 function getTimeBonusMultiplier(startTick, endTick, maxTick) {

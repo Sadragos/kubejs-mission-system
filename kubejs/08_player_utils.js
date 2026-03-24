@@ -46,6 +46,24 @@ function getPlayerProgress(player, type, min1percent) {
 }
 
 /**
+ * Berechnet den durchschnittlichen Fortschritt aller Spieler für einen bestimmten Missionstyp.
+ * @param {Server} server - Der Server, dessen Spieler ausgelesen werden
+ * @param {string} type - Missionstyp (z.B. "item", "kill")
+ * @param {boolean} [min1percent] - Falls true, wird mindestens 0.01 zurückgegeben
+ * @returns {number} Durchschnittlicher Fortschrittswert zwischen 0 und 1, oder 0 wenn keine Spieler online
+ */
+function getAveragePlayerProgress(server, type, min1percent) {
+    const players = server.players;
+    if (!players || players.length === 0) return 0;
+    let total = 0;
+    players.forEach(player => {
+        total += getPlayerProgress(player, type);
+    });
+    const res = total / players.length;
+    return min1percent ? Math.max(0.01, res) : res;
+}
+
+/**
  * Setzt den letzten Login-Zeitpunkt des Spielers.
  * @param {Player} player - Spieler, dessen letzten Login-Zeitpunkt gesetzt wird
  */

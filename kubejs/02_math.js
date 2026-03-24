@@ -4,7 +4,7 @@
  * @param {number} max - Obere Grenze (exklusive)
  * @returns {number}
  */
-function random (min, max) {
+function random(min, max) {
     return Math.random() * (max - min) + min
 }
 
@@ -35,4 +35,24 @@ function getWeightedRandomItem(list) {
         }
     }
     return null;
+}
+
+/**
+ * Gibt eine zufällige ganze Zahl im Bereich [min, max] zurück (beide Grenzen inklusive).
+ * Der Bereich wird jedoch anhand des Parameters `percent` angepasst.
+ * `percent` gibt an, wie viel Prozent des ursprünglichen Bereichs tatsächlich genommen werden soll.
+ * Der tatsächliche Bereich wird zudem auf mindestens `lowest` und maximal `min + minGap` angepasst.
+ * @param {number} min - Untere Grenze (inklusive)
+ * @param {number} max - Obere Grenze (inklusive)
+ * @param {number} percent - Prozent des ursprünglichen Bereichs, die tatsächlich genommen werden sollen
+ * @param {number} lowest - Untere Grenze des tatsächlichen Bereichs (optional, default: 1)
+ * @param {number} minGap - Minimale Differenz zwischen unterer und oberer Grenze (optional, default: 1)
+ * @returns {number} Zufällig gewählte Zahl im angepassten Bereich
+ */
+function randomIntAdjusted(min, max, percent, lowest, minGap) {
+    lowest = lowest || 1;
+    minGap = minGap || 1;
+    let adjustedMin = Math.max(lowest, Math.round(min * percent));
+    let adjustedMax = Math.max(adjustedMin + minGap, Math.round(max * percent));
+    return randomInt(adjustedMin, adjustedMax);
 }
