@@ -1,8 +1,8 @@
-type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;irons_jewelry:ruby;;4;16;6;12;100
-item;irons_jewelry:sapphire;;4;16;6;12;100
-item;irons_jewelry:topaz;;4;16;6;12;100
-item;irons_jewelry:moonstone;;4;16;6;12;100
-item;irons_jewelry:peridot;;4;16;6;12;100
-item;irons_jewelry:onyx;;4;16;6;12;100
-item;irons_jewelry:garnet;;4;16;6;12;100
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;irons_jewelry:ruby;;4;16;6;12;100;
+item;irons_jewelry:sapphire;;4;16;6;12;100;
+item;irons_jewelry:topaz;;4;16;6;12;100;
+item;irons_jewelry:moonstone;;4;16;6;12;100;
+item;irons_jewelry:peridot;;4;16;6;12;100;
+item;irons_jewelry:onyx;;4;16;6;12;100;
+item;irons_jewelry:garnet;;4;16;6;12;100;

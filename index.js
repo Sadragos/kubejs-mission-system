@@ -31,6 +31,7 @@ allCsvFiles.forEach(file => {
         if(mission.maxCoins) item.maxCoins = parseInt(mission.maxCoins);
         if(mission.egg) item.egg = mission.egg;
         if(mission.eggChance) item.eggChance = parseFloat(mission.eggChance);
+        if(mission.minProgress) item.minProgress = parseFloat(mission.minProgress);
         out.push(`addMission(${JSON.stringify(item)});`)
     });
 });

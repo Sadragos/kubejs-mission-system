@@ -105,21 +105,29 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
             playSoundAtPlayer(event, '@a', 'minecraft:item.totem.use');
             increaseMissionPulled(event.player, 'cursed');
         } else {
-            let mission = getRandomMission();
+            let mission = getRandomMission(event.player);
             let playerProgress = getPlayerProgress(event.player, mission.type, true);
-            let alteredMinCoins = Math.ceil(mission.minCoins * playerProgress);
-            let alteredMaxCoins = Math.max(Math.ceil(mission.maxCoins * playerProgress), alteredMinCoins + 1);
-            let alteredMinAmount = Math.ceil(mission.min * playerProgress);
-            let alteredMaxAmount = Math.ceil(mission.max * playerProgress);
             let eggChance = 0;
-            if(mission.type === MISSION_TYPE_KILL.id) {
+            if (mission.type === MISSION_TYPE_KILL.id) {
                 let baseEggChance = mission.eggChance || FALLBACK_EGG_CHANCE;
-                if(baseEggChance > -1) {
+                if (baseEggChance > -1) {
                     eggChance = baseEggChance * random(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
                 }
             }
             let missionNr = getMissionsPulledTotal(event.player) + 1;
-            giveMissionItem(event, mission.type, mission.item, mission.name, randomInt(alteredMinAmount, alteredMaxAmount), randomInt(alteredMinCoins, alteredMaxCoins), new Date(), event.player.username, playerProgress, eggChance, missionNr);
+            giveMissionItem(
+                event,
+                mission.type,
+                mission.item,
+                mission.name,
+                randomIntAdjusted(mission.min, mission.max, playerProgress),
+                randomIntAdjusted(mission.minCoins, mission.maxCoins, playerProgress),
+                new Date(),
+                event.player.username,
+                playerProgress,
+                eggChance,
+                missionNr
+            );
             playSoundAtPlayer(event, event.player.username, 'minecraft:item.book.page_turn');
             increaseMissionPulled(event.player, mission.type);
         }
@@ -135,7 +143,7 @@ ItemEvents.rightClicked(MISSION_ITEM, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
     let offhand = event.player.offHandItem;
-    if(offhand && validateItem(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
+    if (offhand && validateItem(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
         offhand.count = offhand.count - MISSION_SWAP_FEE;
         stack.count = 0;
         event.player.tell(`§aDu hast die Gebühr von §6${MISSION_SWAP_FEE} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
@@ -200,14 +208,7 @@ PlayerEvents.loggedIn(event => {
 function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr) {
     eggChance = eggChance || 0;
     if (type == MISSION_TYPE_JOUNREY.id) {
-        let base = { x: Math.floor(event.player.position().x), y: Math.floor(event.player.position().y), z: Math.floor(event.player.position().z) };
-        let angle = Math.random() * Math.PI * 2;
-        let targetPos = {
-            x: Math.floor(base.x + Math.cos(angle) * amount),
-            y: base.y,
-            z: Math.floor(base.z + Math.sin(angle) * amount)
-        };
-        item = toChatPosition(targetPos);
+        item = toChatPosition(randomPositionWithDistance(targetPos, amount));
     }
     event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod, eggChance, nr)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
 }
@@ -227,8 +228,8 @@ function generateMissionLore(type, coins, erstellt, item, name, playername, mod,
     let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
     let hint = missionType.hint(name, item);
     let result = `Belohnung: §6${coins} Coin${coins === 1 ? '' : 's'}§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}\nAuftrag Nr: ${nr}\nLevel: ${(mod * 100).toFixed(2)}%`;
-    if(eggChance > 0) {
-        result += `\nEi-Chance: ${(eggChance*100).toFixed(2)}%`;
+    if (eggChance > 0) {
+        result += `\nEi-Chance: ${(eggChance * 100).toFixed(2)}%`;
     }
     return result;
 }
@@ -237,13 +238,13 @@ function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     rewardPlayer(
-        event, 
-        player, 
-        'mission', 
-        data.type.id, 
-        { 
-            coins: data.coins, 
-            xp: data.coins, 
+        event,
+        player,
+        'mission',
+        data.type.id,
+        {
+            coins: data.coins,
+            xp: data.coins,
             worldborder: data.coins
         }
     );
@@ -303,9 +304,10 @@ function getMissionByType(type) {
     return MISSIONS_BY_TYPE[type] || [];
 }
 
-function getRandomMission() {
+function getRandomMission(player) {
     let missionType = getWeightedRandomItem(MISSION_TYPES);
-    let relevantMissions = getMissionByType(missionType.id);
+    let playerProgress = getPlayerProgress(player, missionType.id);
+    let relevantMissions = getMissionByType(missionType.id).filter(mission => !mission.minProgress || mission.minProgress <= playerProgress);
     return getWeightedRandomItem(relevantMissions);
 }
 

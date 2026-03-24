@@ -1,7 +1,7 @@
-type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;supplementaries:present;Geschenk;8;64;6;12;100
-item;supplementaries:planter;Vase;16;32;6;12;100
-item;supplementaries:globe;Globus;1;2;6;12;75
-item;supplementaries:rope;Seil;32;256;6;12;100
-item;supplementaries:bamboo_spikes;;64;512;6;12;100
-item;supplementaries:cog_block;Zahnradblock;16;128;6;12;100
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;supplementaries:present;Geschenk;8;64;6;12;100;
+item;supplementaries:planter;Vase;16;32;6;12;100;
+item;supplementaries:globe;Globus;1;2;6;12;75;
+item;supplementaries:rope;Seil;32;256;6;12;100;
+item;supplementaries:bamboo_spikes;;64;512;6;12;100;
+item;supplementaries:cog_block;Zahnradblock;16;128;6;12;100;

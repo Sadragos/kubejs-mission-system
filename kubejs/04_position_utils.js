@@ -79,3 +79,20 @@ function markPosition(event, summonPos, waypointName) {
         event.server.runCommandSilent(`jm waypoint temp create "${waypointName}" minecraft:overworld ${summonPos.x} 64 ${summonPos.z} green @a`);
     }
 }
+
+/**
+ * Berechnet eine zufällige Position, die um einen bestimmten Abstand von einer gegebenen Position entfernt ist.
+ * Der Abstand wird in X und Z berechnet, die Y-Koordinate bleibt unverändert.
+ * @param {{ x: number, y: number, z: number }} position - Ausgangsposition
+ * @param {number} distance - Abstand, um den die neue Position berechnet werden soll
+ * @returns {{ x: number, y: number, z: number }} Neue Position
+ */
+function randomPositionWithDistance(position, distance) {
+    let base = { x: Math.floor(position.x), y: Math.floor(position.y), z: Math.floor(position.z) };
+    let angle = Math.random() * Math.PI * 2;
+    return {
+        x: Math.floor(base.x + Math.cos(angle) * amount),
+        y: base.y,
+        z: Math.floor(base.z + Math.sin(angle) * amount)
+    };
+}

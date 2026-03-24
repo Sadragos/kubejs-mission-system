@@ -1,8 +1,8 @@
-type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance
-kill;enderzoology:concussion_creeper;;8;16;6;12;50;;
-kill;enderzoology:dire_wolf;;8;16;6;12;50;;
-kill;enderzoology:enderminy;;8;32;6;12;50;;
-kill;enderzoology:fallen_knight;;4;8;6;12;75;;
-kill;enderzoology:infested_zombie;;8;16;6;12;100;;
-kill;enderzoology:wither_cat;;4;10;6;12;50;;
-kill;enderzoology:wither_witch;;2;6;6;12;50;;
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;enderzoology:concussion_creeper;;8;16;6;12;50;;;
+kill;enderzoology:dire_wolf;;8;16;6;12;50;;;
+kill;enderzoology:enderminy;;8;32;6;12;50;;;
+kill;enderzoology:fallen_knight;;4;8;6;12;75;;;
+kill;enderzoology:infested_zombie;;8;16;6;12;100;;;
+kill;enderzoology:wither_cat;;4;10;6;12;50;;;
+kill;enderzoology:wither_witch;;2;6;6;12;50;;;

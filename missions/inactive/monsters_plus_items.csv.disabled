@@ -1,6 +1,6 @@
-type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight
-item;monsterplus:crystal_shard;;8;16;6;12;100
-item;monsterplus:ancient_broken_sword;;1;2;7;14;100
-item;monsterplus:spectral_essence;;8;16;6;12;100
-item;monsterplus:demonic_essence;;8;16;6;12;100
-item;monsterplus:dark_essence;;8;16;6;12;100
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;monsterplus:crystal_shard;;8;16;6;12;100;
+item;monsterplus:ancient_broken_sword;;1;2;7;14;100;
+item;monsterplus:spectral_essence;;8;16;6;12;100;
+item;monsterplus:demonic_essence;;8;16;6;12;100;
+item;monsterplus:dark_essence;;8;16;6;12;100;
