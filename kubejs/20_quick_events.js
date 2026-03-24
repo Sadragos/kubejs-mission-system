@@ -125,6 +125,7 @@ const PRESENT_EVENT = {
     name: 'Geschenkt',
     id: 'present',
     weight: 1,
+    showInStat: false,
     startEvent(event) {
         let players = event.server.players;
         event.server.tell(`§fEin neuer §aAuftrag§f der Gilde für jeden!`);
@@ -141,7 +142,8 @@ const PRESENT_EVENT = {
 const HUNT_EVENT = {
     id: 'hunt',
     weight: 4,
-    name: undefined,
+    showInStat: true,
+    name: 'Jagd',
     startTick: undefined,
     endTick: undefined,
     missionTime: undefined,
@@ -369,6 +371,7 @@ const THIEF_EVENT = {
     name: 'Gilden-Dieb',
     id: 'thief',
     weight: 2,
+    showInStat: true,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
         if (players.length === 0) {
@@ -405,6 +408,7 @@ const AIRDROP_EVENT = {
     name: 'Frachtverlust',
     id: 'airdrop',
     weight: 2,
+    showInStat: false,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
         if (players.length === 0) {
@@ -447,6 +451,7 @@ const ITEM_REQUEST_EVENT = {
     name: 'Bestellung',
     id: 'request',
     weight: 2,
+    showInStat: true,
     startTick: undefined,
     endTick: undefined,
     missionTime: undefined,
