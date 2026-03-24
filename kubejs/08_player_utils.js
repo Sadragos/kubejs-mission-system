@@ -28,7 +28,7 @@ function increaseMissionDoneCount(player, type, amount) {
  */
 function getMissionDoneCount(player, type) {
     const pData = player.persistentData;
-    if(!pData.getInt(`mission_done_${type}`)) return 0;
+    if (!pData.getInt(`mission_done_${type}`)) return 0;
     return pData.getInt(`mission_done_${type}`);
 }
 
@@ -91,7 +91,7 @@ function daysSinceLogin(player) {
  */
 function getMissionPulled(player, type) {
     const pData = player.persistentData;
-    if(!pData.getInt(`mission_pulled_${type}`)) return 0;
+    if (!pData.getInt(`mission_pulled_${type}`)) return 0;
     return pData.getInt(`mission_pulled_${type}`);
 }
 
@@ -106,6 +106,28 @@ function increaseMissionPulled(player, type) {
 }
 
 /**
+ * Erhöht den Zähler der abgeschlossenen Events eines Spielers um eins.
+ * @param {Player} player - Spieler, dessen Zähler erhöht wird
+ * @param {string} type - Eventtyp (z.B. "hunt")
+ */
+function increaseEventDone(player, type) {
+    const pData = player.persistentData;
+    pData.putInt(`events_${type}`, getEventDone(player, type) + 1);
+}
+
+/**
+ * Gibt die Anzahl der abgeschlossenen Events eines Spielers zurück.
+ * @param {Player} player - Spieler, dessen Anzahl der abgeschlossenen Events zurückgegeben wird
+ * @param {string} type - Eventtyp (z.B. "hunt")
+ * @returns {number} Anzahl der abgeschlossenen Events (mindestens 0)
+ */
+function getEventDone(player, type) {
+    const pData = player.persistentData;
+    if (!pData.getInt(`events_${type}`)) return 0;
+    return pData.getInt(`events_${type}`);
+}
+
+/**
  * Gibt die Gesamtanzahl der gezogenen Missionen zurück.
  * @param {Player} player - Spieler, dessen Gesamtanzahl der gezogenen Missionen zurückgegeben wird
  * @returns {number} Gesamtanzahl der gezogenen Missionen (mindestens 0)
@@ -116,4 +138,66 @@ function getMissionsPulledTotal(player) {
         res += getMissionPulled(player, type);
     }
     return res;
+}
+
+/**
+ * Erhöht die Passive-Skills-XP eines Spielers um einen bestimmten Betrag.
+ * @param {ServerEvent} event - Server-Event, das ausgelöst wurde
+ * @param {string} playername - Username des Spielers, dessen Passive-Skills-XP erhöht wird
+ * @param {number} xp - Anzahl der hinzuzufügenden XP
+ */
+function increaseSkillXP(event, playername, xp) {
+    event.server.runCommandSilent(`puffish_skills experience add ${playername} epsilonskills:passive_skills ${xp}`);
+}
+
+function rewardPlayer(event, player, source, type, rewards) {
+    let internalRewards = {
+        coins: rewards.coins || 0,
+        xp: rewards.xp || 0,
+        worldborder: rewards.worldborder || 0,
+        items: rewards.items || [],
+        buffs: rewards.buffs || []
+    };
+
+    // Statistik
+    switch (source) {
+        case 'mission':
+            increaseMissionDoneCount(player, type);
+            event.server.runCommandSilent(`tellraw ${player.username} [{"text":"Mission erfolgreich abgeschlossen!","color":"green", "bold":true}]`);
+            break;
+        case 'event':
+            increaseEventDone(player, type);
+            event.server.runCommandSilent(`tellraw ${player.username} [{"text":"Event erfolgreich abgeschlossen!","color":"green", "bold":true}]`);
+            break;
+    }
+
+    // Rewards
+    const rewardItems = [];
+    if (internalRewards.coins > 0) {
+        summonItem(event, player.username, COIN_ITEM, internalRewards.coins);
+        rewardItems.push({ "text": `${internalRewards.coins}x Coin`, "color": "white" });
+    }
+    if (internalRewards.xp > 0) {
+        increaseSkillXP(event, player.username, internalRewards.xp);
+        rewardItems.push({ "text": `${internalRewards.xp} Skill-XP`, "color": "aqua" });
+    }
+    if (internalRewards.worldborder > 0) {
+        event.server.runCommandSilent(`worldborder add ${internalRewards.worldborder} 3`);
+        rewardItems.push({ "text": `+${internalRewards.worldborder}m Worldborder`, "color": "green" });
+    }
+    for (let item of internalRewards.items) {
+        summonItem(event, player.username, item.item, item.amount);
+        rewardItems.push({ "text": `${item.amount}x ${item.name}`, "color": "yellow" });
+    }
+    for (let buff of internalRewards.buffs) {
+        event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
+        rewardItems.push({ "text": `${buff.duration} Min. ${buff.name} ${toRoman(buff.amplifier)}`, "color": "light_purple" });
+    }
+    const rewardComponents = [{ "text": "» Belohnung: ", "color": "gold" }];
+    rewardItems.forEach((item, i) => {
+        rewardComponents.push(item);
+        if (i < rewardItems.length - 1) rewardComponents.push({ "text": ", ", "color": "gold" });
+    });
+    rewardComponents.push({ "text": " «", "color": "gold" });
+    event.server.runCommandSilent(`tellraw ${player.username} ${JSON.stringify(rewardComponents)}`);
 }

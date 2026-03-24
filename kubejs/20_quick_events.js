@@ -15,7 +15,7 @@ let QE_REWARDS = [
         name: 'Aufgabe',
         minPerPlayer: 1,
         maxPerPlayer: 1,
-        chance: 0.2
+        chance: 0.1
     }, {
         id: 'buff',
         name: 'Buff',
@@ -94,10 +94,10 @@ let QE_REWARDS = [
                 maxAmplifier: 10
             },
             {
-                name: 'Flügel',
-                buff: 'irons_spellbooks:angel_wings',
-                minDuration: 5,
-                maxDuration: 10,
+                name: 'Fliegen',
+                buff: 'apothic_attributes:flying',
+                minDuration: 2,
+                maxDuration: 5,
                 minAmplifier: 1,
                 maxAmplifier: 1
             }

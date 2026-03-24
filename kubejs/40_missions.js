@@ -244,11 +244,18 @@ function generateMissionLore(type, coins, erstellt, item, name, playername, mod,
 function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
-    player.tell(`§aDer Auftrag ist abgeschlossen und du erhälst deine §6${data.coins} Coins§a Belohnung!`)
-    summonItem(event, playerName, COIN_ITEM, data.coins);
+    rewardPlayer(
+        event, 
+        player, 
+        'mission', 
+        data.type.id, 
+        { 
+            coins: data.coins, 
+            xp: data.coins, 
+            worldborder: data.coins
+        }
+    );
     event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
-    // TODO Minecraft Sound finden
-    increaseMissionDoneCount(player, data.type.id);
 }
 
 function parseMissionInfo(itemStack) {
