@@ -94,10 +94,10 @@ const MISSION_TYPE_MISSIONS = {
 const MISSION_TYPES = [MISSION_TYPE_JOUNREY, MISSION_TYPE_ITEM, MISSION_TYPE_KILL, MISSION_TYPE_MISSIONS];
 
 // Neue Mission würfeln
-ItemEvents.rightClicked(missionToken, event => {
+ItemEvents.rightClicked(MISSION_TOKEN, event => {
     try {
 
-        if (Math.random() < curseChance && !currentEvent) {
+        if (Math.random() < CURSE_CHANCE && !currentEvent) {
             event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
             unlucky = true;
             startEvent(event, HUNT_EVENT.id, true);
@@ -128,15 +128,15 @@ ItemEvents.rightClicked(missionToken, event => {
 })
 
 // Mission abgeben
-ItemEvents.rightClicked(missionItem, event => {
+ItemEvents.rightClicked(MISSION_ITEM, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
     let offhand = event.player.offHandItem;
-    if(offhand && validateItem(offhand.id, coinItem) && offhand.count >= missionSwapFee) {
-        offhand.count = offhand.count - missionSwapFee;
+    if(offhand && validateItem(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
+        offhand.count = offhand.count - MISSION_SWAP_FEE;
         stack.count = 0;
-        event.player.tell(`§aDu hast die Gebühr von §6${missionSwapFee} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
-        event.player.give(Item.of(missionToken, 1));
+        event.player.tell(`§aDu hast die Gebühr von §6${MISSION_SWAP_FEE} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
+        event.player.give(Item.of(MISSION_TOKEN, 1));
     } else {
         data.type.rightClickHandler(event, data, stack);
     }
@@ -147,7 +147,7 @@ EntityEvents.death(event => {
 
     let player = event.source.player;
     let inventory = player.inventory;
-    let searchItem = Item.of(missionItem);
+    let searchItem = Item.of(MISSION_ITEM);
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);
@@ -180,7 +180,7 @@ PlayerEvents.loggedIn(event => {
 
         if (!playerStage) {
             event.player.stages.add("daily_mission_" + currentDateString);
-            let message = dailyMessage[randomInt(0, dailyMessage.length - 1)];
+            let message = DAILY_MESSAGE[randomInt(0, DAILY_MESSAGE.length - 1)];
             message = message.replace("USERNAME", event.player.username);
             event.player.tell(message);
             let count = 3;
@@ -233,7 +233,7 @@ function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     player.tell(`§aDer Auftrag ist abgeschlossen und du erhälst deine §6${data.coins} Coins§a Belohnung!`)
-    summonItem(event, playerName, coinItem, data.coins);
+    summonItem(event, playerName, COIN_ITEM, data.coins);
     event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
     // TODO Minecraft Sound finden
     playSoundAtPlayer(event, playerName, 'advancementplaques:ui.toast.task_complete');
@@ -250,27 +250,27 @@ function parseMissionInfo(itemStack) {
     let loreRaw = componentLore.styledLines().get(0).getString();
 
 
-    let nameMatch = nameRaw.match(nameRegEx);
+    let nameMatch = nameRaw.match(NAME_REGEX);
     let name = nameMatch ? nameMatch[1] : nameRaw;
 
-    let coinsMatch = loreRaw.match(coinsRegex);
+    let coinsMatch = loreRaw.match(COINS_REGEX);
     let coins = coinsMatch ? coinsMatch[1] : 0;
 
-    let erstelltMatch = loreRaw.match(erstelltRegex);
+    let erstelltMatch = loreRaw.match(ERSTELLT_REGEX);
     let erstellt = erstelltMatch ? new Date(erstelltMatch[1]) : new Date();
 
-    let itemMatch = loreRaw.match(itemRegex);
+    let itemMatch = loreRaw.match(ITEM_REGEX);
     let item = itemMatch ? itemMatch[1] : '';
 
-    let playerMatch = loreRaw.match(playerRegex);
+    let playerMatch = loreRaw.match(PLAYER_REGEX);
     let player = playerMatch ? playerMatch[1] : '';
 
-    let typeMatch = nameRaw.match(typeRegEx);
+    let typeMatch = nameRaw.match(TYPE_REGEX);
     let type = typeMatch ? typeMatch[1] : '';
     let missionType = MISSION_TYPES.find(missionType => missionType.text === type);
     let typeId = missionType ? missionType.id : '';
 
-    let levelMatch = loreRaw.match(levelRegex);
+    let levelMatch = loreRaw.match(LEVEL_REGEX);
     let level = levelMatch ? levelMatch[1] : '100';
     let numberLevel = parseFloat(level) / 100;
 
@@ -303,7 +303,7 @@ function checkForHelperMission(event, username, type) {
     let player = event.server.players.find(p => p.username === username);
     if (player === undefined) return;
     let inventory = player.inventory;
-    let searchItem = Item.of(missionItem);
+    let searchItem = Item.of(MISSION_ITEM);
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);

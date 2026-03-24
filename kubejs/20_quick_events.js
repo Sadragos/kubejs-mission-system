@@ -151,7 +151,7 @@ const HUNT_EVENT = {
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
         currentEvent.multiplayer = randomInt(0, 100) <= (MULTIPLAYER_PERCENTAGE * 100);
@@ -363,10 +363,10 @@ const THIEF_EVENT = {
         let pickedOption = mobOptions[Math.floor(Math.random() * mobOptions.length)];
         let materials = ['iron', 'iron', 'iron', 'golden', 'diamond']
         let material = materials[Math.floor(Math.random() * materials.length)];
-        let weaponOptions = [rewardItem, rewardItem, 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
+        let weaponOptions = [REWARD_ITEM, REWARD_ITEM, 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
         let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
         event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Aufträge geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
-        event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${rewardItem}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
+        event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${REWARD_ITEM}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:slow_falling 120`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:strength infinite 2`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:resistance infinite 2`);
@@ -401,7 +401,7 @@ const AIRDROP_EVENT = {
         let items = [];
 
         if (Math.random() < 0.2) {
-            items.push(`{slot:0,item:{id:"${rewardItem}",count:1}}`);
+            items.push(`{slot:0,item:{id:"${REWARD_ITEM}",count:1}}`);
         } else {
             let item = getWeightedRandomItem(getMissionByType('item').filter(it => it.item.includes(':')));
             let amount = Math.max(1, randomInt(item.min / 4, item.max / 4));
@@ -448,7 +448,7 @@ const ITEM_REQUEST_EVENT = {
         }
         let playermod = playermodsum / event.server.players.length;
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = randomInt(missionMinTime, missionMaxTime);
+        currentEvent.missionTime = randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
@@ -560,7 +560,7 @@ EntityEvents.death(event => {
 });
 
 ServerEvents.tick(event => {
-    if (event.server.tickCount % checkInterval === 0) {
+    if (event.server.tickCount % CHECK_INTERVAL === 0) {
         if (currentEvent) {
             if (currentEvent.handleTick) {
                 currentEvent.handleTick(event);
@@ -572,9 +572,9 @@ ServerEvents.tick(event => {
         } else {
             let playerCount = event.server.players.length;
             if (playerCount === 0) return;
-            let bonusChance = playerCount * avgMissionPerHourPlayer;
-            let totalMissionsPerHous = avgMissionsPerHour + bonusChance;
-            let missionChance = totalMissionsPerHous / (ticksPerHour / checkInterval);
+            let bonusChance = playerCount * AVG_MISSION_PER_HOUR_PLAYER;
+            let totalMissionsPerHous = AVG_MISSIONS_PER_HOUR + bonusChance;
+            let missionChance = totalMissionsPerHous / (TICKS_PER_HOUR / CHECK_INTERVAL);
             let chance = Math.random();
 
 
@@ -584,7 +584,7 @@ ServerEvents.tick(event => {
         }
     }
     if (currentEvent?.timeNotification) {
-        let interval = announceIntervalSeconds;
+        let interval = ANNOUNCE_INTERVAL_SECONDS;
         if ((currentEvent.endTick - event.server.tickCount) < 15 * 20) interval = 5;
         else if ((currentEvent.endTick - event.server.tickCount) < 80 * 20) interval = 20;
         if (event.server.tickCount % (interval * 20) === 0) {
@@ -607,7 +607,7 @@ function summonRewardItem(event, playerName, amountMin, amountMax) {
     let min = amountMin === undefined ? 1 : amountMin;
     let max = amountMax === undefined ? 1 : amountMax;
     let amount = randomInt(min, max);
-    summonItem(event, playerName, rewardItem, amount);
+    summonItem(event, playerName, REWARD_ITEM, amount);
 }
 
 function generateRewards() {
@@ -657,12 +657,12 @@ function handleReward(event, rewards, username, multiplier, extras) {
                 break;
             case 'coin':
                 let coins = Math.round(reward.amount * multiplier);
-                summonItem(event, username, coinItem, coins);
+                summonItem(event, username, COIN_ITEM, coins);
                 parts += `\n - ${coins}x Coin`;
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
-                summonItem(event, username, missionToken, missions);
+                summonItem(event, username, MISSION_TOKEN, missions);
                 parts += `\n - ${missions}x Auftrag`;
                 break;
         }
@@ -681,6 +681,6 @@ function getTimeBonusMultiplier(startTick, endTick, maxTick) {
     let maxBonusDuration = maxDuration / 2;
     let maxBonusProgress = Math.min(1, duration / maxBonusDuration);
     let bonusPercentMulti = 1 - maxBonusProgress;
-    let bonus = Math.max(0, maxTimeBonus * bonusPercentMulti);
+    let bonus = Math.max(0, MAX_TIME_BONUS * bonusPercentMulti);
     return 1 + bonus;
 }

@@ -1,45 +1,45 @@
 // Basisitems
-const coinItem = 'kubejs:coin';
-const missionItem = 'kubejs:mission';
-const missionToken = 'kubejs:mission_scroll';
+const COIN_ITEM = 'kubejs:coin';
+const MISSION_ITEM = 'kubejs:mission';
+const MISSION_TOKEN = 'kubejs:mission_scroll';
 
 // Regex
-const typeRegEx = /Auftrag: (.+?) §6(\d+[x|m] )?.+§r/
-const nameRegEx = /Auftrag: .+? §6\d+[x|m] ?(.+)§r/
-const coinsRegex = /Belohnung: §6(\d+) Coins?/
-const itemRegex = /Ziel: (.+)/
-const erstelltRegex = /Erstellt: (.+)/
-const playerRegex = /Von: (.+)/
-const levelRegex = /Level: (.+) ?%/
-const eggChanceRegex = /Ei-Chance: (.+) ?%/
+const TYPE_REGEX = /Auftrag: (.+?) §6(\d+[x|m] )?.+§r/
+const NAME_REGEX = /Auftrag: .+? §6\d+[x|m] ?(.+)§r/
+const COINS_REGEX = /Belohnung: §6(\d+) Coins?/
+const ITEM_REGEX = /Ziel: (.+)/
+const ERSTELLT_REGEX = /Erstellt: (.+)/
+const PLAYER_REGEX = /Von: (.+)/
+const LEVEL_REGEX = /Level: (.+) ?%/
+const EGG_CHANCE_REGEX = /Ei-Chance: (.+) ?%/
 
-// Quick Evens & Missions
-let avgMissionsPerHour = 0.7;
-let avgMissionPerHourPlayer = 0.2;
-let missionSummonMaxPlayerDist = 16 * 8;
-let checkInterval = 100;
-let announceIntervalSeconds = 60;
-let missionMinTime = 20 * 60 * 10;
-let missionMaxTime = missionMinTime + (20 * 60 * 15)
-let rewardItem = missionToken;
-let missionSwapFee = 2;
-let bonusRewardChance = 0.3;
-let maxTimeBonus = 1;
+// Quick Events & Missions
+const AVG_MISSIONS_PER_HOUR = 0.7;
+const AVG_MISSION_PER_HOUR_PLAYER = 0.2;
+const MISSION_SUMMON_MAX_PLAYER_DIST = 16 * 8;
+const CHECK_INTERVAL = 100;
+const ANNOUNCE_INTERVAL_SECONDS = 60;
+const MISSION_MIN_TIME = 20 * 60 * 10;
+const MISSION_MAX_TIME = MISSION_MIN_TIME + (20 * 60 * 15)
+const REWARD_ITEM = MISSION_TOKEN;
+const MISSION_SWAP_FEE = 2;
+const BONUS_REWARD_CHANCE = 0.3;
+const MAX_TIME_BONUS = 1;
 
 // Sonstiges
-let ticksPerSecond = 20;
-let ticksPerMinute = ticksPerSecond * 60;
-let ticksPerHour = ticksPerMinute * 60;
-let curseChance = 0.05;
+const TICKS_PER_SECOND = 20;
+const TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
+const TICKS_PER_HOUR = TICKS_PER_MINUTE * 60;
+const CURSE_CHANCE = 0.05;
 const MULTIPLAYER_PERCENTAGE = 0.7;
 const MISSION_TARGET_PLAYER_MULT = 0.35;
 
 // Schwierigkeit
-let playTimeTarget = 20 * 60 * 60 * 24 * 3;     // 3 Tage
-let mobKillsTarget = 10000;
+const PLAY_TIME_TARGET = 20 * 60 * 60 * 24 * 3;     // 3 Tage
+const MOB_KILLS_TARGET = 10000;
 
 // Greeting
-const dailyMessage = [
+const DAILY_MESSAGE = [
     "§aHallo USERNAME! Schön dass du da bist. Hier, geh schaffen!",
     "§aHi USERNAME! Willkommen zurück! Hier, eine kleine Aufgabe für dich!",
     "§aOh, da bist du ja, USERNAME. Könntest du das hier für mich erledigen?",

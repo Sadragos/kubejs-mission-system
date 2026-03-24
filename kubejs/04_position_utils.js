@@ -24,7 +24,7 @@ function toChatPosition(pos, includeY) {
 
 /**
  * Berechnet eine zufällige Spawn-Position in der Nähe des Spielers.
- * Der Offset liegt im Bereich [0, missionSummonMaxPlayerDist].
+ * Der Offset liegt im Bereich [0, MISSION_SUMMON_MAX_PLAYER_DIST].
  * Die Y-Koordinate ist fest auf 280 gesetzt (über dem Terrain für Luftspawns).
  * @param {Player} player - Der Spieler, um dessen Position gespawnt wird
  * @returns {{ x: number, y: number, z: number }}
@@ -32,7 +32,7 @@ function toChatPosition(pos, includeY) {
 function generateSummonPos(player) {
     let posX = player.blockPosition().x;
     let posZ = player.blockPosition().z;
-    let offsetPos = randomPositionOffset({ x: posX, z: posZ, y: 280 }, 0, missionSummonMaxPlayerDist);
+    let offsetPos = randomPositionOffset({ x: posX, z: posZ, y: 280 }, 0, MISSION_SUMMON_MAX_PLAYER_DIST);
     let summonX = offsetPos.x;
     let summonZ = offsetPos.z;
     let summonY = 280;

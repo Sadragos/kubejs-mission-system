@@ -10,8 +10,8 @@
  */
 function tickTimeColor(ticks) {
     if (ticks < 20 * 20) return '§4';
-    if (ticks < ticksPerMinute) return '§c';
-    if (ticks < ticksPerMinute * 2) return '§e';
+    if (ticks < TICKS_PER_MINUTE) return '§c';
+    if (ticks < TICKS_PER_MINUTE * 2) return '§e';
     return '§a';
 }
 
@@ -50,7 +50,7 @@ function getTimeStats(event) {
  * @returns {string}
  */
 function ticksToTime(ticks, withColor) {
-    if (ticks < ticksPerSecond) return `${ticks} Ticks`;
+    if (ticks < TICKS_PER_SECOND) return `${ticks} Ticks`;
 
     let seconds = Math.floor(ticks / 20);
     let minutes = Math.floor(seconds / 60);
