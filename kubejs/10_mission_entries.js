@@ -1,9 +1,22 @@
+/** Globale Liste aller registrierten Missionen. */
 const ALL_MISSIONS = [];
 
+/**
+ * Registriert eine Mission in der globalen Liste.
+ * Fehlende Felder werden durch `correctMissionInit` mit Fallback-Werten befüllt.
+ * @param {object} mission - Missions-Objekt
+ */
 function addMission(mission) {
     ALL_MISSIONS.push(correctMissionInit(mission));
 }
 
+/**
+ * Befüllt fehlende Felder einer Mission mit Fallback-Werten.
+ * Bei Kill-Missionen wird außerdem ein Spawn-Egg-Identifier abgeleitet,
+ * sofern `eggChance` nicht explizit auf -1 gesetzt ist.
+ * @param {object} mission - Missions-Objekt (wird in-place verändert)
+ * @returns {object} Die vervollständigte Mission
+ */
 function correctMissionInit(mission) {
     if (!mission.minCoins) mission.minCoins = FALLBACK_MIN_COINS;
     if (!mission.maxCoins) mission.maxCoins = FALLBACK_MAX_COINS;
@@ -23,12 +36,17 @@ function correctMissionInit(mission) {
     return mission;
 }
 
+/**
+ * Ergänzt nachträglich fehlende Spawn-Eggs bei Wildcard-Kill-Missionen.
+ * Für Missionen ohne konkretes Egg wird anhand des Item-Filters nach passenden
+ * spezifischen Kill-Missionen gesucht und deren Eggs zusammengeführt.
+ */
 function correctAllMissions() {
     let killMission = getMissionByType(MISSION_TYPE_KILL.id);
     let relevantKillMission = killMission.filter(mission => mission.eggChance > 0 && mission.egg && mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1);
     let missionToCorrect = killMission.filter(mission => mission.eggChance > 0 && !mission.egg);
     missionToCorrect.forEach(mission => {
-        
+
         let relevantTargets = relevantKillMission.filter(killMission => mission.item === '*' || validateItem(killMission.item.replace('!', ''), mission.item));
         if (relevantTargets.length > 0) {
             mission.egg = relevantTargets.map(killMission => killMission.egg).join(',');

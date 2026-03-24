@@ -31,7 +31,6 @@ let ticksPerSecond = 20;
 let ticksPerMinute = ticksPerSecond * 60;
 let ticksPerHour = ticksPerMinute * 60;
 let curseChance = 0.05;
-const HUNT_SCOREBOARD_NAME = 'quest_hunt_score';
 const MULTIPLAYER_PERCENTAGE = 0.7;
 const MISSION_TARGET_PLAYER_MULT = 0.35;
 

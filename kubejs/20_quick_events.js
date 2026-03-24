@@ -624,7 +624,7 @@ function generateRewards() {
                 duration: randomInt(pickedBuff.minDuration, pickedBuff.maxDuration),
                 amplifier: randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier)
             };
-            preparedBuff.display = `§a${preparedBuff.duration} Minuten ${preparedBuff.name} ${roman[preparedBuff.amplifier]}§f`;
+            preparedBuff.display = `§a${preparedBuff.duration} Minuten ${preparedBuff.name} ${toRoman(preparedBuff.amplifier)}§f`;
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
@@ -653,7 +653,7 @@ function handleReward(event, rewards, username, multiplier, extras) {
             case 'buff':
                 let duration = Math.round(reward.duration * multiplier);
                 event.server.runCommandSilent(`effect give ${username} ${reward.buff} ${duration * 60} ${reward.amplifier}`);
-                parts += `\n - ${duration} Minuten ${reward.name} ${roman[reward.amplifier]}`;
+                parts += `\n - ${duration} Minuten ${reward.name} ${toRoman(reward.amplifier)}`;
                 break;
             case 'coin':
                 let coins = Math.round(reward.amount * multiplier);
