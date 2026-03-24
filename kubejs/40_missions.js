@@ -135,6 +135,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
     } catch (e) {
         event.player.tell(`§cEs konnte keine Mission erzeugt werden! Versuch es nochmal.`);
         console.log(e);
+        if (e && e.stack) console.log(e.stack);
     }
 })
 
@@ -208,7 +209,7 @@ PlayerEvents.loggedIn(event => {
 function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr) {
     eggChance = eggChance || 0;
     if (type == MISSION_TYPE_JOUNREY.id) {
-        item = toChatPosition(randomPositionWithDistance(targetPos, amount));
+        item = toChatPosition(randomPositionWithDistance(event.player.position(), amount));
     }
     event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod, eggChance, nr)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
 }

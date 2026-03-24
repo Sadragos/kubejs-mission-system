@@ -91,8 +91,8 @@ function randomPositionWithDistance(position, distance) {
     let base = { x: Math.floor(position.x), y: Math.floor(position.y), z: Math.floor(position.z) };
     let angle = Math.random() * Math.PI * 2;
     return {
-        x: Math.floor(base.x + Math.cos(angle) * amount),
+        x: Math.floor(base.x + Math.cos(angle) * distance),
         y: base.y,
-        z: Math.floor(base.z + Math.sin(angle) * amount)
+        z: Math.floor(base.z + Math.sin(angle) * distance)
     };
 }
