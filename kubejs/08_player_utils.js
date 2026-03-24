@@ -159,6 +159,8 @@ function rewardPlayer(event, player, source, type, rewards) {
         buffs: rewards.buffs || []
     };
 
+    playSoundAtPlayer(event, player.username, 'minecraft:entity.firework_rocket.launch');
+
     // Statistik
     switch (source) {
         case 'mission':
@@ -191,7 +193,7 @@ function rewardPlayer(event, player, source, type, rewards) {
     }
     for (let buff of internalRewards.buffs) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
-        rewardItems.push({ "text": `${buff.duration} Min. ${buff.name} ${toRoman(buff.amplifier)}`, "color": "light_purple" });
+        rewardItems.push({ "text": `${buff.duration} Minuten ${buff.name} ${toRoman(buff.amplifier)}`, "color": "light_purple" });
     }
     const rewardComponents = [{ "text": "» Belohnung: ", "color": "gold" }];
     rewardItems.forEach((item, i) => {

@@ -1,6 +1,8 @@
 // Basisitems
 const COIN_ITEM = 'kubejs:coin';
+const COIN_ITEM_NAME = 'Coin';
 const MISSION_ITEM = 'kubejs:mission';
+const MISSION_ITEM_NAME = 'Auftrag';
 const MISSION_TOKEN = 'kubejs:mission_scroll';
 
 // Regex

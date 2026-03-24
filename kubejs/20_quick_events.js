@@ -26,80 +26,96 @@ let QE_REWARDS = [
                 buff: 'minecraft:speed',
                 minDuration: 10,
                 maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 2
+                minAmplifier: 0,
+                maxAmplifier: 1
             },
             {
                 name: 'Dark Ward',
                 buff: 'born_in_chaos_v1:dark_ward',
                 minDuration: 10,
                 maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 1
+                minAmplifier: 0,
+                maxAmplifier: 0
             },
             {
                 name: 'Vitalität',
                 buff: 'apothic_attributes:vitality',
                 minDuration: 10,
                 maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 5
+                minAmplifier: 0,
+                maxAmplifier: 4
             },
             {
                 name: 'Haste',
                 buff: 'minecraft:haste',
                 minDuration: 5,
                 maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 3
+                minAmplifier: 0,
+                maxAmplifier: 2
             },
             {
                 name: 'Stärke',
                 buff: 'minecraft:strength',
                 minDuration: 5,
                 maxDuration: 15,
-                minAmplifier: 1,
-                maxAmplifier: 3
+                minAmplifier: 0,
+                maxAmplifier: 2
             },
             {
                 name: 'Resistenz',
                 buff: 'minecraft:resistance',
                 minDuration: 5,
                 maxDuration: 15,
-                minAmplifier: 1,
-                maxAmplifier: 3
+                minAmplifier: 2,
+                maxAmplifier: 2
             },
             {
                 name: 'Regeneration',
                 buff: 'minecraft:regeneration',
                 minDuration: 5,
                 maxDuration: 15,
-                minAmplifier: 1,
-                maxAmplifier: 3
+                minAmplifier: 0,
+                maxAmplifier: 2
             },
             {
                 name: 'Luck',
                 buff: 'minecraft:luck',
                 minDuration: 5,
                 maxDuration: 15,
-                minAmplifier: 1,
-                maxAmplifier: 5
+                minAmplifier: 0,
+                maxAmplifier: 4
             },
             {
                 name: 'Lebenssteigerung',
                 buff: 'minecraft:health_boost',
                 minDuration: 10,
                 maxDuration: 20,
-                minAmplifier: 1,
-                maxAmplifier: 10
+                minAmplifier: 0,
+                maxAmplifier: 9
             },
             {
                 name: 'Fliegen',
                 buff: 'apothic_attributes:flying',
                 minDuration: 2,
                 maxDuration: 5,
-                minAmplifier: 1,
+                minAmplifier: 0,
+                maxAmplifier: 0
+            },
+            {
+                name: 'Altes Wissen',
+                buff: 'apothic_attributes:knowledge',
+                minDuration: 4,
+                maxDuration: 8,
+                minAmplifier: 0,
                 maxAmplifier: 1
+            },
+            {
+                name: 'Sättigung',
+                buff: 'farmersdelight:nourishment',
+                minDuration: 10,
+                maxDuration: 20,
+                minAmplifier: 0,
+                maxAmplifier: 0
             }
         ]
     }
@@ -113,10 +129,9 @@ const PRESENT_EVENT = {
         let players = event.server.players;
         event.server.tell(`§fEin neuer §aAuftrag§f der Gilde für jeden!`);
         for (let player of players) {
-            summonRewardItem(event, player.username, 1, 1);
+            rewardPlayer(event, player, event, PRESENT_EVENT.id, { items: [{ item: MISSION_TOKEN, amount: 1, name: MISSION_ITEM_NAME }] });
         }
         currentEvent.stopEvent(event);
-        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -265,7 +280,21 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = ['minecraft:slowness 300', 'gametechbcs_spellbooks:blackout 90', 'apothic_attributes:grievous 300', 'elixirum:shrink 120 5', 'irons_spellbooks:chilled 240', 'minecraft:hunger 180', 'minecraft:infested 300', 'minecraft:mining_fatigue 180', 'apothic_attributes:sundering 240', 'minecraft:darkness 60', 'minecraft:oozing 300', 'minecraft:oozing 300', 'minecraft:nausea 20', 'minecraft:weaving 300'];
+                let effects = [
+                    'minecraft:slowness 300',
+                    'apothic_attributes:grievous 300',
+                    'sizeshiftingpotions:shrinking 120 5',
+                    'irons_spellbooks:chilled 240',
+                    'minecraft:hunger 180',
+                    'minecraft:infested 300',
+                    'minecraft:mining_fatigue 180',
+                    'apothic_attributes:sundering 240',
+                    'minecraft:darkness 60',
+                    'minecraft:oozing 300',
+                    'minecraft:oozing 300',
+                    'minecraft:nausea 20',
+                    'minecraft:weaving 300'
+                ];
                 let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
@@ -281,7 +310,7 @@ const HUNT_EVENT = {
             return;
         }
 
-        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
+        playSoundAtPlayer(event, '@a', 'minecraft:entity.firework_rocket.launch');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         if (currentEvent.multiplayer) {
@@ -307,7 +336,7 @@ const HUNT_EVENT = {
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
 
         checkForHelperMission(event, hunter, HUNT_EVENT.id);
-        let picked_egg_name;
+        let spawnEggItem = undefined;
         if (canSpawnEgg) {
             let mob = currentEvent.targetMonster;
             let chance = Math.random();
@@ -325,16 +354,14 @@ const HUNT_EVENT = {
                             }
                         });
                         let pickedEgg = getWeightedRandomItem(weightedEggs);
-                        picked_egg_name = pickedEgg.name;
-                        summonItem(event, hunter, pickedEgg.item, 1);
+                        spawnEggItem = {item: pickedEgg.item, amount: 1, name: pickedEgg.name};
                     } else {
-                        picked_egg_name = mob.name;
-                        summonItem(event, hunter, mob.egg, 1);
+                        spawnEggItem = {item: mob.egg, amount: 1, name: mob.name};
                     }
                 }
             }
         }
-        handleReward(event, currentEvent.rewards, hunter, bonus, picked_egg_name ? [`Spawnei: ${picked_egg_name}`] : []);
+        handleReward(event, currentEvent.rewards, hunter, bonus, spawnEggItem);
     }
 }
 
@@ -496,12 +523,11 @@ const ITEM_REQUEST_EVENT = {
             return;
         }
 
-        playSoundAtPlayer(event, '@a', 'advancementplaques:ui.toast.task_complete');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         event.server.tell(`${currentEvent.label} §aEvent war Erfolgreich!§f\n  -> Teilnehmer: §a${huntersText.join('§f, §a')}§f\n${getTimeStats(event)}\n  -> Zeitbonus: ${bonusText}`);
         hunters.forEach(hunter => {
-            handleReward(event, currentEvent.rewards, hunter, bonus, []);
+            handleReward(event, currentEvent.rewards, hunter, bonus);
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
@@ -548,6 +574,8 @@ EntityEvents.death(event => {
     if (event.entity.hasCustomName() && event.entity.getCustomName().getString() == 'Gilden-Dieb') {
         event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
         checkForHelperMission(event, event.source.player.username, THIEF_EVENT.id);
+        let reward = randomInt(1, 3);
+        rewardPlayer(event, event.source.player, 'event', THIEF_EVENT.id, { xp: reward, worldborder: reward });
     }
 });
 
@@ -637,34 +665,30 @@ function generateRewards() {
     return rewards;
 }
 
-function handleReward(event, rewards, username, multiplier, extras) {
+function handleReward(event, rewards, username, multiplier, spawnEggItem) {
     let player = event.server.players.find(p => p.username === username);
+    let items = [];
+    let buffs = [];
+    let coins = 0;
+    if(spawnEggItem) items.push(spawnEggItem);
+
     let parts = `§7Durch deine Teilnahme am Event hast du die folgenden Belohnungen erhalten:`;
     for (let reward of rewards) {
         switch (reward.id) {
             case 'buff':
                 let duration = Math.round(reward.duration * multiplier);
-                event.server.runCommandSilent(`effect give ${username} ${reward.buff} ${duration * 60} ${reward.amplifier}`);
-                parts += `\n - ${duration} Minuten ${reward.name} ${toRoman(reward.amplifier)}`;
+                buffs.push({ buff: reward.buff, duration: duration, amplifier: reward.amplifier, name: reward.name });
                 break;
             case 'coin':
-                let coins = Math.round(reward.amount * multiplier);
-                summonItem(event, username, COIN_ITEM, coins);
-                parts += `\n - ${coins}x Coin`;
+                coins = Math.round(reward.amount * multiplier);
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
-                summonItem(event, username, MISSION_TOKEN, missions);
-                parts += `\n - ${missions}x Auftrag`;
+                items.push({item: MISSION_ITEM, amount: missions, name: MISSION_ITEM_NAME});
                 break;
         }
     }
-    if (extras) {
-        for (let i = 0; i < extras.length; i++) {
-            parts += `\n - ${extras[i]}`;
-        }
-    }
-    player.tell(parts);
+    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: Math.ceil(coins/2) });
 }
 
 function getTimeBonusMultiplier(startTick, endTick, maxTick) {
