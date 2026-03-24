@@ -185,22 +185,23 @@ PlayerEvents.loggedIn(event => {
     setTimeout(() => {
         if (event.player === undefined) return;
         if (!event.server.players.some(p => p.username === event.player.username)) return;
-        let currentDateString = new Date().toISOString().split('T')[0];
-        let playerStage = event.player.stages.has("daily_mission_" + currentDateString);
-        let yesterdayDateString = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0];
-        let yesterdayStage = event.player.stages.has("daily_mission_" + yesterdayDateString);
 
-        if (!playerStage) {
-            event.player.stages.add("daily_mission_" + currentDateString);
-            let message = DAILY_MESSAGE[randomInt(0, DAILY_MESSAGE.length - 1)];
-            message = message.replace("USERNAME", event.player.username);
-            event.player.tell(message);
-            let count = 3;
-            if (!yesterdayStage) {
-                count = 5;
-            }
-            summonRewardItem(event, event.player.username, count, count);
+        const player = event.player;
+
+        if (firstLogin(player)) {
+            setLoginDate(player);
+            return;
         }
+
+        const days = daysSinceLogin(player);
+        if (days === 0) return;
+
+        setLoginDate(player);
+        let message = DAILY_MESSAGE[randomInt(0, DAILY_MESSAGE.length - 1)];
+        message = message.replace("USERNAME", player.username);
+        player.tell(message);
+        let count = days === 1 ? 3 : 5;
+        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count, name: MISSION_ITEM_NAME }] });
     }, 30000);
 });
 
