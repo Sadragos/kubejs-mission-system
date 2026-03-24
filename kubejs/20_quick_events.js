@@ -163,8 +163,9 @@ const HUNT_EVENT = {
         currentEvent.missionTime = randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
+        let avgPlayerProgress = getAveragePlayerProgress(event.server, 'kill', true);
         currentEvent.multiplayer = randomInt(0, 100) <= (MULTIPLAYER_PERCENTAGE * 100);
-        currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length));
+        currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= avgPlayerProgress) ));
         currentEvent.wild = currentEvent.targetMonster.item === '*';
 
         if (currentEvent.wild && currentEvent.multiplayer) {
@@ -479,7 +480,7 @@ const ITEM_REQUEST_EVENT = {
 
         currentEvent.rewards = generateRewards(event);
 
-        currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length));
+        currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
 
         currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
