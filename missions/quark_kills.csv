@@ -1,0 +1,3 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;quark:forgotten;;2;8;;;70;;;0.3
+kill;wraith;;8;32;;;100;;;0.25

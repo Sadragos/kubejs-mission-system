@@ -1,0 +1,5 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;takesapillage:archer;;8;32;;;100;;;0.15
+kill;takesapillage:clay_golem;;;;;;;;;
+kill;takesapillage:skirmisher;;8;32;;;100;;;0.15
+kill;takesapillage:legioner;;4;16;;;100;;;0.15

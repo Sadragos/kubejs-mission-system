@@ -1,11 +1,11 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
 kill;minecraft:blaze;Lohe;8;64;;;100;;;0.25
 kill;minecraft:breeze;Böe;8;32;;;100;;;0.25
-kill;minecraft:creeper;;4;16;;;100;;;0.1
+kill;creeper;;4;16;;;100;;;0.1
 kill;minecraft:drowned;Ertrunkener;8;64;;;100;;;0.1
 kill;minecraft:elder_guardian;Großwächter;1;3;16;24;75;;-1;0.5
 kill;minecraft:ender_dragon;Ender Drache;1;1;16;24;75;;-1;0.7
-kill;minecraft:enderman;Enderman;6;48;6;14;100;;;0.3
+kill;enderman;Enderman;6;48;6;14;100;;;0.3
 kill;minecraft:endermite;Endermite;4;16;6;12;100;;;0.3
 kill;minecraft:evoker;Magier;4;16;6;14;100;;;0.4
 kill;minecraft:ghast;Ghast;4;16;;;100;;;0.3
@@ -36,9 +36,10 @@ kill;!minecraft:wither;Wither;1;2;16;24;75;;-1;0.65
 kill;minecraft:zoglin;Zoglin;8;16;;;100;;;0.4
 kill;minecraft:zombie;Zombie;8;64;;;250;;;
 kill;minecraft:zombified_piglin;Zombifizierter-Piglin;8;64;;;100;;;
-kill;zombi,skeleton,husk,stray,knight,corpse,bone,necromancer,drowned,sunken,skull,soul,ghost,specter,spectre,spectral;Untote;128;256;;;1500;;0.20;
+kill;zombi,skeleton,husk,stray,knight,corpse,bone,necro,drowned,sunken,skull,soul,ghost,specter,spectre,spectral,wraith;Untote;128;256;;;1500;;0.20;
 kill;*;Gegner;128;512;;;3500;;0.15;
-kill;pillager,vindicator,evoker,ravager,witch;Raider;32;128;;;600;;0.20;0.1
-kill;blaze,wither,magma,zoglin,piglin,ghast;Dämonen;32;128;;;400;;0.20;0.25
+kill;illager,pillage,vindicator,evoker,ravager,witch,iceologer,minecolonies;Raider;32;128;;;600;;0.20;0.1
+kill;blaze,wither,magma,zoglin,piglin,ghast,eternalnether,mushlin;Dämonen;32;128;;;400;;0.20;0.25
 kill;skeleton;Knochengerüste;32;128;;;600;;0.20;
 kill;zombi,husk,drowned;Wandelnde Leichen;32;128;;;600;;0.20;
+kill;minecraft:creaking;;4;8;;;75;;;0.35

@@ -1,0 +1,13 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;illagerinvasion:provoker;;8;32;;;100;;;0.15
+kill;illagerinvasion:basher;;8;32;;;100;;;0.15
+kill;illagerinvasion:sorcerer;;2;8;;;100;;;0.15
+kill;illagerinvasion:archivist;;2;8;;;100;;;0.15
+kill;illagerinvasion:inquisitor;;2;8;;;100;;;0.15
+kill;illagerinvasion:marauder;;8;32;;;100;;;0.15
+kill;illagerinvasion:invoker;;1;2;12;24;60;;;0.25
+kill;illagerinvasion:alchemist;;4;16;;;100;;;0.15
+kill;illagerinvasion:firecaller;;4;16;;;100;;;0.15
+kill;illagerinvasion:necromancer;;2;8;;;100;;;0.15
+kill;illagerinvasion:surrendered;;;;;;;;;
+kill;illusioner;;2;8;;;50;;;0.15

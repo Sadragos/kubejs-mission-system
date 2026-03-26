@@ -1,0 +1,14 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;rottencreatures:burned;;8;32;;;75;;;0.25
+kill;rottencreatures:frostbitten;;8;32;;;75;;;
+kill;rottencreatures:swampy;;8;32;;;75;;;
+kill;rottencreatures:undead_miner;;4;16;;;75;;;
+kill;mummy;;8;32;;;100;;;
+kill;rottencreatures:glacial_hunter;;4;16;;;75;;;
+kill;rottencreatures:dead_beard;;2;8;;;75;;;0.2
+kill;rottencreatures:immortal;;4;16;;;75;;;
+kill;rottencreatures:scarab;;;;;;;;;
+kill;rottencreatures:hunter_wolf;;;;;;;;;
+kill;rottencreatures:skeleton_lackey;;4;16;;;75;;;
+kill;rottencreatures:zombie_lackey;;4;16;;;75;;;
+kill;rottencreatures:zap;;4;16;;;75;;;

@@ -1,0 +1,14 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
+kill;earthmobsmod:zombified_pig;;;;;;5;;;
+kill;earthmobsmod:bone_spider;;;;;;5;;;
+kill;earthmobsmod:viler_witch;;;;;;5;;;
+kill;earthmobsmod:bouldering_zombie;;;;;;5;;;
+kill;earthmobsmod:lobber_zombie;;;;;;5;;;
+kill;earthmobsmod:bouldering_drowned;;;;;;5;;;
+kill;earthmobsmod:lobber_drowned;;;;;;5;;;
+kill;earthmobsmod:bouldering_frozen_zombie;;;;;;5;;;
+kill;earthmobsmod:lobber_husk;;;;;;5;;;
+kill;earthmobsmod:tropical_slime;;;;;;5;;;
+kill;earthmobsmod:skeleton_wolf;;;;;;5;;;
+kill;earthmobsmod:wither_skeleton_wolf;;;;;;5;;;0.25
+kill;earthmobsmod:zombified_rabbit;;;;;;5;;;
