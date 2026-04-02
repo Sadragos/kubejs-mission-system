@@ -38,10 +38,10 @@ const MISSION_TARGET_PLAYER_MULT = 0.35;
 
 // Schwierigkeit
 const MISSION_TYPE_GOALS = {
-    item: 400,
-    kill: 250,
-    journey: 60,
-    missions: 40
+    item: 200,
+    kill: 125,
+    journey: 30,
+    missions: 20
 };
 
 // Greeting
