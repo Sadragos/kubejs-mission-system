@@ -22,7 +22,11 @@ ServerEvents.commandRegistry((event) => {
                             return runStart(ctx.source, value);
                         }),
                 ),
-            )
+            ),
+    );
+
+    event.register(
+        Commands.literal("missions")
             .then(
                 Commands.literal("stats")
                     .executes((ctx) => {
@@ -30,7 +34,7 @@ ServerEvents.commandRegistry((event) => {
                     })
                     .then(
                         Commands.argument("player", Arguments.STRING.create(event))
-                            .requires((source) => source.hasPermission(4))
+                            .requires((source) => source.hasPermission(2))
                             .suggests((ctx, builder) => {
                                 ctx.source.server.playerList.players.forEach((p) =>
                                     builder.suggest(p.username),

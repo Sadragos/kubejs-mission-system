@@ -1,5 +1,5 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;immersiveengineering:hemp_fiber;Industriehanffasern;32;128;;;100;
+item;hemp_fiber;Industriehanffasern;32;128;;;100;
 item;immersiveengineering:component_electronic;Electronic Component;16;64;;;100;0.5
 item;immersiveengineering:hemp_fabric;Rebustes Gewebe;8;32;;;100;0.1
 item;immersiveengineering:component_iron;Mechanische Eisenkomponente;16;64;;;100;0.2

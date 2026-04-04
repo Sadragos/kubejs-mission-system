@@ -6,21 +6,21 @@ item;corn;Mais;32;128;6;12;100;
 item;bell_pepper;Paprika;32;128;6;12;100;
 item;garlic;Knoblauch;32;128;6;12;100;
 item;soybean;Soyabohnen;32;128;6;12;100;
-item;croptopia:tomato_juice;Tomatensaft;32;256;6;12;100;0.05
-item;croptopia:cranberry_juice;Cranberry Saft;32;256;6;12;100;0.05
-item;croptopia:pecan_pie;Pekanuss-Kuchen;8;64;6;12;100;0.1
-item;croptopia:cherry_pie;Kirschkuchen;8;64;6;12;100;0.1
-item;croptopia:coffee;Kaffee;16;96;6;12;100;0.15
-item;croptopia:fruit_salad;Obstsalat;16;64;6;12;100;0.15
-item;croptopia:tofuburger;Tofuburger;16;64;6;12;100;0.2
-item;croptopia:taco;Taco;8;48;6;12;100;0.2
-item;croptopia:figgy_pudding;Figgy Pudding;8;48;6;12;100;0.2
+item;tomato_juice;Tomatensaft;32;256;6;12;100;0.05
+item;cranberry_juice;Cranberry Saft;32;256;6;12;100;0.05
+item;pecan_pie;Pekanuss-Kuchen;8;64;6;12;100;0.1
+item;cherry_pie;Kirschkuchen;8;64;6;12;100;0.1
+item;coffee;Kaffee;16;96;6;12;100;0.15
+item;fruit_salad;Obstsalat;16;64;6;12;100;0.15
+item;tofuburger;Tofuburger;16;64;6;12;100;0.2
+item;taco;Taco;8;48;6;12;100;0.2
+item;figgy_pudding;Figgy Pudding;8;48;6;12;100;0.2
 item;sushi;Sushi;8;64;6;12;100;0.1
-item;croptopia:beef_wellington;Filet Wellington;8;48;6;12;100;0.3
-item;croptopia:toast;Toast;16;200;6;12;100;0.1
-item;croptopia:fruit_cake;Fruit Cake;8;48;6;12;100;0.4
-item;croptopia:tostada;Tostada;8;64;6;12;100;0.2
-item;croptopia:fajitas;Fajitas;8;48;6;12;100;0.2
-item;croptopia:supreme_pizza;Supreme Pizza;8;48;6;12;100;0.4
-item;croptopia:macaron;Macaron;16;64;6;12;100;0.3
-item;croptopia:croque_madame;;8;48;6;12;100;0.3
+item;beef_wellington;Filet Wellington;8;48;6;12;100;0.3
+item;toast;Toast;16;200;6;12;100;0.1
+item;fruit_cake;Fruit Cake;8;48;6;12;100;0.4
+item;tostada;Tostada;8;64;6;12;100;0.2
+item;fajitas;Fajitas;8;48;6;12;100;0.2
+item;supreme_pizza;Supreme Pizza;8;48;6;12;100;0.4
+item;macaron;Macaron;16;64;6;12;100;0.3
+item;croque_madame;;8;48;6;12;100;0.3
