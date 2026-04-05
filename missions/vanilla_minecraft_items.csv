@@ -2,7 +2,7 @@ type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
 item;minecraft:acacia_log;Akazienstamm;512;1024;;;250;
 item;minecraft:andesite;Andesite;512;1024;;;250;
 item;minecraft:basalt;Basalt;1024;2048;;;250;0.1
-item;minecraft:mangrove_log;Mangrovenstamm;256;1024;;;250;0.1
+item;mangrove_log;Mangrovenstamm;256;1024;;;250;0.1
 item;minecraft:quartz;Netherquarz;128;512;;;250;0.25
 item;minecraft:sand;Sand;1024;4096;;;250;
 item;minecraft:soul_sand;Seelensand;512;2048;;;250;0.25

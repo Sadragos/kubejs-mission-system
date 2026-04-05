@@ -1,0 +1,5 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;immersivepetroleum:gas_generator;Tragbarer Generator;4;8;;;100;0.2
+item;immersivepetroleum:asphalt;Asphalt;64;256;;;100;0.2
+item;immersivepetroleum:flarestack;Leuchtfeuer;4;8;;;100;0.2
+item;immersivepetroleum:molotov;Molotov;8;32;;;100;0.15

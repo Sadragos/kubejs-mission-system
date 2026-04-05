@@ -1,0 +1,15 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;twilightforest:canopy_log;Baldachinbaumstamm;64;512;;;100;0.1
+item;twilightforest:twilight_oak_sapling;Kränklicher Dämmerungs-Eichensetzling;8;16;;;100;0.1
+item;mangrove_log;Mangrovenstamm;64;512;;;100;0.1
+item;twilightforest:mangrove_sapling;Mangrovensetzling;16;32;;;100;0.1
+item;twilightforest:dark_log;Dunkelstamm;64;512;;;100;0.1
+item;twilightforest:darkwood_sapling;Dunkelholzsetzling;16;32;;;100;0.1
+item;twilightforest:raven_feather;Rabenfeder;16;32;;;100;0.1
+item;twilightforest:uncrafting_table;Zerlegebank;1;4;8;16;75;0.1
+item;twilightforest:knightmetal_ingot;Rittermetallbarren;8;32;;;100;0.1
+item;twilightforest:torchberries;Fackelbeeren;8;64;;;100;0.1
+item;twilightforest:firefly;Leuchtkäfer;8;64;;;100;0.1
+item;twilightforest:cicada;Zikade;8;64;;;100;0.1
+item;twilightforest:ironwood_ingot;Eisenholzbarren;8;32;;;100;0.1
+item;twilightforest:liveroot;Lebenswurzel;8;32;;;100;0.1
