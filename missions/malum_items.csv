@@ -22,3 +22,6 @@ item;malum:exposed_soulwood_log;;2;8;6;12;50;0.4
 item;malum:blighted_soulwood;;16;64;6;12;50;0.35
 item;malum:runic_sapball;;8;32;6;12;100;
 item;malum:soul_stained_steel_ingot;;4;24;6;12;100;0.1
+item;malum:warp_flux;;2;12;6;12;100;0.1
+item;malum:cthonic_gold_fragment;;2;16;6;12;100;0.1
+item;malum:cthonic_gold;;1;8;6;12;75;0.1

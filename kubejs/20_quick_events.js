@@ -7,7 +7,7 @@ let QE_REWARDS = [
         id: 'coin',
         name: COIN_ITEM_NAME,
         minPerPlayer: 4,
-        maxPerPlayer: 6,
+        maxPerPlayer: 8,
         weight: 100,
         chance: 1.0
     }, {
@@ -96,8 +96,8 @@ let QE_REWARDS = [
             {
                 name: 'Fliegen',
                 buff: 'apothic_attributes:flying',
-                minDuration: 2,
-                maxDuration: 5,
+                minDuration: 4,
+                maxDuration: 10,
                 minAmplifier: 0,
                 maxAmplifier: 0
             },
@@ -105,7 +105,7 @@ let QE_REWARDS = [
                 name: 'Altes Wissen',
                 buff: 'apothic_attributes:knowledge',
                 minDuration: 4,
-                maxDuration: 8,
+                maxDuration: 10,
                 minAmplifier: 0,
                 maxAmplifier: 1
             },
@@ -239,6 +239,9 @@ const HUNT_EVENT = {
                 text: `\n  -> Spawn-Ei-Chance: §a${(currentEvent.targetMonster.eggChance * 100).toFixed(0)}%§f`
             });
         }
+        parts.push({
+            text: `\n  -> Schwierigkeit: ${(playermod*100).toFixed(1)}%`
+        });
         event.server.tell(parts);
         playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.6');
     },
@@ -507,6 +510,9 @@ const ITEM_REQUEST_EVENT = {
         });
         parts.push({
             text: `\n  -> Belohnung: ${currentEvent.rewards.map(el => el.display).join(', ')}`
+        });
+        parts.push({
+            text: `\n  -> Schwierigkeit: ${(playermod*100).toFixed(1)}%`
         });
         event.server.tell(parts);
         playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.1');

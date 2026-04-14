@@ -2,14 +2,17 @@ ServerEvents.commandRegistry((event) => {
     const { commands: Commands, arguments: Arguments } = event;
     event.register(
         Commands.literal("missions")
-            .requires((source) => source.hasPermission(2))
             .then(
-                Commands.literal("abort").executes((ctx) =>
-                    runWithAction(ctx.source, "abort"),
-                ),
+                Commands.literal("abort")
+                    .requires((source) => source.hasPermission(2))
+                    .executes((ctx) =>
+                        runWithAction(ctx.source, "abort"),
+                    ),
             )
             .then(
-                Commands.literal("start").then(
+                Commands.literal("start")
+                    .requires((source) => source.hasPermission(2))
+                    .then(
                     Commands.argument("type", Arguments.STRING.create(event))
                         .suggests((ctx, builder) => {
                             for (const opt of ALL_QUICK_EVENTS) {
@@ -82,40 +85,37 @@ ServerEvents.commandRegistry((event) => {
 
         const name = player.username;
 
-        function progressBar(percent, width) {
-            const filled = Math.round((percent / 100) * width);
-            return "§a" + "█".repeat(filled) + "§8" + "░".repeat(width - filled);
-        }
-
         let totalPulled = 0, totalDone = 0;
         const lines = [`§6--- Missionen Statistik: ${name} ---`];
 
         for (const type of Object.keys(MISSION_TYPE_GOALS)) {
             let pulled = getMissionPulled(player, type);
             let done = getMissionDoneCount(player, type);
-            let progress = getPlayerProgress(player, type) * 100;
+            let progress = (getPlayerProgress(player, type) * 100).toFixed(1);
             let pullPercent = pulled > 0 ? ((done / pulled) * 100).toFixed(1) : "0.0";
             let typeName = (MISSION_TYPES.find(t => t.id === type)?.text ?? type).replace(/§./g, '');
-            lines.push(`§6${typeName}§7: §a${done} §7/ §f${pulled} §7(§e${pullPercent}%§7) §8[${progressBar(progress, 10)}§8]`);
+            lines.push(`§8[§6${typeName}§8] §7Erledigt: §a${done} §7/ §f${pulled} §7(§e${pullPercent}%§7) §8| §7Fortschritt: §e${progress}%`);
             totalPulled += pulled;
             totalDone += done;
         }
-        lines.push(`§6Gesamt§7: §a${totalDone} §7/ §f${totalPulled}`);
+
+        let totalPercent = totalPulled > 0 ? ((totalDone / totalPulled) * 100).toFixed(1) : "0.0";
+        lines.push(`§8[§6Gesamt§8] §7Erledigt: §a${totalDone} §7/ §f${totalPulled} §7(§e${totalPercent}%§7)`);
 
         let cursed = getMissionPulled(player, "cursed");
         if (cursed > 0) {
             let cursedPercent = ((cursed / (cursed + totalPulled)) * 100).toFixed(1);
-            lines.push(`§6Verflucht§7: §a${cursed} §7 => §e${cursedPercent}%§7`);
+            lines.push(`§8[§5Verflucht§8] §7Gezogen: §a${cursed} §8| §7Anteil: §e${cursedPercent}%`);
         }
 
         let totalEvents = 0;
         lines.push(`§6--- Events Statistik: ${name} ---`);
         for (const ev of ALL_QUICK_EVENTS.filter(e => e.showInStat)) {
             let done = getEventDone(player, ev.id);
-            lines.push(`§6${ev.name}§7: §a${done}`);
+            lines.push(`§8[§6${ev.name}§8]§a${done}`);
             totalEvents += done;
         }
-        lines.push(`§6Gesamt§7: §a${totalEvents}`);
+        lines.push(`§8[§6Gesamt§8] §a${totalEvents}`);
 
         source.player.tell(lines.join('\n'));
 
