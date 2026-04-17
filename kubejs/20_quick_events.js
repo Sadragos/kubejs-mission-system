@@ -141,6 +141,7 @@ const PRESENT_EVENT = {
 
 const HUNT_EVENT = {
     id: 'hunt',
+    progressType: 'kill',
     weight: 4,
     showInStat: true,
     name: 'Jagd',
@@ -454,6 +455,7 @@ const AIRDROP_EVENT = {
 const ITEM_REQUEST_EVENT = {
     name: 'Bestellung',
     id: 'request',
+    progressType: 'item',
     weight: 2,
     showInStat: true,
     startTick: undefined,
@@ -653,7 +655,7 @@ function generateRewards(event) {
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
-            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getPlayerProgress(event.server, currentEvent.id));
+            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill'));
             if (existing) {
                 existing.amount += amount;
                 existing.display = `§a${existing.amount}x ${existing.name}§f`;
