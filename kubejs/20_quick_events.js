@@ -696,7 +696,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 break;
         }
     }
-    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: Math.ceil(coins / 2) });
+    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: coins });
 }
 
 function getTimeBonusMultiplier(startTick, endTick, maxTick) {

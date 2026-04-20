@@ -200,7 +200,7 @@ PlayerEvents.loggedIn(event => {
         let message = DAILY_MESSAGE[randomInt(0, DAILY_MESSAGE.length - 1)];
         message = message.replace("USERNAME", player.username);
         player.tell(message);
-        let count = days === 1 ? 3 : 5;
+        let count = days === 1 ? 4 : 6;
         rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count, name: MISSION_ITEM_NAME }] });
     }, 30000);
 });
