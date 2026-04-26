@@ -1,0 +1,11 @@
+type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
+item;enderscape:veiled_log;;64;512;;;100;0.5
+item;enderscape:celestial_stem;;64;512;;;100;0.5
+item;enderscape:murublight_stem;;64;512;;;100;0.5
+item;enderscape:kurodite;;64;512;;;100;0.5
+item;enderscape:veradite;;64;512;;;100;0.5
+item;enderscape:alluring_magnia_sprout;;32;64;;;100;0.5
+item;enderscape:repulsive_magnia_sprout;;32;64;;;100;0.5
+item;enderscape:shadoline_ingot;;32;128;;;100;0.5
+item;enderscape:nebulite;;8;48;;;100;0.5
+item;enderscape:flanger_berry;;32;64;;;100;0.5
