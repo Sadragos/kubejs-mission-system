@@ -201,7 +201,7 @@ PlayerEvents.loggedIn(event => {
         message = message.replace("USERNAME", player.username);
         player.tell(message);
         let count = days === 1 ? 4 : 6;
-        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count, name: MISSION_ITEM_NAME }] });
+        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count, name: MISSION_ITEM_NAME }], worldborder: 16 });
     }, 30000);
 });
 

@@ -42,7 +42,7 @@ function getPlayerProgress(player, type, min1percent) {
     const goal = MISSION_TYPE_GOALS[type];
     if (!goal) return 0;
     const res = Math.min(1, getMissionDoneCount(player, type) / goal);
-    return min1percent ? Math.max(0.01, res) : res;
+    return min1percent ? Math.max(0.05, res) : res;
 }
 
 /**
