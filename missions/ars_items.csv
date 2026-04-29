@@ -18,3 +18,10 @@ item;ars_nouveau:starbuncle_shards;Starbuncle Token;4;16;;;100;0.05
 item;ars_nouveau:whirlisprig_shards;Whirlsprig Token;4;16;;;100;0.05
 item;ars_nouveau:experience_gem;;64;256;;;100;0.1
 item;ars_nouveau:source_berry_roll;;16;64;;;100;0.1
+item;ars_nouveau:abjuration_essence;;6;24;;;100;0.1
+item;ars_nouveau:air_essence;;6;24;;;100;0.1
+item;ars_nouveau:conjuration_essence;;6;24;;;100;0.1
+item;ars_nouveau:earth_essence;;6;24;;;100;0.1
+item;ars_nouveau:fire_essence;;6;24;;;100;0.1
+item;ars_nouveau:manipulation_essence;;6;24;;;100;0.1
+item;ars_nouveau:water_essence;;6;24;;;100;0.1

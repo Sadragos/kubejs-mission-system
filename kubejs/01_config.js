@@ -1,3 +1,4 @@
+// priority: 900
 // Basisitems
 const COIN_ITEM = 'kubejs:coin';
 const COIN_ITEM_NAME = 'Coin';
