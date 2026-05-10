@@ -39,10 +39,21 @@ function getMissionDoneCount(player, type) {
  * @returns {number} Fortschrittswert zwischen 0 und 1
  */
 function getPlayerProgress(player, type, min1percent) {
-    const goal = MISSION_TYPE_GOALS[type];
-    if (!goal) return 0;
-    const res = Math.min(1, getMissionDoneCount(player, type) / goal);
-    return min1percent ? Math.max(0.05, res) : res;
+    let goal = 0;
+    let done = 0;
+    if(DIFFICULTY_BY_TYPE) {
+        goal = MISSION_TYPE_GOALS[type] || 100;
+        done = getMissionDoneCount(player, type);
+    } else {
+        for (const _k of Object.keys(MISSION_TYPE_GOALS)) { 
+            goal += MISSION_TYPE_GOALS[_k]; 
+            done += getMissionDoneCount(player, _k);
+        }
+    }
+    const res = Math.min(1, done / goal);
+    const lvl = min1percent ? Math.max(MIN_DIFFICULTY, res) : res;
+    player.server.tell(`${player.username} -> goal : ${goal}, done: ${done}, res: ${res}, lvl: ${lvl}, type: ${type}, min1: ${min1percent}`);
+    return lvl;
 }
 
 /**
@@ -56,11 +67,8 @@ function getAveragePlayerProgress(server, type, min1percent) {
     const players = server.players;
     if (!players || players.length === 0) return 0;
     let total = 0;
-    players.forEach(player => {
-        total += getPlayerProgress(player, type);
-    });
-    const res = total / players.length;
-    return min1percent ? Math.max(0.01, res) : res;
+    for (let _i = 0; _i < players.length; _i++) { total += getPlayerProgress(players[_i], type, min1percent); }
+    return total / players.length;
 }
 
 /**

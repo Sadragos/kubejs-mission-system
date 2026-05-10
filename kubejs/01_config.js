@@ -44,6 +44,8 @@ const MISSION_TYPE_GOALS = {
     journey: 25,
     missions: 20
 };
+const MIN_DIFFICULTY = 0.05;
+const DIFFICULTY_BY_TYPE = false;
 
 // Greeting
 const DAILY_MESSAGE = [

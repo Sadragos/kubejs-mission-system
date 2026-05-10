@@ -307,7 +307,7 @@ function getMissionByType(type) {
 
 function getRandomMission(player) {
     let missionType = getWeightedRandomItem(MISSION_TYPES);
-    let playerProgress = getPlayerProgress(player, missionType.id);
+    let playerProgress = getPlayerProgress(player, missionType.id, true);
     let relevantMissions = getMissionByType(missionType.id).filter(mission => !mission.minProgress || mission.minProgress <= playerProgress);
     return getWeightedRandomItem(relevantMissions);
 }

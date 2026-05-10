@@ -197,7 +197,7 @@ const HUNT_EVENT = {
         let playermodsum = 0;
         let playermult = 0;
         for (let player of event.server.players) {
-            playermodsum += getPlayerProgress(player, 'kill');
+            playermodsum += getPlayerProgress(player, 'kill', true);
             playermult += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
@@ -473,7 +473,7 @@ const ITEM_REQUEST_EVENT = {
         let playermodsum = 0;
         let playerMulti = 0;
         for (let player of event.server.players) {
-            playermodsum += getPlayerProgress(player, 'item');
+            playermodsum += getPlayerProgress(player, 'item', true);
             playerMulti += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
@@ -655,7 +655,7 @@ function generateRewards(event) {
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
-            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill'));
+            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true));
             if (existing) {
                 existing.amount += amount;
                 existing.display = `§a${existing.amount}x ${existing.name}§f`;
