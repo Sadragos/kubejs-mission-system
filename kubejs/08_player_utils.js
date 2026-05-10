@@ -52,7 +52,6 @@ function getPlayerProgress(player, type, min1percent) {
     }
     const res = Math.min(1, done / goal);
     const lvl = min1percent ? Math.max(MIN_DIFFICULTY, res) : res;
-    player.server.tell(`${player.username} -> goal : ${goal}, done: ${done}, res: ${res}, lvl: ${lvl}, type: ${type}, min1: ${min1percent}`);
     return lvl;
 }
 
