@@ -589,7 +589,7 @@ EntityEvents.death(event => {
         event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
         checkForHelperMission(event, event.source.player.username, THIEF_EVENT.id);
         let reward = randomInt(1, 3);
-        rewardPlayer(event, event.source.player, 'event', THIEF_EVENT.id, { xp: reward, worldborder: reward });
+        rewardPlayer(event, event.source.player, 'event', THIEF_EVENT.id, {  worldborder: reward });
     }
 });
 
@@ -696,7 +696,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 break;
         }
     }
-    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, xp: coins, worldborder: coins });
+    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, worldborder: coins });
 }
 
 function getTimeBonusMultiplier(startTick, endTick, maxTick) {

@@ -245,7 +245,7 @@ function finishMission(event, player, data) {
         data.type.id,
         {
             coins: data.coins,
-            xp: data.coins,
+            // xp: data.coins,
             worldborder: data.coins
         }
     );
