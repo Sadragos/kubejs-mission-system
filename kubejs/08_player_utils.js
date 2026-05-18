@@ -8,6 +8,7 @@ function increaseMissionDoneCount(player, type, amount) {
     amount = amount || 1;
     const pData = player.persistentData;
     pData.putInt(`mission_done_${type}`, getMissionDoneCount(player, type) + amount);
+    pData.putInt('missions_done', (pData.getInt('missions_done') || 0) + amount);
 }
 
 /**
