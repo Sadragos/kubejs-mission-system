@@ -4,7 +4,7 @@
  * @returns {boolean}
  */
 function isAnyValidKill(mob) {
-    return getMissionByType('kill').some(mission => validateItem(mob, mission.item))
+    return getMissionByType('kill').some(mission => IdUtils.idMatches(mob, mission.item))
 }
 
 /**
@@ -17,7 +17,7 @@ function isAnyValidKill(mob) {
 function isValidKill(mob, target) {
     const entityName = mob.type.toString().toLowerCase();
     if (target === undefined || target === '*') return isAnyValidKill(entityName);
-    return validateItem(entityName, target);
+    return IdUtils.idMatches(entityName, target);
 }
 
 /**
@@ -30,5 +30,5 @@ function isValidKill(mob, target) {
 function getMoblist(filter) {
     let killMission = getMissionByType(MISSION_TYPE_KILL.id);
     let relevantKillMission = killMission.filter(mission => mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1);
-    return relevantKillMission.filter(killMission => filter === '*' || validateItem(killMission.item.replace('!', ''), filter));
+    return relevantKillMission.filter(killMission => filter === '*' || IdUtils.idMatches(killMission.item.replace('!', ''), filter));
 }

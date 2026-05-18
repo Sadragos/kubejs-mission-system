@@ -46,10 +46,10 @@ function getTimeStats(event) {
  * - < 1h  → "MM:SS"
  * - >= 1h → "HH:MM:SS"
  * @param {number} ticks - Umzuwandelnde Tick-Anzahl
- * @param {boolean} [withColor] - Reserviert, aktuell ungenutzt
  * @returns {string}
  */
-function ticksToTime(ticks, withColor) {
+function 
+ticksToTime(ticks) {
     if (ticks < TICKS_PER_SECOND) return `${ticks} Ticks`;
 
     let seconds = Math.floor(ticks / 20);
@@ -58,66 +58,4 @@ function ticksToTime(ticks, withColor) {
 
     let hours = Math.floor(minutes / 60);
     return `${hours.toString().padStart(2, '0')}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
-}
-
-/**
- * Formatiert ein Date-Objekt als "YYYY-MM-DD HH:MM:SS" (z.B. "2026-03-24 14:05:30").
- * @param {Date} date
- * @returns {string}
- */
-function formatDateISO(date) {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
-/**
- * Wandelt einen Datumsstring im Format "YYYY-MM-DD HH:MM:SS" in ein Date-Objekt um.
- * @param {string} str - Datumsstring, z.B. "2026-03-24 14:05:30"
- * @returns {Date}
- */
-function parseDateISO(str) {
-    const [datePart, timePart] = str.split(' ');
-    const [year, month, day] = datePart.split('-').map(Number);
-    const [hours, minutes, seconds] = (timePart || '00:00:00').split(':').map(Number);
-    return new Date(year, month - 1, day, hours, minutes, seconds);
-}
-
-/**
- * Gibt ein neues Date-Objekt zurück, das nur den Datumanteil enthält (Uhrzeit auf 00:00:00 gesetzt).
- * @param {Date} date
- * @returns {Date}
- */
-function dateOnly(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-}
-
-/**
- * Gibt die Anzahl ganzer Tage zwischen zwei Datumswerten zurück.
- * @param {Date} a
- * @param {Date} b
- * @returns {number} Absolute Anzahl Tage zwischen a und b
- */
-function daysBetween(a, b) {
-    const msPerDay = 1000 * 60 * 60 * 24;
-    return Math.round(Math.abs(dateOnly(a) - dateOnly(b)) / msPerDay);
-}
-
-/**
- * Formatiert ein Date-Objekt als "TT.MM HH:MM" (z.B. "24.03 14:05").
- * @param {Date} date
- * @returns {string}
- */
-function formatDateTimeReadable(date) {
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Monat ist 0-basiert
-
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-
-    return `${day}.${month} ${hours}:${minutes}`;
 }

@@ -7,13 +7,13 @@ const MISSION_TYPE_ITEM = {
         let player = event.player;
         let need = dataItem.currentDamage;
 
-        let take = removeFromInventory(player, dataItem.item, need);
+        let take = ItemUtils.removeFromInventory(player, dataItem.item, need);
 
         let remaining = dataItem.currentDamage - take;
         if (remaining > 0) {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben! Du brauchst noch ${remaining} um den Auftrag zu erledigen!`);
             stack.setDamage(remaining);
-            summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
+            ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
             event.cancel();
         } else {
             player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben!`);
@@ -101,8 +101,8 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
             event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
             unlucky = true;
             startEvent(event, HUNT_EVENT.id, true);
-            summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
-            playSoundAtPlayer(event, '@a', 'minecraft:item.totem.use');
+            ParticleUtils.summonParticleAtPlayer(event.server, '@a', 'minecraft:ash', 100, 3, 0.2, 0.2, 0.2);
+            SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.totem.use');
             increaseMissionPulled(event.player, 'cursed');
         } else {
             let mission = getRandomMission(event.player);
@@ -111,7 +111,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
             if (mission.type === MISSION_TYPE_KILL.id) {
                 let baseEggChance = mission.eggChance || FALLBACK_EGG_CHANCE;
                 if (baseEggChance > -1) {
-                    eggChance = baseEggChance * random(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
+                    eggChance = baseEggChance * MathUtils.randomFloat(MISSION_EGG_CHANCE_MULTIPLIER_MIN, MISSION_EGG_CHANCE_MULTIPLIER_MAX);
                 }
             }
             let missionNr = getMissionsPulledTotal(event.player) + 1;
@@ -120,15 +120,15 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
                 mission.type,
                 mission.item,
                 mission.name,
-                randomIntAdjusted(mission.min, mission.max, playerProgress),
-                randomIntAdjusted(mission.minCoins, mission.maxCoins, playerProgress),
+                MathUtils.randomIntAdjusted(mission.min, mission.max, playerProgress),
+                MathUtils.randomIntAdjusted(mission.minCoins, mission.maxCoins, playerProgress),
                 new Date(),
                 event.player.username,
                 playerProgress,
                 eggChance,
                 missionNr
             );
-            playSoundAtPlayer(event, event.player.username, 'minecraft:item.book.page_turn');
+            SoundUtils.playSoundAtPlayer(event.server, event.player.username, 'minecraft:item.book.page_turn');
             increaseMissionPulled(event.player, mission.type);
         }
         event.item.shrink(1);
@@ -144,7 +144,7 @@ ItemEvents.rightClicked(MISSION_ITEM, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
     let offhand = event.player.offHandItem;
-    if (offhand && validateItem(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
+    if (offhand && IdUtils.idMatches(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
         offhand.count = offhand.count - MISSION_SWAP_FEE;
         stack.count = 0;
         event.player.tell(`§aDu hast die Gebühr von §6${MISSION_SWAP_FEE} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
@@ -166,7 +166,7 @@ EntityEvents.death(event => {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
-                summonParticleAtPosition(event, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1);
+                ParticleUtils.summonParticleAtPosition(event.server, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
                     player.tell(`§aDu hast den letzten Kill für den Auftrag §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishMission(event, player, data);
@@ -188,16 +188,16 @@ PlayerEvents.loggedIn(event => {
 
         const player = event.player;
 
-        if (firstLogin(player)) {
-            setLoginDate(player);
+        if (PlayerUtils.firstLogin(player)) {
+            PlayerUtils.setLoginDate(player);
             return;
         }
 
-        const days = daysSinceLogin(player);
+        const days = PlayerUtils.daysSinceLogin(player);
         if (days === 0) return;
 
-        setLoginDate(player);
-        let message = DAILY_MESSAGE[randomInt(0, DAILY_MESSAGE.length - 1)];
+        PlayerUtils.setLoginDate(player);
+        let message = DAILY_MESSAGE[MathUtils.randomInt(0, DAILY_MESSAGE.length - 1)];
         message = message.replace("USERNAME", player.username);
         player.tell(message);
         let count = days === 1 ? 4 : 6;
@@ -209,7 +209,7 @@ PlayerEvents.loggedIn(event => {
 function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr) {
     eggChance = eggChance || 0;
     if (type == MISSION_TYPE_JOUNREY.id) {
-        item = toChatPosition(randomPositionWithDistance(event.player.position(), amount));
+        item = PositionUtils.toChatPosition(PositionUtils.randomPositionWithDistance(event.player.position(), amount));
     }
     event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod, eggChance, nr)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
 }
@@ -306,10 +306,10 @@ function getMissionByType(type) {
 }
 
 function getRandomMission(player) {
-    let missionType = getWeightedRandomItem(MISSION_TYPES);
+    let missionType = MathUtils.randomWeightedEntry(MISSION_TYPES);
     let playerProgress = getPlayerProgress(player, missionType.id, true);
     let relevantMissions = getMissionByType(missionType.id).filter(mission => !mission.minProgress || mission.minProgress <= playerProgress);
-    return getWeightedRandomItem(relevantMissions);
+    return MathUtils.randomWeightedEntry(relevantMissions);
 }
 
 function checkForHelperMission(event, username, type) {
@@ -323,7 +323,7 @@ function checkForHelperMission(event, username, type) {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
-                summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
+                ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
                     player.tell(`§aDu hast die letzte Mission für §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
                     finishMission(event, player, data);

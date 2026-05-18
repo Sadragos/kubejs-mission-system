@@ -1,14 +1,4 @@
 /**
- * Spielt einen Sound an der Position eines Spielers für alle Spieler ab.
- * @param {ServerEvent} event
- * @param {string} playername - Name des Zielspielers (Abspielposition)
- * @param {string} sound - Sound-Identifier (z.B. "minecraft:entity.player.levelup")
- */
-function playSoundAtPlayer(event, playername, sound) {
-    event.server.runCommandSilent(`execute at ${playername} run playsound ${sound} player @a ~ ~ ~ 1 1`);
-}
-
-/**
  * Erhöht den Missions-Zähler eines Spielers für einen bestimmten Typ.
  * @param {Player} player - Spieler, dessen Zähler erhöht wird
  * @param {string} type - Missionstyp (z.B. "item", "kill")
@@ -45,8 +35,8 @@ function getPlayerProgress(player, type, min1percent) {
         goal = MISSION_TYPE_GOALS[type] || 100;
         done = getMissionDoneCount(player, type);
     } else {
-        for (const _k of Object.keys(MISSION_TYPE_GOALS)) { 
-            goal += MISSION_TYPE_GOALS[_k]; 
+        for (const _k of Object.keys(MISSION_TYPE_GOALS)) {
+            goal += MISSION_TYPE_GOALS[_k];
             done += getMissionDoneCount(player, _k);
         }
     }
@@ -68,44 +58,6 @@ function getAveragePlayerProgress(server, type, min1percent) {
     let total = 0;
     for (let _i = 0; _i < players.length; _i++) { total += getPlayerProgress(players[_i], type, min1percent); }
     return total / players.length;
-}
-
-/**
- * Setzt den letzten Login-Zeitpunkt des Spielers.
- * @param {Player} player - Spieler, dessen letzten Login-Zeitpunkt gesetzt wird
- */
-function setLoginDate(player) {
-    const pData = player.persistentData;
-    pData.putString('login_date', formatDateISO(new Date()));
-}
-
-/**
- * Prüft, ob ein Spieler sich zum ersten Mal einloggt (kein Login-Datum gespeichert).
- * @param {Player} player
- * @returns {boolean}
- */
-function firstLogin(player) {
-    const pData = player.persistentData;
-    return !pData.getString('login_date');
-}
-
-/**
- * Gibt das gespeicherte Login-Datum eines Spielers als Date-Objekt zurück.
- * @param {Player} player
- * @returns {Date}
- */
-function getLoginDate(player) {
-    const pData = player.persistentData;
-    return parseDateISO(pData.getString('login_date'));
-}
-
-/**
- * Gibt die Anzahl der Tage seit dem letzten Login des Spielers zurück.
- * @param {Player} player
- * @returns {number}
- */
-function daysSinceLogin(player) {
-    return daysBetween(getLoginDate(player), new Date());
 }
 
 /**
@@ -184,7 +136,7 @@ function rewardPlayer(event, player, source, type, rewards) {
         buffs: rewards.buffs || []
     };
 
-    playSoundAtPlayer(event, player.username, 'minecraft:entity.firework_rocket.launch');
+    SoundUtils.playSoundAtPlayer(event.server, player.username, 'minecraft:entity.firework_rocket.launch');
 
     // Statistik
     switch (source) {
@@ -201,7 +153,8 @@ function rewardPlayer(event, player, source, type, rewards) {
     // Rewards
     const rewardItems = [];
     if (internalRewards.coins > 0) {
-        summonItem(event, player.username, COIN_ITEM, internalRewards.coins);
+        ItemUtils.summonItemAtPlayer(event.server, player.username, COIN_ITEM, internalRewards.coins);
+        ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'supplementaries:confetti', 100, 3, 0.2, 0.2, 0.2);
         rewardItems.push({ "text": `${internalRewards.coins}x Coin`, "color": "white" });
     }
     if (internalRewards.xp > 0) {
@@ -213,12 +166,13 @@ function rewardPlayer(event, player, source, type, rewards) {
         rewardItems.push({ "text": `+${internalRewards.worldborder}m Worldborder`, "color": "green" });
     }
     for (let item of internalRewards.items) {
-        summonItem(event, player.username, item.item, item.amount);
+        ItemUtils.summonItemAtPlayer(event.server, player.username, item.item, item.amount);
+        ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'supplementaries:confetti', 100, 3, 0.2, 0.2, 0.2);
         rewardItems.push({ "text": `${item.amount}x ${item.name}`, "color": "yellow" });
     }
     for (let buff of internalRewards.buffs) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
-        rewardItems.push({ "text": `${buff.duration} Minuten ${buff.name} ${toRoman(buff.amplifier)}`, "color": "light_purple" });
+        rewardItems.push({ "text": `${buff.duration} Minuten ${buff.name} ${TextUtils.toRoman(buff.amplifier)}`, "color": "light_purple" });
     }
     const rewardComponents = [{ "text": "» Belohnung: ", "color": "gold" }];
     rewardItems.forEach((item, i) => {

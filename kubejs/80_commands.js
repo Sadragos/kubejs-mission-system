@@ -60,7 +60,7 @@ ServerEvents.commandRegistry((event) => {
                 } else {
                     currentEvent.stopEvent(source);
                 }
-                removeScoreboard(source);
+                ScoreboardUtils.removeScoreboard(source.server, 'my_mission_scores');
                 break;
             default:
                 source.player.tell("§cInvalid Command!");

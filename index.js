@@ -51,7 +51,7 @@ scripts.forEach(script => {
 const relevantMissionCount = out.filter(line => !line.startsWith('//') && line.trim().length > 0).length;
 const lineString = out.join('\n');
 
-const fileContent = `${fullScript}\n\n${lineString}\n\ncorrectAllMissions();`;
+const fileContent = `// priority: 200\n${fullScript}\n\n${lineString}\n\ncorrectAllMissions();`;
 
 console.log(`Writing Quests and ${relevantMissionCount} Missions to ${outFile}`);
 mkdirSync('out', { recursive: true });

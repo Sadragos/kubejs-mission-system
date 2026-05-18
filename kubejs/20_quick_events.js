@@ -161,12 +161,12 @@ const HUNT_EVENT = {
 
     startEvent(event) {
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
+        currentEvent.missionTime = MathUtils.randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
 
         let avgPlayerProgress = getAveragePlayerProgress(event.server, 'kill', true);
-        currentEvent.multiplayer = randomInt(0, 100) <= (MULTIPLAYER_PERCENTAGE * 100);
-        currentEvent.targetMonster = getWeightedRandomItem(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= avgPlayerProgress) ));
+        currentEvent.multiplayer = MathUtils.randomInt(0, 100) <= (MULTIPLAYER_PERCENTAGE * 100);
+        currentEvent.targetMonster = MathUtils.randomWeightedEntry(getMissionByType('kill').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= avgPlayerProgress)));
         currentEvent.wild = currentEvent.targetMonster.item === '*';
 
         if (currentEvent.wild && currentEvent.multiplayer) {
@@ -201,10 +201,11 @@ const HUNT_EVENT = {
             playermult += MISSION_TARGET_PLAYER_MULT;
         }
         let playermod = playermodsum / event.server.players.length;
-        currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) * playermult);
+        currentEvent.targetAmount = Math.ceil(MathUtils.randomInt(currentEvent.targetMonster.min, currentEvent.targetMonster.max) * playermult);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
 
-        initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, currentEvent.multiplayer);
+        ScoreboardUtils.initBoard(event.server, 'my_mission_scores', `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`);
+        if (currentEvent.multiplayer) ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', 0);
 
         let parts = [{ text: currentEvent.label }];
         let mobPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
@@ -244,7 +245,7 @@ const HUNT_EVENT = {
             text: `\n  -> Schwierigkeit: ${(playermod*100).toFixed(1)}%`
         });
         event.server.tell(parts);
-        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.6');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.6');
     },
 
     handleDeath(event) {
@@ -255,10 +256,10 @@ const HUNT_EVENT = {
         currentEvent.actionTable.set(killer, (currentEvent.actionTable.get(killer) || 0) + 1);
         currentEvent.total++;
 
-        summonParticleAtPosition(event, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1);
+        ParticleUtils.summonParticleAtPosition(event.server, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1, 0.1, 0.1);
 
-        setScore(event, killer, currentEvent.actionTable.get(killer));
-        if (currentEvent.multiplayer) setScore(event, 'GESAMT', currentEvent.total);
+        ScoreboardUtils.setScore(event.server, 'my_mission_scores', killer, currentEvent.actionTable.get(killer));
+        if (currentEvent.multiplayer) ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', currentEvent.total);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -306,18 +307,18 @@ const HUNT_EVENT = {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen, die Vertragsstrafe wird verhängt!`);
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
                 event.server.runCommandSilent(`effect give @a minecraft:unluck 300 2`);
-                summonParticleAtPlayer(event, '@a', 'minecraft:ash', 100, 3, 0.2);
+                ParticleUtils.summonParticleAtPlayer(event.server, '@a', 'minecraft:ash', 100, 3, 0.2, 0.2, 0.2);
                 unlucky = false;
             } else {
                 event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
             }
             currentEvent = undefined;
-            removeScoreboard(event);
-            playSoundAtPlayer(event, '@a', 'minecraft:entity.lightning_bolt.thunder');
+            ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+            SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
 
-        playSoundAtPlayer(event, '@a', 'minecraft:entity.firework_rocket.launch');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.firework_rocket.launch');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = `§a${(bonus * 100).toFixed(0)}%§f`;
         if (currentEvent.multiplayer) {
@@ -331,7 +332,7 @@ const HUNT_EVENT = {
         }
         unlucky = false;
         currentEvent = undefined;
-        removeScoreboard(event);
+        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
     },
 
     timeNotification(event) {
@@ -360,7 +361,7 @@ const HUNT_EVENT = {
                                 name: otherEggMission.name
                             }
                         });
-                        let pickedEgg = getWeightedRandomItem(weightedEggs);
+                        let pickedEgg = MathUtils.randomWeightedEntry(weightedEggs);
                         spawnEggItem = { item: pickedEgg.item, amount: 1, name: pickedEgg.name };
                     } else {
                         spawnEggItem = { item: mob.egg, amount: 1, name: mob.name };
@@ -385,24 +386,24 @@ const THIEF_EVENT = {
         }
         let player = players[Math.floor(Math.random() * players.length)];
 
-        let summonPos = generateSummonPos(player);
+        let summonPos = PositionUtils.generateSummonPos(player, MISSION_SUMMON_MAX_PLAYER_DIST);
         let mobOptions = ['minecraft:zombie', 'minecraft:skeleton', 'minecraft:husk', 'minecraft:pillager', 'minecraft:evoker', 'minecraft:vindicator', 'minecraft:wither_skeleton'];
         let pickedOption = mobOptions[Math.floor(Math.random() * mobOptions.length)];
         let materials = ['iron', 'iron', 'iron', 'golden', 'diamond']
         let material = materials[Math.floor(Math.random() * materials.length)];
         let weaponOptions = [REWARD_ITEM, REWARD_ITEM, 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
         let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
-        event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Aufträge geklaut! Er wurde bei §a${toChatPosition(summonPos)}§f gesichtet!`);
+        event.server.tell(`§6[${currentEvent.name}]§f Ein Dieb hat der Händlergilde Aufträge geklaut! Er wurde bei §a${PositionUtils.toChatPosition(summonPos)}§f gesichtet!`);
         event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:"\\"Gilden-Dieb\\"",CustomNameVisible:1b,PersistenceRequired:1,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${REWARD_ITEM}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:slow_falling 120`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:strength infinite 2`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:resistance infinite 2`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:glowing infinite`);
         event.server.runCommandSilent(`effect give @e[name="Gilden-Dieb"] minecraft:speed infinite`);
-        markPosition(event, summonPos, currentEvent.name);
+        PositionUtils.markPosition(event.server, summonPos, currentEvent.name);
         currentEvent.stopEvent(event);
 
-        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.4');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.4');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -422,17 +423,17 @@ const AIRDROP_EVENT = {
         }
         let player = players[Math.floor(Math.random() * players.length)];
 
-        let summonPos = generateSummonPos(player);
+        let summonPos = PositionUtils.generateSummonPos(player, MISSION_SUMMON_MAX_PLAYER_DIST);
         let options = ['Eine Flugmaschiene', 'Ein Gyrokopter', 'Eine Drohne', 'Ein betrunkener Pilot', 'Ein fliegender Kurier', 'Eine Eule', 'Ein wahnsinniger Flieger', 'Ein Transportflieger'];
         let pickedOption = options[Math.floor(Math.random() * options.length)];
-        event.server.tell(`§6[${currentEvent.name}]§f ${pickedOption} hat bei §a${toChatPosition(summonPos)}§f Fracht verloren.`);
+        event.server.tell(`§6[${currentEvent.name}]§f ${pickedOption} hat bei §a${PositionUtils.toChatPosition(summonPos)}§f Fracht verloren.`);
         let items = [];
 
         if (Math.random() < 0.2) {
             items.push(`{slot:0,item:{id:"${REWARD_ITEM}",count:1}}`);
         } else {
-            let item = getWeightedRandomItem(getMissionByType('item').filter(it => it.item.includes(':')));
-            let amount = Math.max(1, randomInt(item.min / 4, item.max / 4));
+            let item = MathUtils.randomWeightedEntry(getMissionByType('item').filter(it => it.item.includes(':')));
+            let amount = Math.max(1, MathUtils.randomInt(item.min / 4, item.max / 4));
             let index = 0;
             do {
                 let stackAmount = Math.min(64, amount);
@@ -443,9 +444,9 @@ const AIRDROP_EVENT = {
         }
 
         event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"create:cardboard_package_10x12",count:1,components:{"create:package_address":"Frachtverlust","create:package_contents":[${items.join(',')}]}}}`);
-        markPosition(event, summonPos, currentEvent.name);
+        PositionUtils.markPosition(event.server, summonPos, currentEvent.name);
         currentEvent.stopEvent(event);
-        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.0');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.0');
     },
     stopEvent(event) {
         currentEvent = undefined;
@@ -478,20 +479,21 @@ const ITEM_REQUEST_EVENT = {
         }
         let playermod = playermodsum / event.server.players.length;
         currentEvent.startTick = event.server.tickCount;
-        currentEvent.missionTime = randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
+        currentEvent.missionTime = MathUtils.randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
         currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
         currentEvent.rewards = generateRewards(event);
 
-        currentEvent.targetItem = getWeightedRandomItem(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
+        currentEvent.targetItem = MathUtils.randomWeightedEntry(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
 
-        currentEvent.targetAmount = Math.ceil(randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
+        currentEvent.targetAmount = Math.ceil(MathUtils.randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
         let targetName = currentEvent.targetItem.name;
 
-        initScoreboard(event, `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`, true);
+        ScoreboardUtils.initBoard(event.server, 'my_mission_scores', `${currentEvent.scoreLabel} ${currentEvent.targetAmount}§8x§f ${targetName}`);
+        ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', 0);
 
         let parts = [{ text: currentEvent.label }];
         let itemPart = Text.of(`[${currentEvent.targetAmount}x ${targetName}]`)
@@ -517,7 +519,7 @@ const ITEM_REQUEST_EVENT = {
             text: `\n  -> Schwierigkeit: ${(playermod*100).toFixed(1)}%`
         });
         event.server.tell(parts);
-        playSoundAtPlayer(event, '@a', 'minecraft:item.goat_horn.sound.1');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.1');
     },
     stopEvent(event) {
         let hunters = [];
@@ -532,8 +534,8 @@ const ITEM_REQUEST_EVENT = {
         if (failed) {
             event.server.tell(`${currentEvent.label} §cZeit ist abgelaufen!`);
             currentEvent = undefined;
-            removeScoreboard(event);
-            playSoundAtPlayer(event, '@a', 'minecraft:entity.lightning_bolt.thunder');
+            ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+            SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
 
@@ -545,7 +547,7 @@ const ITEM_REQUEST_EVENT = {
             checkForHelperMission(event, hunter, ITEM_REQUEST_EVENT.id);
         });
         currentEvent = undefined;
-        removeScoreboard(event);
+        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
     },
     timeNotification(event) {
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
@@ -559,7 +561,7 @@ const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT,
 ItemEvents.rightClicked('minecraft:bowl', event => {
     if (!currentEvent || currentEvent.id !== ITEM_REQUEST_EVENT.id) return
     let player = event.player;
-    let take = removeFromInventory(player, currentEvent.targetItem.item, currentEvent.targetAmount - currentEvent.total);
+    let take = ItemUtils.removeFromInventory(player, currentEvent.targetItem.item, currentEvent.targetAmount - currentEvent.total);
 
     if (take === 0) {
         player.tell(`§cDu hast kein ${currentEvent.targetItem.name} im Inventar.`);
@@ -568,10 +570,10 @@ ItemEvents.rightClicked('minecraft:bowl', event => {
         let playername = String(player.username);
         currentEvent.actionTable.set(playername, (currentEvent.actionTable.get(playername) || 0) + take);
         currentEvent.total += take;
-        summonParticleAtPlayer(event, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1);
+        ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
 
-        setScore(event, playername, currentEvent.actionTable.get(playername));
-        setScore(event, 'GESAMT', currentEvent.total);
+        ScoreboardUtils.setScore(event.server, 'my_mission_scores', playername, currentEvent.actionTable.get(playername));
+        ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', currentEvent.total);
 
         if (currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -586,9 +588,9 @@ EntityEvents.death(event => {
         currentEvent.handleDeath(event);
     }
     if (event.entity.hasCustomName() && event.entity.getCustomName().getString() == 'Gilden-Dieb') {
-        event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
+        event.server.tell(`§6[Gilden-Dieb]§f Der Gilden-Dieb bei §a${PositionUtils.toChatPosition({ x: Math.floor(event.entity.position().x), y: Math.floor(event.entity.position().y), z: Math.floor(event.entity.position().z) })}§f wurde von §a${event.source.player.username}§f zur Strecke gebracht!`);
         checkForHelperMission(event, event.source.player.username, THIEF_EVENT.id);
-        let reward = randomInt(1, 3);
+        let reward = MathUtils.randomInt(1, 3);
         rewardPlayer(event, event.source.player, 'event', THIEF_EVENT.id, {  worldborder: reward });
     }
 });
@@ -631,7 +633,7 @@ ServerEvents.tick(event => {
 function startEvent(event, typeFilter, force) {
     console.log(`Starting Event: ${typeFilter}`);
     if (!currentEvent || currentEvent.endTick < event.server.tickCount || force) {
-        let ev = getWeightedRandomItem(ALL_QUICK_EVENTS.filter(e => !typeFilter || e.id === typeFilter));
+        let ev = MathUtils.randomWeightedEntry(ALL_QUICK_EVENTS.filter(e => !typeFilter || e.id === typeFilter));
         this.currentEvent = ev;
         this.currentEvent.startEvent(event);
     }
@@ -648,14 +650,14 @@ function generateRewards(event) {
                 id: pick.id,
                 buff: pickedBuff.buff,
                 name: pickedBuff.name,
-                duration: randomInt(pickedBuff.minDuration, pickedBuff.maxDuration),
-                amplifier: randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier)
+                duration: MathUtils.randomInt(pickedBuff.minDuration, pickedBuff.maxDuration),
+                amplifier: MathUtils.randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier)
             };
-            preparedBuff.display = `§a${preparedBuff.duration} Minuten ${preparedBuff.name} ${toRoman(preparedBuff.amplifier)}§f`;
+            preparedBuff.display = `§a${preparedBuff.duration} Minuten ${preparedBuff.name} ${TextUtils.toRoman(preparedBuff.amplifier)}§f`;
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
-            let amount = randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true));
+            let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true));
             if (existing) {
                 existing.amount += amount;
                 existing.display = `§a${existing.amount}x ${existing.name}§f`;
