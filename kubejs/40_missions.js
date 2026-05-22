@@ -121,7 +121,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
                 mission.item,
                 mission.name,
                 MathUtils.randomIntAdjusted(mission.min, mission.max, playerProgress),
-                MathUtils.randomIntAdjusted(mission.minCoins, mission.maxCoins, playerProgress),
+                Math.max(1, MathUtils.randomIntAdjusted(mission.minCoins, mission.maxCoins, playerProgress)),
                 new Date(),
                 event.player.username,
                 playerProgress,

@@ -690,7 +690,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 buffs.push({ buff: reward.buff, duration: duration, amplifier: reward.amplifier, name: reward.name });
                 break;
             case 'coin':
-                coins = Math.round(reward.amount * multiplier);
+                coins = Math.max(1, Math.round(reward.amount * multiplier));
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
