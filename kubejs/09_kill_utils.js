@@ -4,7 +4,12 @@
  * @returns {boolean}
  */
 function isAnyValidKill(mob) {
-    return getMissionByType('kill').some(mission => IdUtils.idMatches(mob, mission.item))
+    const missions = getMissionByType('kill');
+    const hasWildcard = missions.some(mission => mission.item === '*');
+    if (hasWildcard) {
+        return missions.some(mission => mission.item !== '*' && IdUtils.idMatches(mob, mission.item));
+    }
+    return missions.some(mission => IdUtils.idMatches(mob, mission.item));
 }
 
 /**
