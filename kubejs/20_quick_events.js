@@ -657,7 +657,8 @@ function generateRewards(event) {
             rewards.push(preparedBuff);
         } else {
             let existing = rewards.find(r => r.id === pick.id);
-            let amount = Math.max(1, MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true)));
+            let coinMin = pick.id === 'coin' ? MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX) : 1;
+            let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true), 1, coinMin);
             if (existing) {
                 existing.amount += amount;
                 existing.display = `§a${existing.amount}x ${existing.name}§f`;
