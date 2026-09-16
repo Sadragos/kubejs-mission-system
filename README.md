@@ -6,6 +6,23 @@ A dynamic mission and event system for Minecraft servers that generates random, 
 
 ## From the Player's Perspective
 
+### What Are Mission Scrolls?
+
+Mission Scrolls are personal quest items. Right-click a scroll to randomly generate a mission tailored to your progress. The generated mission becomes a physical item with detailed lore describing your task. Every player gets a fixed amount of Blank Mission scrolls, wheny they log in for the first time of the day. They can also be obtained through other means like Quick Events.
+
+**Mission Types:**
+- **Sende (Send)** – Gather items and right-click the mission item to turn them in
+- **Töte (Kill)** – Keep the mission item in your inventory while you kill the required mobs; progress tracks automatically
+- **Reise (Journey)** – Travel to a distant location; the mission item creates a waypoint and tracks your distance
+- **Helfe bei (Help With)** – Participate in a certain number of Quick Events of a specific type
+
+Mission characteristics:
+- **Scaled difficulty** – amounts adjust based on your individual pack progress
+- **Egg chances** – kill missions have a chance to drop spawn eggs as bonus rewards
+- **Tradeable** – missions are items, so players can trade them with each other (swap unwanted missions with friends)
+- **Swap option** – right-click with coins in your offhand slot (2 coin fee) to reject the mission and receive a fresh scroll
+- **Server announcements** – completing a mission announces it to all players
+
 ### What Are Quick Events?
 
 Quick Events are spontaneous, server-wide events announced in chat. They appear periodically and fall into two categories:
@@ -25,22 +42,6 @@ Quick Events have:
 - **Time bonuses** – finishing faster multiplies your rewards (up to 100% extra)
 - **Penalties** – if a cursed event (triggered by a player rolling a cursed scroll) fails, everyone receives a debuff
 
-### What Are Mission Scrolls?
-
-Mission Scrolls are personal quest items. Right-click a scroll to randomly generate a mission tailored to your progress. The generated mission becomes a physical item with detailed lore describing your task.
-
-**Mission Types:**
-- **Sende (Send)** – Gather items and right-click the mission item to turn them in
-- **Töte (Kill)** – Keep the mission item in your inventory while you kill the required mobs; progress tracks automatically
-- **Reise (Journey)** – Travel to a distant location; the mission item creates a waypoint and tracks your distance
-- **Helfe bei (Help With)** – Participate in a certain number of Quick Events of a specific type
-
-Mission characteristics:
-- **Scaled difficulty** – amounts adjust based on your individual pack progress
-- **Egg chances** – kill missions have a chance to drop spawn eggs as bonus rewards
-- **Tradeable** – missions are items, so players can trade them with each other (swap unwanted missions with friends)
-- **Swap option** – right-click with coins in your offhand slot (2 coin fee) to reject the mission and receive a fresh scroll
-- **Server announcements** – completing a mission announces it to all players
 
 ### How Missions Work
 
