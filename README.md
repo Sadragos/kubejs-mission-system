@@ -11,10 +11,12 @@ A dynamic mission and event system for Minecraft servers that generates random, 
 Mission Scrolls are personal quest items. Right-click a scroll to randomly generate a mission tailored to your progress. The generated mission becomes a physical item with detailed lore describing your task. Every player gets a fixed amount of Blank Mission scrolls, wheny they log in for the first time of the day. They can also be obtained through other means like Quick Events.
 
 **Mission Types:**
-- **Sende (Send)** – Gather items and right-click the mission item to turn them in
-- **Töte (Kill)** – Keep the mission item in your inventory while you kill the required mobs; progress tracks automatically
-- **Reise (Journey)** – Travel to a distant location; the mission item creates a waypoint and tracks your distance
-- **Helfe bei (Help With)** – Participate in a certain number of Quick Events of a specific type
+- **Sende (Send)** – Gather items and right-click the mission item to turn them in (`type: item`)
+- **Töte (Kill)** – Keep the mission item in your inventory while you kill the required mobs; progress tracks automatically (`type: kill`)
+- **Reise (Journey)** – Travel to a distant location; the mission item creates a waypoint and tracks your distance (`type: journey`)
+- **Helfe bei (Help With)** – Participate in a certain number of Quick Events of a specific type (`type: missions`)
+
+**Cursed Scrolls:** There's a 5% chance that pulling a mission generates a cursed scroll instead, which immediately starts a hunt event with a penalty debuff if the event fails.
 
 Mission characteristics:
 - **Scaled difficulty** – amounts adjust based on your individual pack progress
@@ -30,10 +32,16 @@ Quick Events are spontaneous, server-wide events announced in chat. They appear 
 **Cooperative Events** – All players work together toward a shared goal:
 - **Treibjagd (Driven Hunt)** – The server collectively must kill a certain number of specific mobs within the time limit. Everyone who participates shares the rewards.
 - **Bestellung (Order)** – The guild has ordered a bulk shipment of items. Players contribute what they can via wooden bowl, and all contributors are rewarded.
+- **Gemätzel (Slaughter)** – Multiplayer hunt against all monster types (wild hunt variant).
 
 **Competitive Events** – Players race against each other:
 - **Wilde Jagd (Wild Hunt)** – First player to kill the target number of any monster wins.
 - **Kopfgeldjagd (Bounty Hunt)** – First player to kill the target number of a specific monster wins.
+
+**Special Events:**
+- **Gilden-Dieb (Guild Thief)** – An armed, armored mob spawns near players with stolen guild scrolls. Players must track it down and defeat it to recover the loot. The thief spawns with randomized armor and weapons, and has speed/strength/resistance buffs.
+- **Frachtverlust (Cargo Loss)** – Airdrop-style event where a supply crate (Create cardboard package) appears at a marked location containing random items or mission scrolls.
+- **Geschenkt (Gift)** – Every player receives a free blank mission scroll.
 
 Quick Events have:
 - **Dynamic scaling** – target amounts scale with both the average player progress across the server AND the number of players online (more players = higher targets)
@@ -53,6 +61,8 @@ Quick Events have:
 - Rewards distributed automatically on completion
 - Some events spawn elite mobs or airdrop supply crates at marked locations
 
+**Daily Login:** Players receive 4 mission scrolls on their first login day, 6 if they've scipped a day, with a personalized greeting message.
+
 **Mission Scrolls:**
 - Right-click an empty scroll → generates a random mission item
 - Right-click mission item with required items in inventory → turn in (item missions)
@@ -61,10 +71,13 @@ Quick Events have:
 - Right-click with coins in offhand → swap to a different mission
 
 **Rewards:**
-- **Coins** – the primary currency, awarded for all completions
+- **Coins** – 4-8 per player for successful events (primary currency)
+- **Mission scrolls** – 10% chance as event reward
 - **Spawn eggs** – rare drops from kill missions and successful events
-- **Status effects** – events may grant buffs (Speed, Strength, Vitality, Haste, etc.)
+- **Status effects** – 13 different buffs available (Speed, Strength, Vitality, Haste, Resistance, Regeneration, Luck, Health Boost, Flying, Knowledge, Nourishment, Dark Ward, etc.)
 - **Time bonuses** – up to 100% extra for fast event completions
+
+**Position Markers:** Thief and airdrop events display marked positions in chat with coordinates.
 
 ### Tips
 
@@ -72,6 +85,15 @@ Quick Events have:
 - **Prioritize high-value missions** – Some missions offer better coin-to-effort ratios.
 - **Track your progress** – The mission item shows your current progress and time remaining.
 - **Swap missions** – If you're stuck, you can pay a small fee to swap to a new mission.
+
+### Commands
+
+| Command | Description | Permission |
+|---------|-------------|------------|
+| `/missions abort` | Abort the current quick event | 2 (OP) |
+| `/missions start <type>` | Manually start a quick event by type (`hunt`, `thief`, `airdrop`, `present`, `request`) | 2 (OP) |
+| `/missions stats` | View your own mission and event statistics | 0 |
+| `/missions stats <player>` | View another player's mission and event statistics | 2 (OP) |
 
 ---
 
@@ -103,7 +125,7 @@ type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minPro
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `type` | Yes | Mission type: `item` (gather), `kill` (defeat mob), `journey`, `missions` |
+| `type` | Yes | Mission type: `item` (gather), `kill` (defeat mob), `journey`, `missions` (help with quick events) |
 | `item` | Yes | Item ID or mob ID (e.g., `minecraft:iron_ingot`, `twilight:twilight_wolf`) |
 | `name` | No | Display name (defaults to item name) |
 | `minAmount` | No | Minimum quantity required |
@@ -113,6 +135,7 @@ type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minPro
 | `weight` | Yes | Weight for random selection (higher = more frequent) |
 | `egg` | No | Bonus egg item ID to potentially grant |
 | `eggChance` | No | Probability (0-1) of granting the bonus egg |
+| `min` | No | Minimum player count required for this mission to appear (used by quick event filtering) |
 | `minProgress` | No | Minimum player progress (0-1) required for this mission to appear |
 
 **Example CSV row:**
@@ -189,6 +212,14 @@ node index.js /path/to/custom/output.js
 - **Progression gating** – Use `minProgress` to unlock advanced missions
 - **Event missions** – Time-limited missions for server events
 - **Multiplayer scaling** – Tune `AVG_MISSION_PER_HOUR_PLAYER` for your player count
+
+### Event Sound Effects
+
+Different goat horn sounds are played for different event types, and particle effects are shown at kill locations and during cursed scroll activation.
+
+### Inactive Missions
+
+Missions in `missions/inactive/` (with `.disabled` extension) are not loaded into the mission pool. Move CSV files there to temporarily disable them.
 
 ### Dependencies
 
