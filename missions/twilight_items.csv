@@ -1,7 +1,7 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
 item;twilightforest:canopy_log;Baldachinbaumstamm;64;512;;;100;0.1
 item;twilightforest:twilight_oak_sapling;Kränklicher Dämmerungs-Eichensetzling;8;16;;;100;0.1
-item;mangrove_log;Mangrovenstamm;64;512;;;100;0.1
+item;minecraft:mangrove_log;Mangrovenstamm;64;512;;;100;0.1
 item;twilightforest:mangrove_sapling;Mangrovensetzling;16;32;;;100;0.1
 item;twilightforest:dark_log;Dunkelstamm;64;512;;;100;0.1
 item;twilightforest:darkwood_sapling;Dunkelholzsetzling;16;32;;;100;0.1

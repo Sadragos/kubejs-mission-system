@@ -28,4 +28,4 @@ item;create:steam_whistle;Dampfpfeife;16;32;6;12;100;0.1
 item;create:sweet_roll;Rosinenschnecke;16;64;6;12;100;0.1
 item;create:veridium;Veridium;128;512;6;12;100;
 item;create:whisk;Rührstab;16;32;6;12;100;0.1
-item;zinc_ingot;Zink;64;256;6;12;250;
+item;#c:ingots/zinc;Zink;64;256;6;12;250;
