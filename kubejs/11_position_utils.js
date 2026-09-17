@@ -44,6 +44,7 @@ const PositionUtils = {
      * @param {string} target command target selector (default: '@a')
      */
     setWaypoint: (server, name, pos, target) => {
+        if (!Platform.isLoaded('journeymap')) return;
         target = target ?? '@a';
         server.runCommandSilent(`jm waypoint delete "${name}" ${target}`);
         server.runCommandSilent(`jm waypoint temp create "${name}" minecraft:overworld ${pos.x} 64 ${pos.z} green ${target}`);

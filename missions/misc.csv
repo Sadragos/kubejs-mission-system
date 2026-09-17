@@ -5,6 +5,6 @@ journey;;Wandschaft;1000;2000;6;10;200;
 journey;;Kurze Reise;2000;4000;6;12;100;
 journey;;Große Reise;4000;8000;8;12;50;
 journey;;Welteise;8000;12000;8;14;15;
-missions;hunt;Jagd;1;8;10;24;100;
-missions;thief;Dieb;1;4;10;24;25;0.1
-missions;request;Bestellung;1;6;10;24;100;
+missions;hunt;;1;8;10;24;100;
+missions;thief;;1;4;10;24;25;0.1
+missions;request;;1;6;10;24;100;

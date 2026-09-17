@@ -27,6 +27,7 @@
   "kubejs.mission.missions.done": "Du hast alle benötigten Events abgeschlossen!",
   "kubejs.mission.cursed.warning": "ACHTUNG! %s hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!",
   "kubejs.mission.error.generate_failed": "Es konnte keine Mission erzeugt werden! Versuch es nochmal.",
+  "kubejs.mission.error.invalid": "Dieser Auftrag ist ungültig und kann nicht abgegeben werden.",
   "kubejs.mission.swap.success": "Du hast die Gebühr von %s Coins bezahlt und damit die Mission %s abgelehnt!",
   "kubejs.mission.finish.broadcast": "%s hat den Auftrag %s %s erledigt und %s Coins kassiert!",
   "kubejs.mission.title": "Auftrag: %s §6%s %s",

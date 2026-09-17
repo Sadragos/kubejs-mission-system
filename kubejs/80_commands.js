@@ -117,7 +117,7 @@ ServerEvents.commandRegistry((event) => {
         }
         lines.push(Text.translate('kubejs.command.stats.event_total_line', totalEvents));
 
-        source.player.tell(Text.join(Text.of('\n'), lines));
+        source.player.tell(TextUtils.join(Text.of('\n'), lines));
 
 
         return 1;

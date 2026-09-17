@@ -159,7 +159,7 @@ const HUNT_EVENT = {
             Text.translate(introKey, mobPart),
             Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime))
         ];
-        parts.push(Text.translate('kubejs.event.reward', Text.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
+        parts.push(Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
         if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
             parts.push(Text.translate('kubejs.event.egg_chance', (currentEvent.targetMonster.eggChance * 100).toFixed(0)));
         }
@@ -249,9 +249,9 @@ const HUNT_EVENT = {
             lines.push(Text.translate('kubejs.event.winner', currentEvent.label, TextUtils.colored(winnerName, 'green')));
             lines.push(Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')));
         }
-        lines.push(...getTimeStats(event));
+        Array.prototype.push.apply(lines, getTimeStats(event));
         lines.push(Text.translate('kubejs.event.time_bonus', bonusText));
-        event.server.tell(Text.join(Text.of('\n'), lines));
+        event.server.tell(TextUtils.join(Text.of('\n'), lines));
 
         if (currentEvent.multiplayer) {
             for (let [key] of currentEvent.actionTable) {
@@ -362,20 +362,25 @@ const AIRDROP_EVENT = {
 
         let resolvedItemId = Math.random() < 0.2 ? undefined : resolveAirdropItemId();
         if (!resolvedItemId) {
-            items.push(`{slot:0,item:{id:"${REWARD_ITEM}",count:1}}`);
+            items.push({ id: REWARD_ITEM, count: 1 });
         } else {
             let item = resolvedItemId.mission;
             let amount = Math.max(1, MathUtils.randomInt(item.min / 4, item.max / 4));
-            let index = 0;
             do {
                 let stackAmount = Math.min(64, amount);
-                items.push(`{slot:${index},item:{id:"${resolvedItemId.id}",count:${stackAmount}}}`);
+                items.push({ id: resolvedItemId.id, count: stackAmount });
                 amount -= stackAmount;
-                index++;
-            } while (index < 9 && amount > 0);
+            } while (items.length < 9 && amount > 0);
         }
 
-        event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"create:cardboard_package_10x12",count:1,components:{"create:package_address":"${Text.translate(AIRDROP_EVENT.nameKey).getString()}","create:package_contents":[${items.join(',')}]}}}`);
+        if (Platform.isLoaded('create')) {
+            let packageContents = items.map((it, index) => `{slot:${index},item:{id:"${it.id}",count:${it.count}}}`).join(',');
+            event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"create:cardboard_package_10x12",count:1,components:{"create:package_address":"${Text.translate(AIRDROP_EVENT.nameKey).getString()}","create:package_contents":[${packageContents}]}}}`);
+        } else {
+            items.forEach(it => {
+                event.server.runCommandSilent(`summon item ${summonPos.x} ${summonPos.y} ${summonPos.z} {Item:{id:"${it.id}",count:${it.count}}}`);
+            });
+        }
         PositionUtils.markPosition(event.server, summonPos, Text.translate(AIRDROP_EVENT.nameKey).getString());
         currentEvent.stopEvent(event);
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.0');
@@ -438,7 +443,7 @@ const ITEM_REQUEST_EVENT = {
             Text.translate('kubejs.event.request.announce', itemPart),
             Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime))
         ];
-        parts.push(Text.translate('kubejs.event.reward', Text.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
+        parts.push(Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
         parts.push(Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)));
 
         event.server.tell(parts);
@@ -464,9 +469,9 @@ const ITEM_REQUEST_EVENT = {
         let bonusText = TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green');
         let lines = [Text.translate('kubejs.event.success', currentEvent.label)];
         lines.push(Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')));
-        lines.push(...getTimeStats(event));
+        Array.prototype.push.apply(lines, getTimeStats(event));
         lines.push(Text.translate('kubejs.event.time_bonus', bonusText));
-        event.server.tell(Text.join(Text.of('\n'), lines));
+        event.server.tell(TextUtils.join(Text.of('\n'), lines));
 
         for (let [key] of currentEvent.actionTable) {
             handleReward(event, currentEvent.rewards, key, bonus);

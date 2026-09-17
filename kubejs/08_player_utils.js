@@ -175,7 +175,7 @@ function rewardPlayer(event, player, source, type, rewards) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
         rewardItems.push(Text.translate('kubejs.reward.buff', TextUtils.colored(buff.duration, 'light_purple'), TextUtils.effectName(buff.buff), TextUtils.colored(TextUtils.toRoman(buff.amplifier), 'light_purple')).color('light_purple'));
     }
-    let rewardLine = Text.translate('kubejs.reward.header', Text.join(Text.of(', '), rewardItems)).color('gold');
+    let rewardLine = Text.translate('kubejs.reward.header', TextUtils.join(Text.of(', '), rewardItems)).color('gold');
     player.tell(rewardLine);
 }
 

@@ -131,5 +131,21 @@ const TextUtils = {
     effectName: (effectId, fallbackText) => {
         let parts = effectId.indexOf(':') > -1 ? effectId.split(':') : ['minecraft', effectId];
         return Text.translateWithFallback(`effect.${parts[0]}.${parts[1]}`, fallbackText || IdUtils.idToString(parts[1]));
+    },
+    /**
+     * Joins an array of Components with a separator Component into one Component.
+     * A manual replacement for `Text.join(separator, texts)`, whose overload resolution
+     * against a plain JS array is unreliable and silently drops the separator between entries.
+     * @param {Internal.Component} separator
+     * @param {Internal.Component[]} texts
+     * @returns {Internal.Component}
+     */
+    join: (separator, texts) => {
+        if (!texts || texts.length === 0) return Text.of('');
+        let result = texts[0];
+        for (let i = 1; i < texts.length; i++) {
+            result = result.append(separator).append(texts[i]);
+        }
+        return result;
     }
 };

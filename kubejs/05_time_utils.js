@@ -27,7 +27,7 @@ function getTimeRemaining(event, progress, bonus) {
     let parts = [currentEvent.label, Text.translate('kubejs.event.time_remaining_short', tickTimeColor(remainingTicks) + ticksToTime(remainingTicks))];
     if (progress) parts.push(Text.translate('kubejs.event.progress', TextUtils.colored(currentEvent.total, 'green'), currentEvent.targetAmount));
     if (bonus && bonus > 1) parts.push(Text.translate('kubejs.event.time_bonus', TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green')));
-    event.server.tell(Text.join(Text.of(' '), parts));
+    event.server.tell(TextUtils.join(Text.of(' '), parts));
 }
 
 /**

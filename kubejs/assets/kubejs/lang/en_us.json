@@ -27,6 +27,7 @@
   "kubejs.mission.missions.done": "You have completed all the required events!",
   "kubejs.mission.cursed.warning": "ATTENTION! %s got a cursed mission! Work together so it doesn't fail!",
   "kubejs.mission.error.generate_failed": "Could not generate a mission! Try again.",
+  "kubejs.mission.error.invalid": "This contract is invalid and can't be turned in.",
   "kubejs.mission.swap.success": "You paid the %s coin fee and rejected the mission %s!",
   "kubejs.mission.finish.broadcast": "%s has completed the contract %s %s and collected %s Coins!",
   "kubejs.mission.title": "Contract: %s §6%s %s",

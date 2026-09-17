@@ -54,7 +54,7 @@ const MISSION_TYPE_JOUNREY = {
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let isNear = false;
-        let parts = dataItem.item.replace(/[\[\]\s]/g, "").split(",");
+        let parts = String(dataItem.item).replace(/[\[\]\s]/g, "").split(",");
         let targetPos = { x: parseInt(parts[0]), y: 0, z: parseInt(parts[1]) };
 
         let dx = targetPos.x - player.position().x;
@@ -66,13 +66,17 @@ const MISSION_TYPE_JOUNREY = {
         stack.damage = dist;
 
         if (isNear) {
-            event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
+            if (Platform.isLoaded('journeymap')) {
+                event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
+            }
             player.tell(Text.translate('kubejs.mission.journey.arrived').color('green'));
             stack.count = 0;
             finishMission(event, player, dataItem);
         } else {
-            event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
-            event.server.runCommandSilent(`jm waypoint temp create "${dataItem.name}" minecraft:overworld ${targetPos.x} 64 ${targetPos.z} gold ${player.username}`);
+            if (Platform.isLoaded('journeymap')) {
+                event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
+                event.server.runCommandSilent(`jm waypoint temp create "${dataItem.name}" minecraft:overworld ${targetPos.x} 64 ${targetPos.z} gold ${player.username}`);
+            }
             player.tell(Text.translate('kubejs.mission.journey.remaining', TextUtils.colored(dist)).color('red'));
         }
     }
@@ -156,8 +160,10 @@ ItemEvents.rightClicked(MISSION_ITEM, event => {
         let target = resolveTargetName(data.typeId, data.item, data.name);
         event.player.tell(Text.translate('kubejs.mission.swap.success', TextUtils.colored(MISSION_SWAP_FEE), target).color('green'));
         event.player.give(Item.of(MISSION_TOKEN, 1));
-    } else {
+    } else if (data.type) {
         data.type.rightClickHandler(event, data, stack);
+    } else {
+        event.player.tell(Text.translate('kubejs.mission.error.invalid').color('red'));
     }
 });
 
@@ -166,13 +172,12 @@ EntityEvents.death(event => {
 
     let player = event.source.player;
     let inventory = player.inventory;
-    let searchItem = Item.of(MISSION_ITEM);
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);
-        if (item.is(searchItem)) {
+        if (item.id === MISSION_ITEM) {
             let data = parseMissionInfo(item);
-            if (data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
+            if (data.type && data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
                 let target = resolveTargetName(data.typeId, data.item, data.name);
                 ParticleUtils.summonParticleAtPosition(event.server, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
@@ -356,13 +361,12 @@ function checkForHelperMission(event, username, type) {
     let player = event.server.players.find(p => p.username === username);
     if (player === undefined) return;
     let inventory = player.inventory;
-    let searchItem = Item.of(MISSION_ITEM);
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);
-        if (item.is(searchItem)) {
+        if (item.id === MISSION_ITEM) {
             let data = parseMissionInfo(item);
-            if (data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
+            if (data.type && data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
                 let target = resolveTargetName(data.typeId, data.item, data.name);
                 ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
