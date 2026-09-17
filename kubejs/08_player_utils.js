@@ -178,3 +178,40 @@ function rewardPlayer(event, player, source, type, rewards) {
     let rewardLine = Text.translate('kubejs.reward.header', Text.join(Text.of(', '), rewardItems)).color('gold');
     player.tell(rewardLine);
 }
+
+const PlayerUtils = {
+    /**
+     * Stores the current date and time as the player's last login timestamp.
+     * @param {Internal.ServerPlayer} player
+     */
+    setLoginDate: (player) => {
+        let pData = player.persistentData;
+        pData.putString('login_date', TimeUtils.formatDateISO(new Date()));
+    },
+    /**
+     * Returns true if the player has never logged in before (no login date stored).
+     * @param {Internal.ServerPlayer} player
+     * @returns {boolean}
+     */
+    firstLogin: (player) => {
+        let pData = player.persistentData;
+        return !pData.getString('login_date');
+    },
+    /**
+     * Returns the player's stored last login date as a Date object.
+     * @param {Internal.ServerPlayer} player
+     * @returns {Date}
+     */
+    getLoginDate: (player) => {
+        let pData = player.persistentData;
+        return TimeUtils.parseDateISO(pData.getString('login_date'));
+    },
+    /**
+     * Returns the number of days since the player's last login.
+     * @param {Internal.ServerPlayer} player
+     * @returns {number}
+     */
+    daysSinceLogin: (player) => {
+        return TimeUtils.daysBetween(PlayerUtils.getLoginDate(player), new Date());
+    }
+};

@@ -1,0 +1,135 @@
+/** Lazily-loaded reference to the vanilla EntityType class (no direct global binding exists for it). */
+let _EntityTypeClass;
+function _getEntityTypeClass() {
+    if (!_EntityTypeClass) _EntityTypeClass = Java.loadClass('net.minecraft.world.entity.EntityType');
+    return _EntityTypeClass;
+}
+
+const TextUtils = {
+    /**
+     * Capitalizes the first character of a value.
+     * @param {*} val any value, converted to string internally
+     * @returns {string}
+     */
+    capitalizeFirstLetter: (val) => {
+        return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+    },
+    /**
+     * Capitalizes the first character of each space-separated word.
+     * @param {string} str
+     * @returns {string}
+     */
+    capitalizeEachWord: (str) => {
+        return str.split(' ').map(word => TextUtils.capitalizeFirstLetter(word)).join(' ');
+    },
+    /**
+     * Converts a positive integer to a Roman numeral string.
+     * @param {number} num positive integer (e.g. 1–100+)
+     * @returns {string} Roman representation (e.g. 42 → "XLII")
+     */
+    toRoman: (num) => {
+        let values  = [100, 90, 50, 40, 10, 9, 5, 4, 1];
+        let symbols = ['C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+        let result = '';
+        for (let i = 0; i < values.length; i++) {
+            while (num >= values[i]) {
+                result += symbols[i];
+                num -= values[i];
+            }
+        }
+        return result;
+    },
+    /**
+     * Checks whether a mission item/mob string is a single, concrete, resolvable registry ID
+     * (as opposed to a substring filter, comma-list, wildcard or negation used for matching).
+     * @param {string} idOrFilter
+     * @returns {boolean}
+     */
+    isConcreteId: (idOrFilter) => {
+        return !!idOrFilter
+            && idOrFilter.indexOf(',') === -1
+            && idOrFilter.indexOf('*') === -1
+            && !idOrFilter.startsWith('!')
+            && !idOrFilter.startsWith('#')
+            && idOrFilter.indexOf(':') > -1;
+    },
+    /**
+     * Resolves a CSV `name` value to a display Component, if one was given: first as a lang
+     * key (if a translation actually exists for it), otherwise as literal text. Returns
+     * `undefined` for a blank name, so callers can fall through to their own real-name lookup.
+     * @param {string} [name] CSV `name` value
+     * @returns {Internal.Component|undefined}
+     */
+    resolveNameOverride: (name) => {
+        if (!name) return undefined;
+        let translated = Text.translate(name);
+        return translated.getString() !== name ? translated : Text.literal(name);
+    },
+    /**
+     * Returns the display name of an item: the CSV `name` (as a lang key if one matches,
+     * otherwise as literal text) if given; otherwise the real name of a `#namespace:path` item
+     * tag's first item, or of a single concrete item ID; otherwise the raw ID/filter itself.
+     * @param {string} idOrFilter item ID, item tag (`#namespace:path`) or mission item filter string
+     * @param {string} [name] CSV `name` value
+     * @returns {Internal.Component}
+     */
+    itemName: (idOrFilter, name) => {
+        let override = TextUtils.resolveNameOverride(name);
+        if (override) return override;
+        if (idOrFilter && idOrFilter.startsWith('#')) {
+            try {
+                let stack = Ingredient.first(idOrFilter);
+                if (stack && !stack.isEmpty()) return stack.getHoverName();
+            } catch (e) { /* empty/unknown tag, fall through */ }
+        } else if (TextUtils.isConcreteId(idOrFilter)) {
+            try {
+                let stack = Item.of(idOrFilter);
+                if (stack && !stack.isEmpty()) return stack.getHoverName();
+            } catch (e) { /* not a valid item id, fall through */ }
+        }
+        return Text.literal(idOrFilter);
+    },
+    /**
+     * Returns the display name of a mob: the "any monster" translation for the `*` wildcard
+     * (always, regardless of `name`); otherwise the CSV `name` (as a lang key if one matches,
+     * otherwise as literal text) if given; otherwise the real name of a concrete entity ID;
+     * otherwise the raw ID/filter itself.
+     * @param {string} idOrFilter entity ID or mission mob filter string
+     * @param {string} [name] CSV `name` value
+     * @returns {Internal.Component}
+     */
+    entityName: (idOrFilter, name) => {
+        if (idOrFilter === '*') return Text.translate('kubejs.mission.any_monster');
+        let override = TextUtils.resolveNameOverride(name);
+        if (override) return override;
+        if (TextUtils.isConcreteId(idOrFilter)) {
+            try {
+                let type = _getEntityTypeClass().byString(idOrFilter);
+                if (type) return type.getDescription();
+            } catch (e) { /* not a valid entity id, fall through */ }
+        }
+        return Text.literal(idOrFilter);
+    },
+    /**
+     * Wraps a value as a literal text Component in the given Minecraft color, for
+     * highlighting a number/name inline within a translated sentence.
+     * @param {*} value
+     * @param {string} [color] Minecraft color name (default: "gold")
+     * @returns {Internal.Component}
+     */
+    colored: (value, color) => {
+        return Text.of(String(value)).color(color || 'gold');
+    },
+    /**
+     * Returns the real, translatable display name of a status effect, derived from the
+     * standard `effect.<namespace>.<path>` translation key convention. Falls back to
+     * `fallbackText` client-side if that key doesn't exist (e.g. non-standard modded keys).
+     * @param {string} effectId effect ID (e.g. "minecraft:speed")
+     * @param {string} [fallbackText] literal text to use if the translation key is missing
+     * @returns {Internal.Component}
+     */
+    effectName: (effectId, fallbackText) => {
+        let parts = effectId.indexOf(':') > -1 ? effectId.split(':') : ['minecraft', effectId];
+        return Text.translateWithFallback(`effect.${parts[0]}.${parts[1]}`, fallbackText || IdUtils.idToString(parts[1]));
+    }
+};
