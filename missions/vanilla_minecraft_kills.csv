@@ -23,7 +23,6 @@ kill;minecraft:silverfish;Silberfisch;8;128;;;100;;;
 kill;minecraft:skeleton_horse;Skelettpferd;4;16;;;100;;;
 kill;!minecraft:skeleton;Skelett;8;64;;;200;;;
 kill;minecraft:slime;Schleim;8;128;;;100;;;
-kill;spider;Arachnen;8;96;;;300;;;
 kill;minecraft:spider;Spinne;16;64;;;100;;;
 kill;minecraft:cave_spider;Höhnlenspinne;16;64;;;100;;;
 kill;minecraft:stray;Eiswanderer;8;64;;;100;;;0.15
@@ -36,10 +35,5 @@ kill;!minecraft:wither;Wither;1;2;16;24;75;;-1;0.65
 kill;minecraft:zoglin;Zoglin;8;16;;;100;;;0.4
 kill;minecraft:zombie;Zombie;8;64;;;250;;;
 kill;minecraft:zombified_piglin;Zombifizierter-Piglin;8;64;;;100;;;
-kill;zombi,skeleton,husk,stray,knight,corpse,bone,necro,drowned,sunken,skull,soul,ghost,specter,spectre,spectral,wraith;Untote;128;256;;;1500;;0.20;
 kill;*;Gegner;128;512;;;3500;;0.15;
-kill;illager,pillage,vindicator,evoker,ravager,witch,iceologer,minecolonies;Raider;32;128;;;600;;0.20;0.1
-kill;blaze,wither,magma,zoglin,piglin,ghast,eternalnether,mushlin;Dämonen;32;128;;;400;;0.20;0.25
-kill;skeleton;Knochengerüste;32;128;;;600;;0.20;
-kill;zombi,husk,drowned;Wandelnde Leichen;32;128;;;600;;0.20;
 kill;minecraft:creaking;;4;8;;;75;;;0.35
