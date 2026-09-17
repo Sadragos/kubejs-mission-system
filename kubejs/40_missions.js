@@ -2,7 +2,7 @@ const MISSION_TYPE_ITEM = {
     id: 'item',
     labelKey: 'kubejs.mission.type.item',
     color: 'green',
-    weight: 13,
+    weight: MISSION_TYPE_WEIGHTS.item,
     hint: (target) => Text.translate('kubejs.mission.hint.item', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -29,7 +29,7 @@ const MISSION_TYPE_KILL = {
     id: 'kill',
     labelKey: 'kubejs.mission.type.kill',
     color: 'dark_red',
-    weight: 8,
+    weight: MISSION_TYPE_WEIGHTS.kill,
     hint: (target) => Text.translate('kubejs.mission.hint.kill', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -49,7 +49,7 @@ const MISSION_TYPE_JOUNREY = {
     id: 'journey',
     labelKey: 'kubejs.mission.type.journey',
     color: 'aqua',
-    weight: 2,
+    weight: MISSION_TYPE_WEIGHTS.journey,
     hint: (target, item) => Text.translate('kubejs.mission.hint.journey', item),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
@@ -86,7 +86,7 @@ const MISSION_TYPE_MISSIONS = {
     id: 'missions',
     labelKey: 'kubejs.mission.type.missions',
     color: 'yellow',
-    weight: 1,
+    weight: MISSION_TYPE_WEIGHTS.missions,
     hint: (target) => Text.translate('kubejs.mission.hint.missions', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;

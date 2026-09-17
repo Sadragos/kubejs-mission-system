@@ -2,38 +2,6 @@
 let currentEvent;
 let unlucky = false;
 
-let QE_REWARDS = [
-    {
-        id: 'coin',
-        minPerPlayer: 4,
-        maxPerPlayer: 8,
-        weight: 100,
-        chance: 1.0
-    }, {
-        id: 'mission',
-        minPerPlayer: 1,
-        maxPerPlayer: 1,
-        chance: 0.1
-    }, {
-        id: 'buff',
-        chance: 1.0,
-        buffs: [
-            { buff: 'minecraft:speed', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 1 },
-            { buff: 'born_in_chaos_v1:dark_ward', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 },
-            { buff: 'apothic_attributes:vitality', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 4 },
-            { buff: 'minecraft:haste', minDuration: 5, maxDuration: 20, minAmplifier: 0, maxAmplifier: 2 },
-            { buff: 'minecraft:strength', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 2 },
-            { buff: 'minecraft:resistance', minDuration: 5, maxDuration: 15, minAmplifier: 2, maxAmplifier: 2 },
-            { buff: 'minecraft:regeneration', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 2 },
-            { buff: 'minecraft:luck', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 4 },
-            { buff: 'minecraft:health_boost', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 9 },
-            { buff: 'apothic_attributes:flying', minDuration: 4, maxDuration: 10, minAmplifier: 0, maxAmplifier: 0 },
-            { buff: 'apothic_attributes:knowledge', minDuration: 4, maxDuration: 10, minAmplifier: 0, maxAmplifier: 1 },
-            { buff: 'farmersdelight:nourishment', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 }
-        ]
-    }
-]
-
 /**
  * Builds the colored "[Event Name]" label component used at the start of chat broadcasts.
  * @param {string} nameKey lang key of the event's display name
@@ -62,7 +30,7 @@ function scoreboardTitle(abbr, amount, target, unlucky) {
 const PRESENT_EVENT = {
     nameKey: 'kubejs.event.present.name',
     id: 'present',
-    weight: 1,
+    weight: QUICK_EVENT_WEIGHTS.present,
     showInStat: false,
     startEvent(event) {
         let players = event.server.players;
@@ -80,7 +48,7 @@ const PRESENT_EVENT = {
 const HUNT_EVENT = {
     id: 'hunt',
     progressType: 'kill',
-    weight: 4,
+    weight: QUICK_EVENT_WEIGHTS.hunt,
     showInStat: true,
     nameKey: 'kubejs.event.hunt.generic',
     abbr: 'H',
@@ -207,22 +175,7 @@ const HUNT_EVENT = {
         let failed = (currentEvent.multiplayer && currentEvent.total < currentEvent.targetAmount) || (!currentEvent.multiplayer && winnerCount < currentEvent.targetAmount);
         if (failed) {
             if (unlucky) {
-                let effects = [
-                    'minecraft:slowness 300',
-                    'apothic_attributes:grievous 300',
-                    'sizeshiftingpotions:shrinking 120 5',
-                    'irons_spellbooks:chilled 240',
-                    'minecraft:hunger 180',
-                    'minecraft:infested 300',
-                    'minecraft:mining_fatigue 180',
-                    'apothic_attributes:sundering 240',
-                    'minecraft:darkness 60',
-                    'minecraft:oozing 300',
-                    'minecraft:oozing 300',
-                    'minecraft:nausea 20',
-                    'minecraft:weaving 300'
-                ];
-                let selectedEffect = effects[Math.floor(Math.random() * effects.length)];
+                let selectedEffect = CURSE_EFFECTS[Math.floor(Math.random() * CURSE_EFFECTS.length)];
                 event.server.tell(Text.translate('kubejs.event.failed.cursed', currentEvent.label));
                 event.server.runCommandSilent(`effect give @a ${selectedEffect}`);
                 event.server.runCommandSilent(`effect give @a minecraft:unluck 300 2`);
@@ -305,7 +258,7 @@ const HUNT_EVENT = {
 const THIEF_EVENT = {
     nameKey: 'kubejs.event.thief.name',
     id: 'thief',
-    weight: 2,
+    weight: QUICK_EVENT_WEIGHTS.thief,
     showInStat: true,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
@@ -316,21 +269,17 @@ const THIEF_EVENT = {
         let player = players[Math.floor(Math.random() * players.length)];
 
         let summonPos = PositionUtils.generateSummonPos(player, MISSION_SUMMON_MAX_PLAYER_DIST);
-        let mobOptions = ['minecraft:zombie', 'minecraft:skeleton', 'minecraft:husk', 'minecraft:pillager', 'minecraft:evoker', 'minecraft:vindicator', 'minecraft:wither_skeleton'];
-        let pickedOption = mobOptions[Math.floor(Math.random() * mobOptions.length)];
-        let materials = ['iron', 'iron', 'iron', 'golden', 'diamond']
-        let material = materials[Math.floor(Math.random() * materials.length)];
-        let weaponOptions = [REWARD_ITEM, REWARD_ITEM, 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', 'kubejs:coins', `minecraft:${material}_sword`, `better_weaponry:${material}_dagger`, `better_weaponry:${material}_scythe`, `better_weaponry:${material}_spear`, `better_weaponry:${material}_broadsword`, `better_weaponry:${material}_battleaxe`, `better_weaponry:${material}_cutlass`];
-        let weapon = weaponOptions[Math.floor(Math.random() * weaponOptions.length)];
+        let pickedOption = THIEF_MOB_OPTIONS[Math.floor(Math.random() * THIEF_MOB_OPTIONS.length)];
+        let material = MathUtils.randomWeightedEntry(THIEF_MATERIAL_OPTIONS).id;
+        let weapon = MathUtils.randomWeightedEntry(THIEF_WEAPON_POOL).item.replace('{material}', material);
         event.server.tell(Text.translate('kubejs.event.thief.announce', eventLabel(THIEF_EVENT.nameKey), TextUtils.colored(PositionUtils.toChatPosition(summonPos), 'green')));
         // CustomName is a static (non-interpolated) translatable component JSON literal, so it's safe to embed directly.
-        event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:'{"translate":"kubejs.event.thief.mob_name"}',CustomNameVisible:1b,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[0.1f,0.1f,0.1f,0.1f],HandItems:[{id:"${weapon}",Count:1b},{id:"${REWARD_ITEM}",Count:1b}],HandDropChances:[0.5f,1.0f]}`);
+        event.server.runCommandSilent(`summon ${pickedOption} ${summonPos.x} ${summonPos.y} ${summonPos.z} {PersistenceRequired:1,CustomName:'{"translate":"kubejs.event.thief.mob_name"}',CustomNameVisible:1b,ArmorItems:[{id:"minecraft:${material}_boots",Count:1b},{id:"minecraft:${material}_leggings",Count:1b},{id:"minecraft:${material}_chestplate",Count:1b},{id:"minecraft:${material}_helmet",Count:1b}],ArmorDropChances:[${THIEF_ARMOR_DROP_CHANCE}f,${THIEF_ARMOR_DROP_CHANCE}f,${THIEF_ARMOR_DROP_CHANCE}f,${THIEF_ARMOR_DROP_CHANCE}f],HandItems:[{id:"${weapon}",Count:1b},{id:"${REWARD_ITEM}",Count:1b}],HandDropChances:[${THIEF_WEAPON_DROP_CHANCE}f,${THIEF_TOKEN_DROP_CHANCE}f]}`);
         let thiefName = Text.translate('kubejs.event.thief.mob_name').getString();
-        event.server.runCommandSilent(`effect give @e[name="${thiefName}"] minecraft:slow_falling 120`);
-        event.server.runCommandSilent(`effect give @e[name="${thiefName}"] minecraft:strength infinite 2`);
-        event.server.runCommandSilent(`effect give @e[name="${thiefName}"] minecraft:resistance infinite 2`);
-        event.server.runCommandSilent(`effect give @e[name="${thiefName}"] minecraft:glowing infinite`);
-        event.server.runCommandSilent(`effect give @e[name="${thiefName}"] minecraft:speed infinite`);
+        THIEF_BUFFS.forEach(b => {
+            let amplifier = b.amplifier !== undefined ? ` ${b.amplifier}` : '';
+            event.server.runCommandSilent(`effect give @e[name="${thiefName}"] ${b.effect} ${b.duration}${amplifier}`);
+        });
         PositionUtils.markPosition(event.server, summonPos, Text.translate(THIEF_EVENT.nameKey).getString());
         currentEvent.stopEvent(event);
 
@@ -344,7 +293,7 @@ const THIEF_EVENT = {
 const AIRDROP_EVENT = {
     nameKey: 'kubejs.event.airdrop.name',
     id: 'airdrop',
-    weight: 2,
+    weight: QUICK_EVENT_WEIGHTS.airdrop,
     showInStat: false,
     startEvent(event) {
         let players = event.server.players.filter(p => p.level.dimension === 'minecraft:overworld');
@@ -394,7 +343,7 @@ const ITEM_REQUEST_EVENT = {
     nameKey: 'kubejs.event.request.name',
     id: 'request',
     progressType: 'item',
-    weight: 2,
+    weight: QUICK_EVENT_WEIGHTS.request,
     showInStat: true,
     abbr: 'O',
     startTick: undefined,

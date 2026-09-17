@@ -125,7 +125,7 @@ function getMissionsPulledTotal(player) {
  * @param {number} xp - Anzahl der hinzuzufügenden XP
  */
 function increaseSkillXP(event, playername, xp) {
-    event.server.runCommandSilent(`puffish_skills experience add ${playername} epsilonskills:passive_skills ${xp}`);
+    event.server.runCommandSilent(`puffish_skills experience add ${playername} ${SKILL_XP_CATEGORY} ${xp}`);
 }
 
 function rewardPlayer(event, player, source, type, rewards) {
@@ -163,7 +163,7 @@ function rewardPlayer(event, player, source, type, rewards) {
         rewardItems.push(Text.translate('kubejs.reward.xp', TextUtils.colored(internalRewards.xp, 'aqua')).color('aqua'));
     }
     if (internalRewards.worldborder > 0) {
-        event.server.runCommandSilent(`worldborder add ${internalRewards.worldborder} 3`);
+        event.server.runCommandSilent(`worldborder add ${internalRewards.worldborder} ${WORLDBORDER_ANIMATION_SECONDS}`);
         rewardItems.push(Text.translate('kubejs.reward.worldborder', TextUtils.colored(internalRewards.worldborder, 'green')).color('green'));
     }
     for (let item of internalRewards.items) {
