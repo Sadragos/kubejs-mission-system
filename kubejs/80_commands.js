@@ -56,14 +56,14 @@ ServerEvents.commandRegistry((event) => {
         switch (option) {
             case "abort":
                 if (!currentEvent) {
-                    source.player.tell("§cNo Event running!");
+                    source.player.tell(Text.translate('kubejs.command.no_event').color('red'));
                 } else {
                     currentEvent.stopEvent(source);
                 }
                 ScoreboardUtils.removeScoreboard(source.server, 'my_mission_scores');
                 break;
             default:
-                source.player.tell("§cInvalid Command!");
+                source.player.tell(Text.translate('kubejs.command.invalid').color('red'));
         }
         return 1;
     }
@@ -79,45 +79,45 @@ ServerEvents.commandRegistry((event) => {
             : source.player;
 
         if (!player) {
-            source.player.tell(`§cSpieler "${playerName}" nicht gefunden.`);
+            source.player.tell(Text.translate('kubejs.command.player_not_found', playerName).color('red'));
             return 1;
         }
 
         const name = player.username;
 
         let totalPulled = 0, totalDone = 0;
-        const lines = [`§6--- Missionen Statistik: ${name} ---`];
+        const lines = [Text.translate('kubejs.command.stats.mission_header', name).color('gold')];
 
         for (const type of Object.keys(MISSION_TYPE_GOALS)) {
             let pulled = getMissionPulled(player, type);
             let done = getMissionDoneCount(player, type);
             let progress = (getPlayerProgress(player, type) * 100).toFixed(1);
             let pullPercent = pulled > 0 ? ((done / pulled) * 100).toFixed(1) : "0.0";
-            let typeName = (MISSION_TYPES.find(t => t.id === type)?.text ?? type).replace(/§./g, '');
-            lines.push(`§8[§6${typeName}§8] §7Erledigt: §a${done} §7/ §f${pulled} §7(§e${pullPercent}%§7) §8| §7Fortschritt: §e${progress}%`);
+            let typeLabel = Text.translate(MISSION_TYPES.find(t => t.id === type)?.labelKey ?? type);
+            lines.push(Text.translate('kubejs.command.stats.type_line', typeLabel, done, pulled, pullPercent, progress));
             totalPulled += pulled;
             totalDone += done;
         }
 
         let totalPercent = totalPulled > 0 ? ((totalDone / totalPulled) * 100).toFixed(1) : "0.0";
-        lines.push(`§8[§6Gesamt§8] §7Erledigt: §a${totalDone} §7/ §f${totalPulled} §7(§e${totalPercent}%§7)`);
+        lines.push(Text.translate('kubejs.command.stats.total_line', totalDone, totalPulled, totalPercent));
 
         let cursed = getMissionPulled(player, "cursed");
         if (cursed > 0) {
             let cursedPercent = ((cursed / (cursed + totalPulled)) * 100).toFixed(1);
-            lines.push(`§8[§5Verflucht§8] §7Gezogen: §a${cursed} §8| §7Anteil: §e${cursedPercent}%`);
+            lines.push(Text.translate('kubejs.command.stats.cursed_line', cursed, cursedPercent));
         }
 
         let totalEvents = 0;
-        lines.push(`§6--- Events Statistik: ${name} ---`);
+        lines.push(Text.translate('kubejs.command.stats.event_header', name).color('gold'));
         for (const ev of ALL_QUICK_EVENTS.filter(e => e.showInStat)) {
             let done = getEventDone(player, ev.id);
-            lines.push(`§8[§6${ev.name}§8]§a${done}`);
+            lines.push(Text.translate('kubejs.command.stats.event_line', Text.translate(ev.nameKey), done));
             totalEvents += done;
         }
-        lines.push(`§8[§6Gesamt§8] §a${totalEvents}`);
+        lines.push(Text.translate('kubejs.command.stats.event_total_line', totalEvents));
 
-        source.player.tell(lines.join('\n'));
+        source.player.tell(Text.join(Text.of('\n'), lines));
 
 
         return 1;

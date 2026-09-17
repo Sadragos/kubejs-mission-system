@@ -21,23 +21,27 @@ function tickTimeColor(ticks) {
  * @param {boolean} [fortschritt=false] - Ob der Fortschritt (total / targetAmount) angezeigt werden soll
  * @param {number} [bonus] - Zeitbonus-Faktor (nur angezeigt wenn > 1)
  */
-function getTimeRemaining(event, fortschritt, bonus) {
-    fortschritt = fortschritt === undefined ? false : fortschritt;
-    let result = `${currentEvent.label || `§6[${currentEvent.name}]§f`} Verbleibende Zeit: ${tickTimeColor(currentEvent.endTick - event.server.tickCount)}${ticksToTime(currentEvent.endTick - event.server.tickCount)}§f.`;
-    if (fortschritt) result += ` Fortschritt: §a${currentEvent.total} / ${currentEvent.targetAmount}§f.`;
-    if (bonus && bonus > 1) result += ` Zeitbonus: §a${(bonus*100).toFixed(0)}%§f`;
-    event.server.tell(result);
+function getTimeRemaining(event, progress, bonus) {
+    progress = progress === undefined ? false : progress;
+    let remainingTicks = currentEvent.endTick - event.server.tickCount;
+    let parts = [currentEvent.label, Text.translate('kubejs.event.time_remaining_short', tickTimeColor(remainingTicks) + ticksToTime(remainingTicks))];
+    if (progress) parts.push(Text.translate('kubejs.event.progress', TextUtils.colored(currentEvent.total, 'green'), currentEvent.targetAmount));
+    if (bonus && bonus > 1) parts.push(Text.translate('kubejs.event.time_bonus', TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green')));
+    event.server.tell(Text.join(Text.of(' '), parts));
 }
 
 /**
- * Gibt einen formatierten String mit benötigter und verbleibender Zeit des aktuellen Events zurück.
+ * Returns the "time taken" / "time remaining" components for the current event.
  * @param {ServerEvent} event
- * @returns {string}
+ * @returns {Internal.Component[]}
  */
 function getTimeStats(event) {
     const ticksRemaining = currentEvent.endTick - event.server.tickCount;
     const ticksTook = event.server.tickCount - currentEvent.startTick;
-    return `  -> Benötigte Zeit ${tickTimeColor(ticksRemaining)}${ticksToTime(ticksTook)}§f\n  -> Verbleibende Zeit ${tickTimeColor(ticksRemaining)}${ticksToTime(ticksRemaining)}§f`;
+    return [
+        Text.translate('kubejs.event.time_taken', tickTimeColor(ticksRemaining) + ticksToTime(ticksTook)),
+        Text.translate('kubejs.event.time_remaining', tickTimeColor(ticksRemaining) + ticksToTime(ticksRemaining))
+    ];
 }
 
 /**

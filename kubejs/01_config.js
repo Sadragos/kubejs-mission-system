@@ -1,19 +1,7 @@
 // Basisitems
 const COIN_ITEM = 'kubejs:coin';
-const COIN_ITEM_NAME = 'Coin';
 const MISSION_ITEM = 'kubejs:mission';
-const MISSION_ITEM_NAME = 'Auftrag';
 const MISSION_TOKEN = 'kubejs:mission_scroll';
-
-// Regex
-const TYPE_REGEX = /Auftrag: (.+?) §6(\d+[x|m] )?.+§r/
-const NAME_REGEX = /Auftrag: .+? §6\d+[x|m] ?(.+)§r/
-const COINS_REGEX = /Belohnung: §6(\d+) Coins?/
-const ITEM_REGEX = /Ziel: (.+)/
-const ERSTELLT_REGEX = /Erstellt: (.+)/
-const PLAYER_REGEX = /Von: (.+)/
-const LEVEL_REGEX = /Level: (.+) ?%/
-const EGG_CHANCE_REGEX = /Ei-Chance: (.+) ?%/
 
 // Quick Events & Missions
 const AVG_MISSIONS_PER_HOUR = 0.7;
@@ -46,30 +34,16 @@ const MISSION_TYPE_GOALS = {
 const MIN_DIFFICULTY = 0.05;
 const DIFFICULTY_BY_TYPE = false;
 
-// Greeting
-const DAILY_MESSAGE = [
-    "§aHallo USERNAME! Schön dass du da bist. Hier, geh schaffen!",
-    "§aHi USERNAME! Willkommen zurück! Hier, eine kleine Aufgabe für dich!",
-    "§aOh, da bist du ja, USERNAME. Könntest du das hier für mich erledigen?",
-    "§aHey Username, wie wär es, wenn du das hier für mich machst?",
-    "§aNeuer Tag, neuer Job. Hol ihn dir, USERNAME!",
-    "§aHallo USERNAME! Ein kleiner gruß für dich.",
-    "§aHoffentlich bist du fit, USERNAME. Es gibt nämlich Arbeit.",
-    "§aHey, wie gehts USERNAME? Zeit für ne Mission?",
-    "§aHallo USERNAME! Langweilig? Bitteschön!",
-    "§aMöp. Arbeit für USERNAME.",
-    "§aIst USERNAME anwesend? Auftrag für dich!",
-    "§aAh, USERNAME. Perfektes Timing. Ich hab was für dich.",
-    "§aGuten Morgen, USERNAME! Kaffee kann warten, Arbeit nicht.",
-    "§aUSERNAME! Genau die Person, die ich brauchte.",
-    "§aKeine Ausreden, USERNAME. Hier ist deine Mission.",
-    "§aSieh an, USERNAME ist online. Dann kann's ja losgehen.",
-    "§aUSERNAME, du siehst aus als hättest du Lust auf Arbeit. Stimmt's?",
-    "§aFür dich, USERNAME. Frisch eingetroffen.",
-    "§aDu weißt was das bedeutet, USERNAME. An die Arbeit!",
-    "§aWillkommen, USERNAME. Ich hab hier was, das deinen Namen trägt.",
-    "§aUSERNAME ist da! Na dann, hier deine Aufgaben für heute.",
-    "§aHey USERNAME, die Welt rettet sich nicht von allein."
+// Greeting (lang keys, resolved to a translated Component with the username as %s arg)
+const DAILY_MESSAGE_KEYS = [
+    'kubejs.daily.greeting.0', 'kubejs.daily.greeting.1', 'kubejs.daily.greeting.2',
+    'kubejs.daily.greeting.3', 'kubejs.daily.greeting.4', 'kubejs.daily.greeting.5',
+    'kubejs.daily.greeting.6', 'kubejs.daily.greeting.7', 'kubejs.daily.greeting.8',
+    'kubejs.daily.greeting.9', 'kubejs.daily.greeting.10', 'kubejs.daily.greeting.11',
+    'kubejs.daily.greeting.12', 'kubejs.daily.greeting.13', 'kubejs.daily.greeting.14',
+    'kubejs.daily.greeting.15', 'kubejs.daily.greeting.16', 'kubejs.daily.greeting.17',
+    'kubejs.daily.greeting.18', 'kubejs.daily.greeting.19', 'kubejs.daily.greeting.20',
+    'kubejs.daily.greeting.21'
 ];
 
 // Missions

@@ -1,22 +1,24 @@
 const MISSION_TYPE_ITEM = {
     id: 'item',
-    text: '§aSende§r',
+    labelKey: 'kubejs.mission.type.item',
+    color: 'green',
     weight: 13,
-    hint: (name) => `Du kannst diesen Auftrag erfüllen, indem du ${name} im Inventar hast und mit dem Auftrag-Item rechtsklickst.`,
+    hint: (target) => Text.translate('kubejs.mission.hint.item', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let need = dataItem.currentDamage;
+        let target = resolveTargetName(dataItem.typeId, dataItem.item, dataItem.name);
 
         let take = ItemUtils.removeFromInventory(player, dataItem.item, need);
 
         let remaining = dataItem.currentDamage - take;
         if (remaining > 0) {
-            player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben! Du brauchst noch ${remaining} um den Auftrag zu erledigen!`);
+            player.tell(Text.translate('kubejs.mission.item.progress', TextUtils.colored(take), target, TextUtils.colored(remaining)).color('green'));
             stack.setDamage(remaining);
             ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
             event.cancel();
         } else {
-            player.tell(`§aDu hast §6${take}x ${dataItem.name}§a abgegeben!`);
+            player.tell(Text.translate('kubejs.mission.item.delivered_all', TextUtils.colored(take), target).color('green'));
             stack.count = 0;
             finishMission(event, player, dataItem);
         }
@@ -25,16 +27,18 @@ const MISSION_TYPE_ITEM = {
 
 const MISSION_TYPE_KILL = {
     id: 'kill',
-    text: '§4Töte§r',
+    labelKey: 'kubejs.mission.type.kill',
+    color: 'dark_red',
     weight: 8,
-    hint: (name) => `Du kannst diesen Auftrag erfüllen, indem dieses Auftrag-Item im Inventar hast, während du ${name} tötest.`,
+    hint: (target) => Text.translate('kubejs.mission.hint.kill', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let need = dataItem.currentDamage;
-        player.tell(`§cDir fehlen noch §6${need}x ${dataItem.name}§c.`);
+        let target = resolveTargetName(dataItem.typeId, dataItem.item, dataItem.name);
+        player.tell(Text.translate('kubejs.mission.kill.remaining', TextUtils.colored(need), target).color('red'));
 
         if (need === 0) {
-            player.tell(`§aDu hast alle benötigten §6${dataItem.name}§a umgebracht!`);
+            player.tell(Text.translate('kubejs.mission.kill.done', target).color('green'));
             stack.count = 0;
             finishMission(event, player, dataItem);
         }
@@ -43,9 +47,10 @@ const MISSION_TYPE_KILL = {
 
 const MISSION_TYPE_JOUNREY = {
     id: 'journey',
-    text: '§bReise§r',
+    labelKey: 'kubejs.mission.type.journey',
+    color: 'aqua',
     weight: 2,
-    hint: (name, item) => `Bringe diesen Auftrag nach ${item} und rechtsklicke ihn dort. Du kannst ihn so rechtsklicken um einen Wegpunkt zu erzeugen.`,
+    hint: (target, item) => Text.translate('kubejs.mission.hint.journey', item),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let isNear = false;
@@ -62,29 +67,30 @@ const MISSION_TYPE_JOUNREY = {
 
         if (isNear) {
             event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
-            player.tell(`§aDu bist da. Die Gilde ist dir sehr dankbar!`);
+            player.tell(Text.translate('kubejs.mission.journey.arrived').color('green'));
             stack.count = 0;
             finishMission(event, player, dataItem);
         } else {
             event.server.runCommandSilent(`jm waypoint delete "${dataItem.name}" ${player.username}`);
             event.server.runCommandSilent(`jm waypoint temp create "${dataItem.name}" minecraft:overworld ${targetPos.x} 64 ${targetPos.z} gold ${player.username}`);
-            player.tell(`§cDu bist noch ${dist} Meter entfernt.`);
+            player.tell(Text.translate('kubejs.mission.journey.remaining', TextUtils.colored(dist)).color('red'));
         }
     }
 };
 
 const MISSION_TYPE_MISSIONS = {
     id: 'missions',
-    text: '§eHelfe bei§r',
+    labelKey: 'kubejs.mission.type.missions',
+    color: 'yellow',
     weight: 1,
-    hint: (name, item) => `Helfe dem Server, in dem du ${name}-Events zum Erfolg bringst während diese Mission in deinem Inventar hast.`,
+    hint: (target) => Text.translate('kubejs.mission.hint.missions', target),
     rightClickHandler: (event, dataItem, stack) => {
         let player = event.player;
         let need = dataItem.currentDamage;
-        player.tell(`§cDir fehlen noch §6${need}x Events§c.`);
+        player.tell(Text.translate('kubejs.mission.missions.remaining', TextUtils.colored(need)).color('red'));
 
-        if (remaining === 0) {
-            player.tell(`§aDu hast alle benötigten Events abgeschlossen!`);
+        if (need === 0) {
+            player.tell(Text.translate('kubejs.mission.missions.done').color('green'));
             stack.count = 0;
             finishMission(event, player, dataItem);
         }
@@ -98,7 +104,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
     try {
 
         if (Math.random() < CURSE_CHANCE && !currentEvent) {
-            event.server.tell(`§cACHTUNG! §6${event.player.username}§c hat eine verfluchte Mission erwischt! Arbeitet besser zusammen, damit sie nicht fehlschlägt!`);
+            event.server.tell(Text.translate('kubejs.mission.cursed.warning', TextUtils.colored(event.player.username)).color('red'));
             unlucky = true;
             startEvent(event, HUNT_EVENT.id, true);
             ParticleUtils.summonParticleAtPlayer(event.server, '@a', 'minecraft:ash', 100, 3, 0.2, 0.2, 0.2);
@@ -133,7 +139,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
         }
         event.item.shrink(1);
     } catch (e) {
-        event.player.tell(`§cEs konnte keine Mission erzeugt werden! Versuch es nochmal.`);
+        event.player.tell(Text.translate('kubejs.mission.error.generate_failed').color('red'));
         console.log(e);
         if (e && e.stack) console.log(e.stack);
     }
@@ -147,7 +153,8 @@ ItemEvents.rightClicked(MISSION_ITEM, event => {
     if (offhand && IdUtils.idMatches(offhand.id, COIN_ITEM) && offhand.count >= MISSION_SWAP_FEE) {
         offhand.count = offhand.count - MISSION_SWAP_FEE;
         stack.count = 0;
-        event.player.tell(`§aDu hast die Gebühr von §6${MISSION_SWAP_FEE} Coins§a bezahlt und damit die Mission §6${data.name}§a abgelehnt!`);
+        let target = resolveTargetName(data.typeId, data.item, data.name);
+        event.player.tell(Text.translate('kubejs.mission.swap.success', TextUtils.colored(MISSION_SWAP_FEE), target).color('green'));
         event.player.give(Item.of(MISSION_TOKEN, 1));
     } else {
         data.type.rightClickHandler(event, data, stack);
@@ -166,15 +173,16 @@ EntityEvents.death(event => {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
+                let target = resolveTargetName(data.typeId, data.item, data.name);
                 ParticleUtils.summonParticleAtPosition(event.server, event.entity.position(), 'minecraft:totem_of_undying', 20, 1, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
-                    player.tell(`§aDu hast den letzten Kill für den Auftrag §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
+                    player.tell(Text.translate('kubejs.mission.kill.final', TextUtils.colored(data.maxDamage), target).color('green'));
                     finishMission(event, player, data);
                     item.count = 0;
                 } else {
                     data.currentDamage--;
                     item.setDamage(data.currentDamage);
-                    player.tell(`§a${generateMissionTitle(data.type.id, data.name, data.maxDamage)}§a - verbleibend: §6${data.currentDamage}§a.`);
+                    player.tell(Text.translate('kubejs.mission.kill.progress_update', buildMissionTitle(data.type, target, data.maxDamage), TextUtils.colored(data.currentDamage)).color('green'));
                 }
             }
         }
@@ -197,47 +205,98 @@ PlayerEvents.loggedIn(event => {
         if (days === 0) return;
 
         PlayerUtils.setLoginDate(player);
-        let message = DAILY_MESSAGE[MathUtils.randomInt(0, DAILY_MESSAGE.length - 1)];
-        message = message.replace("USERNAME", player.username);
-        player.tell(message);
+        let greetingKey = DAILY_MESSAGE_KEYS[MathUtils.randomInt(0, DAILY_MESSAGE_KEYS.length - 1)];
+        player.tell(Text.translate(greetingKey, player.username).color('green'));
         let count = days === 1 ? 4 : 6;
-        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count, name: MISSION_ITEM_NAME }], worldborder: 16 });
+        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count }], worldborder: 16 });
     }, 30000);
 });
 
+/**
+ * Resolves the real, translatable display name for a mission's target: the item/mob's own
+ * game name for concrete IDs, the matching quick event's name for "help with" missions, or
+ * the literal CSV/fallback name otherwise (journey destinations, filter/category missions).
+ * @param {string} typeId mission type ID (e.g. "item", "kill")
+ * @param {string} item mission item/mob ID, filter string, event ID or journey position
+ * @param {string} name literal fallback name (CSV `name` column or humanized ID)
+ * @returns {Internal.Component}
+ */
+function resolveTargetName(typeId, item, name) {
+    switch (typeId) {
+        case MISSION_TYPE_ITEM.id:
+            return TextUtils.itemName(item, name);
+        case MISSION_TYPE_KILL.id:
+            return TextUtils.entityName(item, name);
+        case MISSION_TYPE_MISSIONS.id:
+            let ev = ALL_QUICK_EVENTS.find(e => e.id === item);
+            return ev ? Text.translate(ev.nameKey) : Text.literal(name);
+        default:
+            return Text.literal(name);
+    }
+}
 
 function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr) {
     eggChance = eggChance || 0;
     if (type == MISSION_TYPE_JOUNREY.id) {
         item = PositionUtils.toChatPosition(PositionUtils.randomPositionWithDistance(event.player.position(), amount));
     }
-    event.server.runCommandSilent(`give ${event.player.username} kubejs:mission[custom_name='["",{"text":"${generateMissionTitle(type, name, amount)}","italic":false}]',lore=['["",{"text":"${generateMissionLore(type, reward, erstellt, item, name, username, mod, eggChance, nr)}","italic":false}]'],damage=${amount},max_damage=${amount},max_stack_size=1]`);
+    let missionType = MISSION_TYPES.find(mt => mt.id === type);
+    let target = resolveTargetName(type, item, name);
+
+    let stack = Item.of(MISSION_ITEM);
+    stack.count = 1;
+    stack.setDamage(amount);
+    stack.setMaxDamage(amount);
+    stack.setCustomName(buildMissionTitle(missionType, target, amount));
+    stack.setLore(buildMissionLore(missionType, target, reward, erstellt, item, name, username, mod, eggChance, nr));
+
+    let tag = NBT.compoundTag();
+    tag.putString('typeId', type);
+    tag.putString('item', item);
+    tag.putString('name', name || '');
+    tag.putInt('coins', reward);
+    tag.putLong('created', erstellt.getTime());
+    tag.putString('creator', username);
+    tag.putDouble('level', mod);
+    tag.putDouble('eggChance', eggChance);
+    tag.putInt('nr', nr);
+    stack.setCustomData(tag);
+
+    event.player.give(stack);
 }
 
-function generateMissionTitle(type, name, amount) {
-    let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
-    let unit = 'x';
-    if (type === MISSION_TYPE_JOUNREY.id) {
-        unit = 'm';
-    }
-    return `Auftrag: ${missionType.text} §6${amount}${unit} ${name}§r`;
+function buildMissionTitle(missionType, target, amount) {
+    let unit = missionType.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
+    let label = Text.translate(missionType.labelKey).color(missionType.color);
+    return Text.translate('kubejs.mission.title', label, `${amount}${unit}`, target);
 }
 
-function generateMissionLore(type, coins, erstellt, item, name, playername, mod, eggChance, nr) {
+function buildMissionLore(missionType, target, coins, erstellt, item, name, playername, mod, eggChance, nr) {
     mod = mod || 1;
     eggChance = eggChance || 0;
-    let missionType = MISSION_TYPES.find(missionType => missionType.id === type);
-    let hint = missionType.hint(name, item);
-    let result = `Belohnung: §6${coins} Coin${coins === 1 ? '' : 's'}§7\n\n${hint}\n\n§7Ziel: ${item}\nErstellt: ${erstellt.toISOString()}\nVon: ${playername}\nAuftrag Nr: ${nr}\nLevel: ${(mod * 100).toFixed(2)}%`;
+    let coinsKey = coins === 1 ? 'kubejs.mission.lore.reward.one' : 'kubejs.mission.lore.reward.other';
+
+    let lines = [
+        Text.translate(coinsKey, TextUtils.colored(coins)).color('gray'),
+        Text.literal(''),
+        missionType.hint(target, item).color('white'),
+        Text.literal(''),
+        Text.translate('kubejs.mission.lore.target', item).color('gray'),
+        Text.translate('kubejs.mission.lore.created', TimeUtils.formatDateISO(erstellt)).color('gray'),
+        Text.translate('kubejs.mission.lore.creator', playername).color('gray'),
+        Text.translate('kubejs.mission.lore.number', nr).color('gray'),
+        Text.translate('kubejs.mission.lore.level', (mod * 100).toFixed(2)).color('gray')
+    ];
     if (eggChance > 0) {
-        result += `\nEi-Chance: ${(eggChance * 100).toFixed(2)}%`;
+        lines.push(Text.translate('kubejs.mission.lore.egg_chance', (eggChance * 100).toFixed(2)).color('gray'));
     }
-    return result;
+    return lines;
 }
 
 function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
+    let target = resolveTargetName(data.typeId, data.item, data.name);
     rewardPlayer(
         event,
         player,
@@ -249,55 +308,32 @@ function finishMission(event, player, data) {
             worldborder: data.coins
         }
     );
-    event.server.runCommandSilent(`tellraw @a[name=!${playerName}] "${playerName} §ahat den Auftrag §6${data.maxDamage}${unit} ${data.name}§a erledigt und §6${data.coins} Coins§a kassiert!"`);
+    let broadcast = Text.translate('kubejs.mission.finish.broadcast', TextUtils.colored(playerName), `${data.maxDamage}${unit}`, target, TextUtils.colored(data.coins)).color('green');
+    event.server.players.forEach(p => {
+        if (p.username !== playerName) p.tell(broadcast);
+    });
 }
 
 function parseMissionInfo(itemStack) {
     let components = itemStack.getComponents();
-    let componentName = components.get('minecraft:custom_name');
-    let componentLore = components.get('minecraft:lore');
     let maxDamage = components.get('minecraft:max_damage') + 0;
     let currentDamage = components.get('minecraft:damage') + 0;
+    let tag = itemStack.getCustomData();
 
-    let nameRaw = componentName.getSiblings().get(0).getString();
-    let loreRaw = componentLore.styledLines().get(0).getString();
-
-
-    let nameMatch = nameRaw.match(NAME_REGEX);
-    let name = nameMatch ? nameMatch[1] : nameRaw;
-
-    let coinsMatch = loreRaw.match(COINS_REGEX);
-    let coins = coinsMatch ? coinsMatch[1] : 0;
-
-    let erstelltMatch = loreRaw.match(ERSTELLT_REGEX);
-    let erstellt = erstelltMatch ? new Date(erstelltMatch[1]) : new Date();
-
-    let itemMatch = loreRaw.match(ITEM_REGEX);
-    let item = itemMatch ? itemMatch[1] : '';
-
-    let playerMatch = loreRaw.match(PLAYER_REGEX);
-    let player = playerMatch ? playerMatch[1] : '';
-
-    let typeMatch = nameRaw.match(TYPE_REGEX);
-    let type = typeMatch ? typeMatch[1] : '';
-    let missionType = MISSION_TYPES.find(missionType => missionType.text === type);
-    let typeId = missionType ? missionType.id : '';
-
-    let levelMatch = loreRaw.match(LEVEL_REGEX);
-    let level = levelMatch ? levelMatch[1] : '100';
-    let numberLevel = parseFloat(level) / 100;
+    let typeId = tag.getString('typeId');
+    let missionType = MISSION_TYPES.find(missionType => missionType.id === typeId);
 
     return {
         typeId: typeId,
         type: missionType,
-        coins: coins,
-        name: name,
-        item: item,
-        erstellt: erstellt,
-        player: player,
+        coins: tag.getInt('coins'),
+        name: tag.getString('name'),
+        item: tag.getString('item'),
+        erstellt: new Date(tag.getLong('created')),
+        player: tag.getString('creator'),
         maxDamage: maxDamage,
         currentDamage: currentDamage,
-        level: numberLevel
+        level: tag.getDouble('level')
     }
 }
 
@@ -323,15 +359,16 @@ function checkForHelperMission(event, username, type) {
         if (item.is(searchItem)) {
             let data = parseMissionInfo(item);
             if (data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
+                let target = resolveTargetName(data.typeId, data.item, data.name);
                 ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'minecraft:totem_of_undying', 20, 3, 0.1, 0.1, 0.1);
                 if (data.currentDamage === 1) {
-                    player.tell(`§aDu hast die letzte Mission für §6${data.maxDamage}x ${data.name}§a ausgeführt!`);
+                    player.tell(Text.translate('kubejs.mission.kill.final', TextUtils.colored(data.maxDamage), target).color('green'));
                     finishMission(event, player, data);
                     item.count = 0;
                 } else {
                     data.currentDamage--;
                     item.setDamage(data.currentDamage);
-                    player.tell(`§a${generateMissionTitle(data.type.id, data.name, data.maxDamage)}§a - verbleibend: §6${data.currentDamage}§a.`);
+                    player.tell(Text.translate('kubejs.mission.kill.progress_update', buildMissionTitle(data.type, target, data.maxDamage), TextUtils.colored(data.currentDamage)).color('green'));
                 }
             }
         }

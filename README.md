@@ -126,8 +126,8 @@ type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minPro
 | Field | Required | Description |
 |-------|----------|-------------|
 | `type` | Yes | Mission type: `item` (gather), `kill` (defeat mob), `journey`, `missions` (help with quick events) |
-| `item` | Yes | Item ID or mob ID (e.g., `minecraft:iron_ingot`, `twilight:twilight_wolf`) |
-| `name` | No | Display name (defaults to item name) |
+| `item` | Yes | Item ID or mob ID (e.g., `minecraft:iron_ingot`, `twilight:twilight_wolf`). For `item` rows, an item **tag** can be used instead of a single ID by prefixing it with `#` (e.g., `#forge:tomatoes`) — accepts any item in that tag as a valid turn-in, and shows the first item in the tag as the contract's display name. This is the preferred replacement for the old bare-word "matches any item containing this text" special cases. |
+| `name` | No | Fallback display text. Ignored for `item`/`kill` rows that use a single, concrete, namespaced ID — those always show the real, translated in-game item/mob name instead (see [Localization](#localization)). Only used for `journey` destinations, `missions` (quick event) rows, and filter-style `item`/`kill` rows (bare words, `*` wildcards, comma-lists) that don't map to one real object. |
 | `minAmount` | No | Minimum quantity required |
 | `maxAmount` | No | Maximum quantity required |
 | `minCoins` | No | Minimum coin reward |
@@ -142,6 +142,32 @@ type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minPro
 ```csv
 item;minecraft:iron_ingot;Iron Ingot;64;256;10;20;300;
 ```
+
+### Localization
+
+The whole mod is bilingual (German/English), with English as the guaranteed fallback for
+any other client language — with no per-player language tracking needed at all. This
+works because Minecraft's translation system is entirely client-side: the server sends
+translation keys (never baked strings), and each connected client resolves them using
+its own selected language file, falling back to `en_us` for anything missing.
+
+- **Custom text** (chat messages, mission titles/lore, quick event announcements, daily
+  greetings, command output) lives in `kubejs/assets/kubejs/lang/en_us.json` (source of
+  truth) and `de_de.json` (translation), under `kubejs.*` keys.
+- **Item and mob names** are never hand-translated — they're resolved live from the
+  item's/mob's own real in-game name (`Item.of(id).getHoverName()` /
+  `EntityType.byString(id).getDescription()`), so they render correctly in whatever
+  language the item's own mod supports. This is why the CSV `name` column is ignored for
+  concrete item/mob IDs (see the CSV format table above).
+- Mission items store their game-logic data (type, target, coins, creator, etc.) in a
+  structured `minecraft:custom_data` NBT tag on the item, completely separate from the
+  translatable display name/lore. This means the exact same physical item shows correctly
+  translated text to every player who inspects it, regardless of their client language.
+
+To add a third language, drop another `<lang_code>.json` file next to `en_us.json` — no
+code changes needed. To add or change custom text, edit the lang JSON files directly (or
+via `ClientEvents.lang(...)` in a client script); item/mob names never need translating
+here.
 
 ### KubeJS Script Structure
 
@@ -185,6 +211,7 @@ node index.js
 
 # Deploy
 # Copy out/missions.js to your KubeJS scripts directory
+# Also copy kubejs/assets/ (lang files, textures) to your KubeJS assets directory
 # Restart/reload the server
 ```
 

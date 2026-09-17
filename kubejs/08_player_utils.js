@@ -143,11 +143,11 @@ function rewardPlayer(event, player, source, type, rewards) {
     switch (source) {
         case 'mission':
             increaseMissionDoneCount(player, type);
-            event.server.runCommandSilent(`tellraw ${player.username} [{"text":"Mission erfolgreich abgeschlossen!","color":"green", "bold":true}]`);
+            player.tell(Text.translate('kubejs.reward.mission_success').color('green').bold());
             break;
         case 'event':
             increaseEventDone(player, type);
-            event.server.runCommandSilent(`tellraw ${player.username} [{"text":"Event erfolgreich abgeschlossen!","color":"green", "bold":true}]`);
+            player.tell(Text.translate('kubejs.reward.event_success').color('green').bold());
             break;
     }
 
@@ -156,30 +156,25 @@ function rewardPlayer(event, player, source, type, rewards) {
     if (internalRewards.coins > 0) {
         ItemUtils.summonItemAtPlayer(event.server, player.username, COIN_ITEM, internalRewards.coins);
         ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'supplementaries:confetti', 100, 3, 0.2, 0.2, 0.2);
-        rewardItems.push({ "text": `${internalRewards.coins}x Coin`, "color": "white" });
+        rewardItems.push(Text.translate('kubejs.reward.item_count', TextUtils.colored(internalRewards.coins, 'white'), TextUtils.itemName(COIN_ITEM)).color('white'));
     }
     if (internalRewards.xp > 0) {
         increaseSkillXP(event, player.username, internalRewards.xp);
-        rewardItems.push({ "text": `${internalRewards.xp} Skill-XP`, "color": "aqua" });
+        rewardItems.push(Text.translate('kubejs.reward.xp', TextUtils.colored(internalRewards.xp, 'aqua')).color('aqua'));
     }
     if (internalRewards.worldborder > 0) {
         event.server.runCommandSilent(`worldborder add ${internalRewards.worldborder} 3`);
-        rewardItems.push({ "text": `+${internalRewards.worldborder}m Worldborder`, "color": "green" });
+        rewardItems.push(Text.translate('kubejs.reward.worldborder', TextUtils.colored(internalRewards.worldborder, 'green')).color('green'));
     }
     for (let item of internalRewards.items) {
         ItemUtils.summonItemAtPlayer(event.server, player.username, item.item, item.amount);
         ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'supplementaries:confetti', 100, 3, 0.2, 0.2, 0.2);
-        rewardItems.push({ "text": `${item.amount}x ${item.name}`, "color": "yellow" });
+        rewardItems.push(Text.translate('kubejs.reward.item_count', TextUtils.colored(item.amount, 'yellow'), TextUtils.itemName(item.item)).color('yellow'));
     }
     for (let buff of internalRewards.buffs) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
-        rewardItems.push({ "text": `${buff.duration} Minuten ${buff.name} ${TextUtils.toRoman(buff.amplifier)}`, "color": "light_purple" });
+        rewardItems.push(Text.translate('kubejs.reward.buff', TextUtils.colored(buff.duration, 'light_purple'), TextUtils.effectName(buff.buff), TextUtils.colored(TextUtils.toRoman(buff.amplifier), 'light_purple')).color('light_purple'));
     }
-    const rewardComponents = [{ "text": "» Belohnung: ", "color": "gold" }];
-    rewardItems.forEach((item, i) => {
-        rewardComponents.push(item);
-        if (i < rewardItems.length - 1) rewardComponents.push({ "text": ", ", "color": "gold" });
-    });
-    rewardComponents.push({ "text": " «", "color": "gold" });
-    event.server.runCommandSilent(`tellraw ${player.username} ${JSON.stringify(rewardComponents)}`);
+    let rewardLine = Text.translate('kubejs.reward.header', Text.join(Text.of(', '), rewardItems)).color('gold');
+    player.tell(rewardLine);
 }
