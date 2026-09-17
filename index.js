@@ -1,9 +1,10 @@
-const { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } = require('fs');
-const { parse } = require('path');
+const { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, readdirSync, existsSync } = require('fs');
+const path = require('path');
 const seedrandom = require('seedrandom');
 
 const args = process.argv.slice(2);
-const outFile = args[0] || 'out/missions.js';
+const outRoot = args[0] || 'out';
+const kubejsOut = path.join(outRoot, 'kubejs');
 
 console.log('Reading Missions CSV...');
 const allCsvFiles = readdirSync('missions').filter(f => f.endsWith('.csv'));
@@ -53,10 +54,18 @@ const lineString = out.join('\n');
 
 const fileContent = `// priority: 200\n${fullScript}\n\n${lineString}\n\ncorrectAllMissions();`;
 
-console.log(`Writing Quests and ${relevantMissionCount} Missions to ${outFile}`);
-mkdirSync('out', { recursive: true });
-writeFileSync(outFile, fileContent);
-writeFileSync('out/missions.js', fileContent);
+console.log(`Cleaning ${outRoot}...`);
+rmSync(outRoot, { recursive: true, force: true });
+
+console.log('Copying assets, startup_scripts and server_scripts...');
+if (existsSync('kubejs/server_scripts')) cpSync('kubejs/server_scripts', path.join(kubejsOut, 'server_scripts'), { recursive: true });
+if (existsSync('kubejs/assets')) cpSync('kubejs/assets', path.join(kubejsOut, 'assets'), { recursive: true });
+if (existsSync('kubejs/startup_scripts')) cpSync('kubejs/startup_scripts', path.join(kubejsOut, 'startup_scripts'), { recursive: true });
+
+const missionsOutFile = path.join(kubejsOut, 'server_scripts', 'missions.js');
+console.log(`Writing Quests and ${relevantMissionCount} Missions to ${missionsOutFile}`);
+mkdirSync(path.join(kubejsOut, 'server_scripts'), { recursive: true });
+writeFileSync(missionsOutFile, fileContent);
 
 
 function parseCSV(file, missionIdKey) {

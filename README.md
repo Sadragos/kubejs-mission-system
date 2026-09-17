@@ -103,15 +103,18 @@ Quick Events have:
 
 ```
 missions/          # CSV mission definitions (one file per category)
-kubejs/            # KubeJS scripts (game logic)
-out/               # Generated output (deploy to server)
+kubejs/            # KubeJS scripts (game logic), assets, server_scripts, startup_scripts
+out/               # Generated output: a ready-to-deploy kubejs/ folder
 index.js           # Build script
 ```
 
 The build process:
 1. Reads all CSV files from `missions/`
-2. Combines all KubeJS scripts from `kubejs/` (in numerical order)
-3. Generates a single `out/missions.js` file ready for deployment
+2. Combines all numbered KubeJS scripts from `kubejs/` (in numerical order) into one
+   `missions.js`
+3. Copies `kubejs/assets/`, `kubejs/server_scripts/`, and `kubejs/startup_scripts/` into
+   `out/kubejs/`, placing the generated `missions.js` in `out/kubejs/server_scripts/`
+   alongside the other server scripts
 
 ### CSV Mission Format
 
@@ -206,18 +209,28 @@ const FALLBACK_EGG_CHANCE = 0.25;         // Default spawn egg probability for k
 ### Building & Deploying
 
 ```bash
-# Build (generates out/missions.js)
+# Build (generates a ready-to-deploy out/kubejs/ folder)
 node index.js
 
 # Deploy
-# Copy out/missions.js to your KubeJS scripts directory
-# Also copy kubejs/assets/ (lang files, textures) to your KubeJS assets directory
+# Copy the contents of out/kubejs/ into your instance's kubejs/ folder
 # Restart/reload the server
 ```
 
-The build script accepts an optional output path argument:
+`node index.js` produces:
+```
+out/kubejs/
+  assets/...            # copied from kubejs/assets/
+  server_scripts/
+    coins.js            # copied from kubejs/server_scripts/
+    missions.js         # generated (CSVs + kubejs/*.js scripts combined)
+  startup_scripts/
+    main.js             # copied from kubejs/startup_scripts/
+```
+
+The build script accepts an optional output directory argument (default: `out`):
 ```bash
-node index.js /path/to/custom/output.js
+node index.js /path/to/custom/output/dir
 ```
 
 ### Adding New Missions
@@ -225,7 +238,7 @@ node index.js /path/to/custom/output.js
 1. Create or edit a CSV file in `missions/`
 2. Add rows following the CSV format
 3. Run `node index.js`
-4. Deploy the new `out/missions.js`
+4. Deploy the new `out/kubejs/`
 
 ### Adding New KubeJS Logic
 
