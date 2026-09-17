@@ -213,12 +213,14 @@ PlayerEvents.loggedIn(event => {
 });
 
 /**
- * Resolves the real, translatable display name for a mission's target: the item/mob's own
- * game name for concrete IDs, the matching quick event's name for "help with" missions, or
- * the literal CSV/fallback name otherwise (journey destinations, filter/category missions).
+ * Resolves the display name for a mission's target. Priority: the CSV `name`, if given, is
+ * used as a lang key when one matches, otherwise as literal text (see
+ * `TextUtils.resolveNameOverride`); if `name` is blank, falls back to the item/mob's own real
+ * game name for concrete IDs/tags, or the matching quick event's name for "help with"
+ * missions; if even that can't be resolved, falls back to the raw item/mob/event ID.
  * @param {string} typeId mission type ID (e.g. "item", "kill")
  * @param {string} item mission item/mob ID, filter string, event ID or journey position
- * @param {string} name literal fallback name (CSV `name` column or humanized ID)
+ * @param {string} name CSV `name` column value
  * @returns {Internal.Component}
  */
 function resolveTargetName(typeId, item, name) {
@@ -228,10 +230,12 @@ function resolveTargetName(typeId, item, name) {
         case MISSION_TYPE_KILL.id:
             return TextUtils.entityName(item, name);
         case MISSION_TYPE_MISSIONS.id:
+            let override = TextUtils.resolveNameOverride(name);
+            if (override) return override;
             let ev = ALL_QUICK_EVENTS.find(e => e.id === item);
-            return ev ? Text.translate(ev.nameKey) : Text.literal(name);
+            return ev ? Text.translate(ev.nameKey) : Text.literal(item);
         default:
-            return Text.literal(name);
+            return TextUtils.resolveNameOverride(name) || Text.literal(item);
     }
 }
 
