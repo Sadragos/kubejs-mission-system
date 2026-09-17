@@ -1,10 +1,10 @@
-const { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, readdirSync, existsSync } = require('fs');
+const { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync, readdirSync, existsSync } = require('fs');
 const path = require('path');
 const seedrandom = require('seedrandom');
 
 const args = process.argv.slice(2);
 const outRoot = args[0] || 'out';
-const kubejsOut = path.join(outRoot, 'kubejs');
+const manifestFile = path.join(outRoot, '.build-manifest.json');
 
 console.log('Reading Missions CSV...');
 const allCsvFiles = readdirSync('missions').filter(f => f.endsWith('.csv'));
@@ -54,18 +54,64 @@ const lineString = out.join('\n');
 
 const fileContent = `// priority: 200\n${fullScript}\n\n${lineString}\n\ncorrectAllMissions();`;
 
-console.log(`Cleaning ${outRoot}...`);
-rmSync(outRoot, { recursive: true, force: true });
+// Safety: never delete a whole directory. Only ever touch files this script itself writes,
+// tracked in a manifest, so a stray build never wipes out unrelated kubejs content (e.g. if
+// outRoot is pointed directly at a live Minecraft instance's kubejs folder).
+const managedFiles = new Set();
+
+function copyManagedDir(srcDir, destSubdir) {
+    if (!existsSync(srcDir)) return;
+    (function walk(dir, relBase) {
+        for (const entry of readdirSync(dir, { withFileTypes: true })) {
+            const srcPath = path.join(dir, entry.name);
+            const relPath = path.join(relBase, entry.name);
+            if (entry.isDirectory()) {
+                walk(srcPath, relPath);
+            } else {
+                const destRelPath = path.join('kubejs', destSubdir, relPath);
+                const destPath = path.join(outRoot, destRelPath);
+                mkdirSync(path.dirname(destPath), { recursive: true });
+                copyFileSync(srcPath, destPath);
+                managedFiles.add(destRelPath);
+            }
+        }
+    })(srcDir, '');
+}
 
 console.log('Copying assets, startup_scripts and server_scripts...');
-if (existsSync('kubejs/server_scripts')) cpSync('kubejs/server_scripts', path.join(kubejsOut, 'server_scripts'), { recursive: true });
-if (existsSync('kubejs/assets')) cpSync('kubejs/assets', path.join(kubejsOut, 'assets'), { recursive: true });
-if (existsSync('kubejs/startup_scripts')) cpSync('kubejs/startup_scripts', path.join(kubejsOut, 'startup_scripts'), { recursive: true });
+copyManagedDir('kubejs/server_scripts', 'server_scripts');
+copyManagedDir('kubejs/assets', 'assets');
+copyManagedDir('kubejs/startup_scripts', 'startup_scripts');
 
-const missionsOutFile = path.join(kubejsOut, 'server_scripts', 'missions.js');
+const missionsRelPath = path.join('kubejs', 'server_scripts', 'missions.js');
+const missionsOutFile = path.join(outRoot, missionsRelPath);
 console.log(`Writing Quests and ${relevantMissionCount} Missions to ${missionsOutFile}`);
-mkdirSync(path.join(kubejsOut, 'server_scripts'), { recursive: true });
+mkdirSync(path.dirname(missionsOutFile), { recursive: true });
 writeFileSync(missionsOutFile, fileContent);
+managedFiles.add(missionsRelPath);
+
+// Remove only files that a previous run of this script wrote but that are no longer managed
+// (e.g. a texture removed from kubejs/assets/) - never anything outside this manifest.
+let previouslyManaged = [];
+if (existsSync(manifestFile)) {
+    try {
+        previouslyManaged = JSON.parse(readFileSync(manifestFile, 'utf8'));
+    } catch (e) {
+        console.warn('Could not read previous build manifest, skipping stale-file cleanup.');
+    }
+}
+for (const relPath of previouslyManaged) {
+    if (!managedFiles.has(relPath)) {
+        const staleFile = path.join(outRoot, relPath);
+        if (existsSync(staleFile)) {
+            rmSync(staleFile, { force: true });
+            console.log(`Removed stale managed file: ${relPath}`);
+        }
+    }
+}
+
+mkdirSync(outRoot, { recursive: true });
+writeFileSync(manifestFile, JSON.stringify([...managedFiles].sort(), null, 2));
 
 
 function parseCSV(file, missionIdKey) {

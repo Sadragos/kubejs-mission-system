@@ -228,6 +228,12 @@ out/kubejs/
     main.js             # copied from kubejs/startup_scripts/
 ```
 
+The build never deletes a whole directory. It only ever writes/overwrites the specific files
+it manages (tracked in `.build-manifest.json` next to the output), and only removes a
+previously-generated file once it's no longer part of the build (e.g. a texture you deleted
+from `kubejs/assets/`). Everything else already present in the output directory — including
+if you point it directly at a live instance's `kubejs` folder — is left alone.
+
 The build script accepts an optional output directory argument (default: `out`):
 ```bash
 node index.js /path/to/custom/output/dir
