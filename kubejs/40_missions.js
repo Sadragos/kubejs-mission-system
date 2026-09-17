@@ -104,7 +104,7 @@ const MISSION_TYPE_MISSIONS = {
 const MISSION_TYPES = [MISSION_TYPE_JOUNREY, MISSION_TYPE_ITEM, MISSION_TYPE_KILL, MISSION_TYPE_MISSIONS];
 
 // Neue Mission würfeln
-ItemEvents.rightClicked(MISSION_TOKEN, event => {
+ItemEvents.rightClicked(MISSION_SCROLL, event => {
     try {
 
         if (Math.random() < CURSE_CHANCE && !currentEvent) {
@@ -150,7 +150,7 @@ ItemEvents.rightClicked(MISSION_TOKEN, event => {
 })
 
 // Mission abgeben
-ItemEvents.rightClicked(MISSION_ITEM, event => {
+ItemEvents.rightClicked(MISSION_CONTRACT, event => {
     let stack = event.getItem();
     let data = parseMissionInfo(stack);
     let offhand = event.player.offHandItem;
@@ -159,7 +159,7 @@ ItemEvents.rightClicked(MISSION_ITEM, event => {
         stack.count = 0;
         let target = resolveTargetName(data.typeId, data.item, data.name);
         event.player.tell(Text.translate('kubejs.mission.swap.success', TextUtils.colored(MISSION_SWAP_FEE), target).color('green'));
-        event.player.give(Item.of(MISSION_TOKEN, 1));
+        event.player.give(Item.of(MISSION_SCROLL, 1));
     } else if (data.type) {
         data.type.rightClickHandler(event, data, stack);
     } else {
@@ -175,7 +175,7 @@ EntityEvents.death(event => {
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);
-        if (item.id === MISSION_ITEM) {
+        if (item.id === MISSION_CONTRACT) {
             let data = parseMissionInfo(item);
             if (data.type && data.type.id === MISSION_TYPE_KILL.id && isValidKill(event.entity, data.item)) {
                 let target = resolveTargetName(data.typeId, data.item, data.name);
@@ -213,7 +213,7 @@ PlayerEvents.loggedIn(event => {
         let greetingKey = DAILY_MESSAGE_KEYS[MathUtils.randomInt(0, DAILY_MESSAGE_KEYS.length - 1)];
         player.tell(Text.translate(greetingKey, player.username).color('green'));
         let count = days === 1 ? 4 : 6;
-        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_TOKEN, amount: count }], worldborder: 16 });
+        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_SCROLL, amount: count }], worldborder: 16 });
     }, 30000);
 });
 
@@ -252,7 +252,7 @@ function giveMissionItem(event, type, item, name, amount, reward, erstellt, user
     let missionType = MISSION_TYPES.find(mt => mt.id === type);
     let target = resolveTargetName(type, item, name);
 
-    let stack = Item.of(MISSION_ITEM);
+    let stack = Item.of(MISSION_CONTRACT);
     stack.count = 1;
     stack.setDamage(amount);
     stack.setMaxDamage(amount);
@@ -364,7 +364,7 @@ function checkForHelperMission(event, username, type) {
 
     for (let i = 0; i < inventory.getContainerSize(); i++) {
         let item = inventory.getItem(i);
-        if (item.id === MISSION_ITEM) {
+        if (item.id === MISSION_CONTRACT) {
             let data = parseMissionInfo(item);
             if (data.type && data.type.id === MISSION_TYPE_MISSIONS.id && data.item === type) {
                 let target = resolveTargetName(data.typeId, data.item, data.name);

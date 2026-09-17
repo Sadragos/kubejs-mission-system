@@ -1,7 +1,7 @@
 // Basisitems: interne IDs der von diesem Datapack registrierten Items (siehe startup_scripts/main.js)
 const COIN_ITEM = 'kubejs:coin';
-const MISSION_ITEM = 'kubejs:mission';
-const MISSION_TOKEN = 'kubejs:mission_scroll';
+const MISSION_CONTRACT = 'kubejs:mission';
+const MISSION_SCROLL = 'kubejs:mission_scroll';
 
 // Quick Events & Missions
 // Durchschnittliche Anzahl Quick Events pro Stunde, wenn niemand online ist ("Sockel"-Rate)
@@ -18,7 +18,7 @@ const ANNOUNCE_INTERVAL_SECONDS = 60;
 const MISSION_MIN_TIME = 20 * 60 * 10;
 const MISSION_MAX_TIME = MISSION_MIN_TIME + (20 * 60 * 15)
 // Item, das als "Bonus"-Belohnung verwendet wird (z.B. Airdrop-Fallback-Inhalt) - aktuell die Auftragsrolle
-const REWARD_ITEM = MISSION_TOKEN;
+const REWARD_ITEM = MISSION_SCROLL;
 // Preis (in Coins, im Nebenhand-Slot) um eine Mission gegen eine neue einzutauschen
 const MISSION_SWAP_FEE = 2;
 // Aktuell ungenutzt (kein Code liest diesen Wert)

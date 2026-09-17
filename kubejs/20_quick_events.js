@@ -36,7 +36,7 @@ const PRESENT_EVENT = {
         let players = event.server.players;
         event.server.tell(Text.translate('kubejs.event.present.announce').color('white'));
         for (let player of players) {
-            rewardPlayer(event, player, event, PRESENT_EVENT.id, { items: [{ item: MISSION_TOKEN, amount: 1 }] });
+            rewardPlayer(event, player, event, PRESENT_EVENT.id, { items: [{ item: MISSION_SCROLL, amount: 1 }] });
         }
         currentEvent.stopEvent(event);
     },
@@ -541,7 +541,7 @@ function generateRewards(event) {
             let existing = rewards.find(r => r.id === pick.id);
             let coinMin = pick.id === 'coin' ? MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX) : 1;
             let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true), 1, coinMin);
-            let itemId = pick.id === 'coin' ? COIN_ITEM : MISSION_TOKEN;
+            let itemId = pick.id === 'coin' ? COIN_ITEM : MISSION_SCROLL;
             if (existing) {
                 existing.amount += amount;
                 existing.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(existing.amount), TextUtils.itemName(itemId)).color('green');
@@ -577,7 +577,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
-                items.push({ item: MISSION_TOKEN, amount: missions });
+                items.push({ item: MISSION_SCROLL, amount: missions });
                 break;
         }
     }
