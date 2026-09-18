@@ -115,7 +115,7 @@ const TextUtils = {
         if (TextUtils.isConcreteId(idOrFilter)) {
             try {
                 let type = _getEntityTypeClass().byString(idOrFilter);
-                if (type) return type.getDescription();
+                if (type && type.isPresent()) return type.get().getDescription();
             } catch (e) { /* not a valid entity id, fall through */ }
         }
         return Text.literal(idOrFilter);
