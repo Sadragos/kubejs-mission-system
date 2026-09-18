@@ -12,8 +12,6 @@ const AVG_MISSION_PER_HOUR_PLAYER = 0.2;
 const MISSION_SUMMON_MAX_PLAYER_DIST = 16 * 8;
 // Alle wie viele Ticks der Event-Würfel-/Tick-Handler prüft (20 Ticks = 1 Sekunde)
 const CHECK_INTERVAL = 100;
-// Wie oft (in Sekunden) während eines laufenden Events die Restzeit angesagt wird
-const ANNOUNCE_INTERVAL_SECONDS = 60;
 // Zufällige Laufzeit eines Quick Events in Ticks: zwischen MISSION_MIN_TIME und MISSION_MAX_TIME
 const MISSION_MIN_TIME = 20 * 60 * 10;
 const MISSION_MAX_TIME = MISSION_MIN_TIME + (20 * 60 * 15)

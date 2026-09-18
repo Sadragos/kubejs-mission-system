@@ -16,21 +16,6 @@ function tickTimeColor(ticks) {
 }
 
 /**
- * Sendet eine Nachricht an alle Spieler mit der verbleibenden Zeit des aktuellen Events.
- * @param {ServerEvent} event
- * @param {boolean} [fortschritt=false] - Ob der Fortschritt (total / targetAmount) angezeigt werden soll
- * @param {number} [bonus] - Zeitbonus-Faktor (nur angezeigt wenn > 1)
- */
-function getTimeRemaining(event, progress, bonus) {
-    progress = progress === undefined ? false : progress;
-    let remainingTicks = currentEvent.endTick - event.server.tickCount;
-    let parts = [currentEvent.label, Text.translate('kubejs.event.time_remaining_short', tickTimeColor(remainingTicks) + ticksToTime(remainingTicks)).color('gray')];
-    if (progress) parts.push(Text.translate('kubejs.event.progress', TextUtils.colored(currentEvent.total, 'green'), TextUtils.colored(currentEvent.targetAmount, 'green')).color('gray'));
-    if (bonus && bonus > 1) parts.push(Text.translate('kubejs.event.time_bonus', TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green')).color('gray'));
-    event.server.tell(TextUtils.join(Text.of(' '), parts));
-}
-
-/**
  * Returns the "time taken" / "time remaining" components for the current event.
  * @param {ServerEvent} event
  * @returns {Internal.Component[]}

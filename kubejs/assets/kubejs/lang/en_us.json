@@ -84,7 +84,7 @@
   "kubejs.event.race.name": "Race",
   "kubejs.event.race.announce": "The guild calls for a race! Target: %s. Whoever gets there first wins!",
   "kubejs.event.race.board_title": "Distance to target",
-  "kubejs.event.race.nearby": "%s is only %sm away from the target!",
+  "kubejs.event.race.nearby": "%s is close to the target: %s",
 
   "kubejs.event.more_info": "[+]",
   "kubejs.event.time_limit": "Time limit: %s",
@@ -100,8 +100,6 @@
   "kubejs.event.time_bonus": "Bonus: %s",
   "kubejs.event.time_taken": "Time taken %s",
   "kubejs.event.time_remaining": "Time remaining %s",
-  "kubejs.event.time_remaining_short": "Time: %s",
-  "kubejs.event.progress": "Progress: %s/%s",
 
   "kubejs.reward.mission_success": "Mission completed successfully!",
   "kubejs.reward.event_success": "Event completed successfully!",

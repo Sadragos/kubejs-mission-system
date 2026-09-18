@@ -84,7 +84,7 @@
   "kubejs.event.race.name": "Wettrennen",
   "kubejs.event.race.announce": "Die Gilde ruft zu einem Wettrennen auf! Ziel: %s. Wer zuerst dort ankommt, gewinnt!",
   "kubejs.event.race.board_title": "Entfernung zum Ziel",
-  "kubejs.event.race.nearby": "%s ist nur noch %sm vom Ziel entfernt!",
+  "kubejs.event.race.nearby": "%s ist in der Nähe des Ziels: %s",
 
   "kubejs.event.more_info": "[+]",
   "kubejs.event.time_limit": "Zeitlimit: %s",
@@ -100,8 +100,6 @@
   "kubejs.event.time_bonus": "Bonus: %s",
   "kubejs.event.time_taken": "Benötigte Zeit %s",
   "kubejs.event.time_remaining": "Verbleibende Zeit %s",
-  "kubejs.event.time_remaining_short": "Zeit: %s",
-  "kubejs.event.progress": "Fortschritt: %s/%s",
 
   "kubejs.reward.mission_success": "Mission erfolgreich abgeschlossen!",
   "kubejs.reward.event_success": "Event erfolgreich abgeschlossen!",

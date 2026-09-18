@@ -4,10 +4,10 @@ const ScoreboardUtils = {
      * @param {Internal.MinecraftServer} server
      * @param {string} id internal objective name
      * @param {string} title display name shown in-game
-     * @param {string} display display slot (default: 'sidebar')
+     * @param {string} display display slot (default: 'list', d.h. Tabliste)
      */
     initBoard: (server, id, title, display) => {
-        display = display ?? 'sidebar'
+        display = display ?? 'list'
         server.runCommandSilent(`scoreboard objectives add ${id} dummy "${title}"`);
         server.runCommandSilent(`scoreboard objectives setdisplay ${display} ${id}`);
     },

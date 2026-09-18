@@ -2,6 +2,74 @@
 let currentEvent;
 let unlucky = false;
 
+// Interne ID der Bossbar, die für zeitlich begrenzte Quick Events (Hunt/Bestellung/Rennen)
+// zusätzlich zur Scoreboard-Tabliste angezeigt wird (siehe refreshEventBossbar/removeEventDisplay).
+const EVENT_BOSSBAR_ID = 'my_mission_progress';
+
+/**
+ * Entfernt sowohl die Scoreboard-Anzeige als auch die Event-Bossbar. Zentrale Stelle für alle
+ * "Event ist vorbei"-Pfade, damit nie eine Bossbar verwaist zurückbleibt.
+ * @param {Internal.MinecraftServer} server
+ */
+function removeEventDisplay(server) {
+    ScoreboardUtils.removeScoreboard(server, 'my_mission_scores');
+    BossbarUtils.removeBar(server, EVENT_BOSSBAR_ID);
+}
+
+/**
+ * Baut den dynamischen Bossbar-Titel für das aktuell laufende zeitlich begrenzte Quick Event
+ * (Hunt, Bestellung, Rennen): Abkürzung + Ziel, verbleibende Zeit und (falls vorhanden) verbleibende
+ * Kills/Items. Wird bei jedem Refresh neu berechnet, damit er immer den Live-Stand zeigt.
+ * @param {ServerEvent} event
+ * @returns {string}
+ */
+function buildBossbarTitle(event) {
+    let remainingTicks = Math.max(0, currentEvent.endTick - event.server.tickCount);
+    let timeText = tickTimeColor(remainingTicks) + ticksToTime(remainingTicks);
+    let namePart = `§6[${currentEvent.abbr}]§f ${currentEvent.bossbarTarget ?? Text.translate(currentEvent.nameKey).getString()}`;
+    let parts = [namePart, timeText];
+    if (currentEvent.targetAmount !== undefined) {
+        let remaining = Math.max(0, currentEvent.targetAmount - currentEventProgress(event));
+        parts.push(`§a${remaining}§7/§f${currentEvent.targetAmount}`);
+    }
+    return parts.join(' §8|§r ');
+}
+
+/**
+ * Berechnet den aktuellen Fortschritt (höchster Einzelwert bei Solo-Hunt, sonst der gemeinsame
+ * Gesamtwert) für Events mit einer festen Zielmenge (Hunt/Bestellung).
+ * @param {ServerEvent} event
+ * @returns {number}
+ */
+function currentEventProgress(event) {
+    if (currentEvent.id === 'hunt' && !currentEvent.multiplayer) {
+        let progress = 0;
+        for (let [, count] of currentEvent.actionTable) {
+            if (count > progress) progress = count;
+        }
+        return progress;
+    }
+    return currentEvent.total;
+}
+
+/**
+ * Berechnet und setzt Name/Wert der Event-Bossbar neu. No-op, falls kein zeitlich begrenztes
+ * Event läuft (Dieb/Airdrop/Präsent laufen synchron durch und erreichen das nie). Die Füllung
+ * stellt bei Hunt/Bestellung die verbleibende Kill-/Item-Anzahl dar (leert sich mit Fortschritt),
+ * bei Rennen (kein festes Ziel, nur ein Zeitlimit) stattdessen die verbleibende Zeit.
+ * @param {ServerEvent} event
+ */
+function refreshEventBossbar(event) {
+    if (!currentEvent || currentEvent.endTick === undefined) return;
+    BossbarUtils.setName(event.server, EVENT_BOSSBAR_ID, buildBossbarTitle(event));
+    if (currentEvent.targetAmount !== undefined) {
+        BossbarUtils.setValue(event.server, EVENT_BOSSBAR_ID, Math.max(0, currentEvent.targetAmount - currentEventProgress(event)));
+    } else {
+        let remainingTicks = Math.max(0, currentEvent.endTick - event.server.tickCount);
+        BossbarUtils.setValue(event.server, EVENT_BOSSBAR_ID, Math.ceil(remainingTicks / TICKS_PER_SECOND));
+    }
+}
+
 /**
  * Builds the colored "[Event Name]" label component used at the start of chat broadcasts.
  * @param {string} nameKey lang key of the event's display name
@@ -109,6 +177,7 @@ const HUNT_EVENT = {
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
         let target = TextUtils.entityName(currentEvent.targetMonster.item, currentEvent.targetMonster.name);
+        currentEvent.bossbarTarget = target.getString();
         let playermodsum = 0;
         let playermult = 0;
         for (let player of event.server.players) {
@@ -121,6 +190,7 @@ const HUNT_EVENT = {
 
         ScoreboardUtils.initBoard(event.server, 'my_mission_scores', scoreboardTitle(currentEvent.abbr, currentEvent.targetAmount, target, unlucky));
         if (currentEvent.multiplayer) ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', 0);
+        BossbarUtils.initBar(event.server, EVENT_BOSSBAR_ID, buildBossbarTitle(event), unlucky ? 'red' : 'green', currentEvent.targetAmount);
 
         let moblistHeader = Text.translate('kubejs.event.hunt.moblist_header').getString();
         let moblistBody = currentEvent.wild
@@ -163,6 +233,7 @@ const HUNT_EVENT = {
 
         ScoreboardUtils.setScore(event.server, 'my_mission_scores', killer, currentEvent.actionTable.get(killer));
         if (currentEvent.multiplayer) ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', currentEvent.total);
+        refreshEventBossbar(event);
 
         if (currentEvent.multiplayer && currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -199,7 +270,7 @@ const HUNT_EVENT = {
                 event.server.tell(Text.translate('kubejs.event.failed', currentEvent.label));
             }
             currentEvent = undefined;
-            ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+            removeEventDisplay(event.server);
             SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
@@ -228,12 +299,7 @@ const HUNT_EVENT = {
         }
         unlucky = false;
         currentEvent = undefined;
-        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
-    },
-
-    timeNotification(event) {
-        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
-        getTimeRemaining(event, currentEvent.multiplayer, bonus);
+        removeEventDisplay(event.server);
     },
 
     handleWin(event, hunter, canSpawnEgg) {
@@ -391,9 +457,11 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.targetAmount = Math.ceil(MathUtils.randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
         let target = TextUtils.itemName(currentEvent.targetItem.item, currentEvent.targetItem.name);
+        currentEvent.bossbarTarget = target.getString();
 
         ScoreboardUtils.initBoard(event.server, 'my_mission_scores', scoreboardTitle(ITEM_REQUEST_EVENT.abbr, currentEvent.targetAmount, target));
         ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', 0);
+        BossbarUtils.initBar(event.server, EVENT_BOSSBAR_ID, buildBossbarTitle(event), 'yellow', currentEvent.targetAmount);
 
         let itemIdHeader = Text.translate('kubejs.event.request.item_id_header').getString();
         let itemPart = Text.of(`[${currentEvent.targetAmount}x `).append(target).append(Text.of(']'))
@@ -426,7 +494,7 @@ const ITEM_REQUEST_EVENT = {
         if (failed) {
             event.server.tell(Text.translate('kubejs.event.failed', currentEvent.label));
             currentEvent = undefined;
-            ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+            removeEventDisplay(event.server);
             SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
             return;
         }
@@ -443,11 +511,7 @@ const ITEM_REQUEST_EVENT = {
             checkForHelperMission(event, key, ITEM_REQUEST_EVENT.id);
         }
         currentEvent = undefined;
-        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
-    },
-    timeNotification(event) {
-        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
-        getTimeRemaining(event, false, bonus);
+        removeEventDisplay(event.server);
     },
 }
 
@@ -482,7 +546,9 @@ const RACE_EVENT = {
         currentEvent.targetPos = PositionUtils.randomPositionWithDistance(spawnPos, distance);
 
         let title = `§6[${RACE_EVENT.abbr}]§f ${Text.translate('kubejs.event.race.board_title').getString()}`;
+        currentEvent.bossbarTarget = PositionUtils.toChatPosition(currentEvent.targetPos);
         ScoreboardUtils.initBoard(event.server, 'my_mission_scores', title);
+        BossbarUtils.initBar(event.server, EVENT_BOSSBAR_ID, buildBossbarTitle(event), 'purple', Math.ceil(currentEvent.missionTime / TICKS_PER_SECOND));
 
         let targetPart = TextUtils.colored(PositionUtils.toChatPosition(currentEvent.targetPos), 'green');
         let detailLines = [
@@ -520,7 +586,7 @@ const RACE_EVENT = {
             }
             if (distance < RACE_NEARBY_DISTANCE && !currentEvent.notified.has(username)) {
                 currentEvent.notified.add(username);
-                event.server.tell(Text.translate('kubejs.event.race.nearby', TextUtils.colored(username, 'green'), TextUtils.colored(Math.round(distance), 'green')).color('gold'));
+                event.server.tell(Text.translate('kubejs.event.race.nearby', TextUtils.colored(username, 'green'), TextUtils.colored(PositionUtils.toChatPosition(currentEvent.targetPos), 'green')).color('gold'));
             }
         }
     },
@@ -541,20 +607,15 @@ const RACE_EVENT = {
         handleReward(event, currentEvent.rewards, username, bonus);
 
         currentEvent = undefined;
-        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+        removeEventDisplay(event.server);
     },
 
     stopEvent(event) {
         event.server.tell(Text.translate('kubejs.event.failed', currentEvent.label));
         currentEvent = undefined;
-        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+        removeEventDisplay(event.server);
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
     },
-
-    timeNotification(event) {
-        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
-        getTimeRemaining(event, false, bonus);
-    }
 }
 
 const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT, ITEM_REQUEST_EVENT, RACE_EVENT];
@@ -577,6 +638,7 @@ ItemEvents.rightClicked('minecraft:bowl', event => {
 
         ScoreboardUtils.setScore(event.server, 'my_mission_scores', playername, currentEvent.actionTable.get(playername));
         ScoreboardUtils.setScore(event.server, 'my_mission_scores', 'GESAMT', currentEvent.total);
+        refreshEventBossbar(event);
 
         if (currentEvent.total >= currentEvent.targetAmount) {
             currentEvent.stopEvent(event);
@@ -622,13 +684,8 @@ ServerEvents.tick(event => {
             }
         }
     }
-    if (currentEvent?.timeNotification) {
-        let interval = ANNOUNCE_INTERVAL_SECONDS;
-        if ((currentEvent.endTick - event.server.tickCount) < 15 * 20) interval = 5;
-        else if ((currentEvent.endTick - event.server.tickCount) < 80 * 20) interval = 20;
-        if (event.server.tickCount % (interval * 20) === 0) {
-            currentEvent.timeNotification(event);
-        }
+    if (currentEvent && currentEvent.endTick !== undefined && event.server.tickCount % TICKS_PER_SECOND === 0) {
+        refreshEventBossbar(event);
     }
 });
 

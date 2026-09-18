@@ -86,7 +86,7 @@ ServerEvents.commandRegistry((event) => {
                 } else {
                     currentEvent.stopEvent(source);
                 }
-                ScoreboardUtils.removeScoreboard(source.server, 'my_mission_scores');
+                removeEventDisplay(source.server);
                 break;
             default:
                 source.player.tell(Text.translate('kubejs.command.invalid').color('red'));
