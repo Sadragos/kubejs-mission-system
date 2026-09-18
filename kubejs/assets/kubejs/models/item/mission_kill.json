@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kubejs:item/mission",
+    "layer1": "minecraft:item/iron_sword"
+  }
+}

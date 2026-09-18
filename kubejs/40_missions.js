@@ -2,6 +2,8 @@ const MISSION_TYPE_ITEM = {
     id: 'item',
     labelKey: 'kubejs.mission.type.item',
     color: 'green',
+    // custom_model_data des Contract-Items, siehe assets/kubejs/models/item/mission*.json
+    iconModelData: 1,
     weight: MISSION_TYPE_WEIGHTS.item,
     hint: (target) => Text.translate('kubejs.mission.hint.item', target),
     rightClickHandler: (event, dataItem, stack) => {
@@ -29,6 +31,7 @@ const MISSION_TYPE_KILL = {
     id: 'kill',
     labelKey: 'kubejs.mission.type.kill',
     color: 'dark_red',
+    iconModelData: 2,
     weight: MISSION_TYPE_WEIGHTS.kill,
     hint: (target) => Text.translate('kubejs.mission.hint.kill', target),
     rightClickHandler: (event, dataItem, stack) => {
@@ -49,6 +52,7 @@ const MISSION_TYPE_JOUNREY = {
     id: 'journey',
     labelKey: 'kubejs.mission.type.journey',
     color: 'aqua',
+    iconModelData: 3,
     weight: MISSION_TYPE_WEIGHTS.journey,
     hint: (target, item) => Text.translate('kubejs.mission.hint.journey', item),
     rightClickHandler: (event, dataItem, stack) => {
@@ -86,6 +90,7 @@ const MISSION_TYPE_MISSIONS = {
     id: 'missions',
     labelKey: 'kubejs.mission.type.missions',
     color: 'yellow',
+    iconModelData: 4,
     weight: MISSION_TYPE_WEIGHTS.missions,
     hint: (target) => Text.translate('kubejs.mission.hint.missions', target),
     rightClickHandler: (event, dataItem, stack) => {
@@ -263,6 +268,7 @@ function giveMissionItem(event, type, item, name, amount, erstellt, username, mo
     stack.setMaxDamage(amount);
     stack.setCustomName(buildMissionTitle(missionType, target, amount));
     stack.setLore(buildMissionLore(missionType, target, rewards, erstellt, item, name, username, mod, eggChance, nr));
+    stack.setCustomModelData(missionType.iconModelData);
 
     let tag = NBT.compoundTag();
     tag.putString('typeId', type);
