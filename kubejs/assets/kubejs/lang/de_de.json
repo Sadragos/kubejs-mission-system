@@ -5,6 +5,9 @@
   "item.kubejs.mission_scroll": "Auftragsrolle",
   "item.kubejs.mission": "Auftrag",
   "kubejs.item.mission_scroll.tooltip": "Rechtsklick um neuen Auftrag zu erhalten",
+  "kubejs.item.currency.value": "Wert: %s Coins",
+  "kubejs.item.currency.stack_value": "Stack-Wert: %s Coins",
+  "kubejs.item.currency.total_value": "Inventar-Gesamtwert: %s Coins",
 
   "kubejs.mission.any_monster": "einen beliebigen Gegner",
   "kubejs.mission.group.undead": "Untote",

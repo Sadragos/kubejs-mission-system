@@ -5,6 +5,9 @@
   "item.kubejs.mission_scroll": "Mission Scroll",
   "item.kubejs.mission": "Contract",
   "kubejs.item.mission_scroll.tooltip": "Right-click to receive a new contract",
+  "kubejs.item.currency.value": "Value: %s Coins",
+  "kubejs.item.currency.stack_value": "Stack Value: %s Coins",
+  "kubejs.item.currency.total_value": "Inventory Total: %s Coins",
 
   "kubejs.mission.any_monster": "any monster",
   "kubejs.mission.group.undead": "Undead",

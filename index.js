@@ -79,10 +79,11 @@ function copyManagedDir(srcDir, destSubdir) {
     })(srcDir, '');
 }
 
-console.log('Copying assets, startup_scripts and server_scripts...');
+console.log('Copying assets, startup_scripts, server_scripts and client_scripts...');
 copyManagedDir('kubejs/server_scripts', 'server_scripts');
 copyManagedDir('kubejs/assets', 'assets');
 copyManagedDir('kubejs/startup_scripts', 'startup_scripts');
+copyManagedDir('kubejs/client_scripts', 'client_scripts');
 
 const missionsRelPath = path.join('kubejs', 'server_scripts', 'missions.js');
 const missionsOutFile = path.join(outRoot, missionsRelPath);
