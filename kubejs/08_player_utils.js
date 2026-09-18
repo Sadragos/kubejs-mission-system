@@ -169,7 +169,7 @@ function rewardPlayer(event, player, source, type, rewards) {
     for (let item of internalRewards.items) {
         ItemUtils.summonItemAtPlayer(event.server, player.username, item.item, item.amount);
         ParticleUtils.summonParticleAtPlayer(event.server, player.username, 'supplementaries:confetti', 100, 3, 0.2, 0.2, 0.2);
-        rewardItems.push(Text.translate('kubejs.reward.item_count', TextUtils.colored(item.amount, REWARD_COLORS.mission), TextUtils.itemName(item.item)).color(REWARD_COLORS.mission));
+        rewardItems.push(Text.translate('kubejs.reward.item_count', TextUtils.colored(item.amount, REWARD_COLORS.item), TextUtils.itemName(item.item)).color(REWARD_COLORS.item));
     }
     for (let buff of internalRewards.buffs) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);

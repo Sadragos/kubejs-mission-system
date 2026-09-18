@@ -643,11 +643,28 @@ function startEvent(event, typeFilter, force) {
 }
 
 /**
+ * Berechnet die Menge für einen skalierenden MISSION_REWARDS-Eintrag (worldborder/xp/item).
+ * Genau eines von beiden muss am Eintrag gesetzt sein: `multiplier` skaliert den bereits
+ * gewürfelten `coinAmount` (wie bisher); `min`/`max` ignoriert coinAmount komplett und würfelt
+ * stattdessen direkt in dieser eigenen, per Spielerfortschritt skalierten Spanne - nötig für
+ * Belohnungen, die nicht sinnvoll proportional zum Coin-Betrag sein sollen (z.B. ein fester
+ * Item-Bonus).
+ * @param {object} pick - MISSION_REWARDS-Eintrag mit entweder `multiplier` oder `min`/`max`
+ * @param {number} coinAmount - bereits gewürfelter Coin-Betrag dieser Belohnungsrunde
+ * @param {number} playerProgress - Fortschritts-Multiplikator (wie `multiplier` in generateRewards)
+ * @returns {number}
+ */
+function resolveScaledRewardAmount(pick, coinAmount, playerProgress) {
+    if (pick.multiplier !== undefined) return Math.max(1, Math.round(coinAmount * pick.multiplier));
+    return Math.max(1, Math.round(MathUtils.randomIntAdjusted(pick.min, pick.max, playerProgress, 1, 1)));
+}
+
+/**
  * Würfelt den MISSION_REWARDS-Pool aus (unabhängig pro Eintrag gegen dessen `chance`) und baut
  * für jeden Treffer ein bereits farbig formatiertes `.display`-Component. Wird sowohl für
  * Quick Events als auch für normale Missionen verwendet.
  * @param {{min: number, max: number}} coinRange - minCoins/maxCoins der relevanten Missions-/Event-CSV-Zeile
- * @param {number} multiplier - Skalierungsfaktor für coin/worldborder/xp/buff (individueller
+ * @param {number} multiplier - Skalierungsfaktor für coin/worldborder/xp/item/buff (individueller
  *   Spieler-Fortschritt bei Missionen, Server-Durchschnitt * QE_REWARD_MULTIPLIER bei Quick Events)
  * @param {'mission'|'event'} context - schließt Einträge mit `enable_in_mission`/
  *   `enable_in_quickevent: false` für den jeweils anderen Kontext aus
@@ -671,23 +688,23 @@ function generateRewards(coinRange, multiplier, context) {
                 break;
             }
             case 'worldborder': {
-                let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
+                let amount = resolveScaledRewardAmount(pick, coinAmount, multiplier);
                 let reward = { id: 'worldborder', amount: amount };
                 reward.display = Text.translate('kubejs.reward.worldborder', TextUtils.colored(amount, REWARD_COLORS.worldborder)).color(REWARD_COLORS.worldborder);
                 rewards.push(reward);
                 break;
             }
             case 'xp': {
-                let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
+                let amount = resolveScaledRewardAmount(pick, coinAmount, multiplier);
                 let reward = { id: 'xp', amount: amount };
                 reward.display = Text.translate('kubejs.reward.xp', TextUtils.colored(amount, REWARD_COLORS.xp)).color(REWARD_COLORS.xp);
                 rewards.push(reward);
                 break;
             }
-            case 'mission': {
-                let amount = Math.max(1, Math.round(MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, multiplier, 1, 1)));
-                let reward = { id: 'mission', item: MISSION_SCROLL, amount: amount };
-                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(MISSION_SCROLL)).color(REWARD_COLORS.mission);
+            case 'item': {
+                let amount = resolveScaledRewardAmount(pick, coinAmount, multiplier);
+                let reward = { id: 'item', item: pick.item, amount: amount };
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(pick.item)).color(pick.color);
                 rewards.push(reward);
                 break;
             }
@@ -742,7 +759,7 @@ function resolveRewardPayload(rewards, multiplier, spawnEggItem, username) {
             case 'xp':
                 xp += Math.max(1, Math.round(reward.amount * multiplier));
                 break;
-            case 'mission':
+            case 'item':
                 items.push({ item: reward.item, amount: Math.max(1, Math.round(reward.amount * multiplier)) });
                 break;
             case 'command':

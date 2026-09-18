@@ -111,14 +111,18 @@ const WORLDBORDER_ANIMATION_SECONDS = 3;
 
 // Zentraler Belohnungspool für Missionen UND Quick Events: bei jeder Würfelung wird jeder
 // Eintrag unabhängig gegen seine `chance` gewürfelt (0 bis length(MISSION_REWARDS) Einträge
-// treffen zu). coin/worldborder/xp basieren auf der minCoins/maxCoins-Spanne der jeweils
-// relevanten Missions-/Event-CSV-Zeile: coin zahlt sie direkt aus, worldborder und xp nutzen
-// sie nur als Basis und wenden ihren eigenen `multiplier` darauf an. command führt unabhängig
-// davon einfach den konfigurierten Befehl aus ("@p" wird durch den Zielspieler ersetzt).
-// enable_in_mission/enable_in_quickevent schalten einen Eintrag jeweils für Missionen bzw.
-// Quick Events komplett aus (Standard: beides an). `color` wird sowohl für die
-// Belohnungsvorschau (Mission-Lore/Event-Ankündigung, siehe generateRewards) als auch für die
-// tatsächliche Auszahlungsnachricht (rewardPlayer) verwendet, damit beide übereinstimmen.
+// treffen zu). coin basiert direkt auf der minCoins/maxCoins-Spanne der jeweils relevanten
+// Missions-/Event-CSV-Zeile und wird so ausgezahlt. worldborder/xp/item skalieren stattdessen
+// (siehe resolveScaledRewardAmount): entweder über `multiplier` (wendet ihn auf den bereits
+// gewürfelten coinAmount an) ODER über eine eigene `min`/`max`-Spanne (wird direkt mit dem
+// Fortschritts-Multiplikator skaliert, unabhängig von coinAmount) - pro Eintrag darf nur eines
+// von beiden gesetzt sein. `item` braucht zusätzlich ein `item`-Feld (welches Item vergeben
+// wird). command führt unabhängig davon einfach den konfigurierten Befehl aus ("@p" wird durch
+// den Zielspieler ersetzt). enable_in_mission/enable_in_quickevent schalten einen Eintrag
+// jeweils für Missionen bzw. Quick Events komplett aus (Standard: beides an). `color` wird
+// sowohl für die Belohnungsvorschau (Mission-Lore/Event-Ankündigung, siehe generateRewards) als
+// auch für die tatsächliche Auszahlungsnachricht (rewardPlayer) verwendet, damit beide
+// übereinstimmen.
 const MISSION_REWARDS = [
     {
         id: 'coin',
@@ -141,9 +145,10 @@ const MISSION_REWARDS = [
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
-        id: 'mission',
-        minPerPlayer: 1,
-        maxPerPlayer: 1,
+        id: 'item',
+        item: MISSION_SCROLL,
+        min: 1,
+        max: 1,
         chance: 0.1,
         color: 'green',
         enable_in_mission: true,
