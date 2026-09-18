@@ -306,15 +306,27 @@ function finishMission(event, player, data) {
     let playerName = player.username;
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     let target = resolveTargetName(data.typeId, data.item, data.name);
+
+    let coins = data.coins;
+    let items = [];
+    let buffs = [];
+    if (Math.random() < BONUS_REWARD_CHANCE) {
+        let bonus = resolveRewardPayload(generateRewards(event, data.type.id), 1);
+        coins += bonus.coins;
+        items = bonus.items;
+        buffs = bonus.buffs;
+    }
+
     rewardPlayer(
         event,
         player,
         'mission',
         data.type.id,
         {
-            coins: data.coins,
-            // xp: data.coins,
-            worldborder: data.coins
+            coins: coins,
+            worldborder: coins,
+            items: items,
+            buffs: buffs
         }
     );
     let broadcast = Text.translate('kubejs.mission.finish.broadcast', TextUtils.colored(playerName), `${data.maxDamage}${unit}`, target, TextUtils.colored(data.coins)).color('green');

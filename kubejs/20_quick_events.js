@@ -94,7 +94,7 @@ const HUNT_EVENT = {
 
         currentEvent.label = eventLabel(currentEvent.nameKey, unlucky);
 
-        currentEvent.rewards = generateRewards(event);
+        currentEvent.rewards = generateRewards(event, currentEvent.progressType);
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -371,7 +371,7 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
-        currentEvent.rewards = generateRewards(event);
+        currentEvent.rewards = generateRewards(event, currentEvent.progressType);
 
         currentEvent.targetItem = MathUtils.randomWeightedEntry(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
 
@@ -520,7 +520,15 @@ function startEvent(event, typeFilter, force) {
     }
 }
 
-function generateRewards(event) {
+/**
+ * Würfelt den QE_REWARDS-Bonuspool aus (unabhängig pro Eintrag gegen dessen `chance`).
+ * Wird sowohl für Quick-Event- als auch für Missions-Bonusbelohnungen verwendet.
+ * @param {ServerEvent} event
+ * @param {string} progressType - Missionstyp, gegen den der durchschnittliche Spielerfortschritt
+ *   für die Mengen-Skalierung berechnet wird (z.B. "kill", "item")
+ * @returns {object[]} Liste gewürfelter Belohnungs-Einträge
+ */
+function generateRewards(event, progressType) {
     let rewards = [];
     for (let i = 0; i < QE_REWARDS.length; i++) {
         let pick = QE_REWARDS[i];
@@ -540,7 +548,7 @@ function generateRewards(event) {
         } else {
             let existing = rewards.find(r => r.id === pick.id);
             let coinMin = pick.id === 'coin' ? MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX) : 1;
-            let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, currentEvent.progressType || 'kill', true), 1, coinMin);
+            let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, progressType || 'kill', true), 1, coinMin);
             let itemId = pick.id === 'coin' ? COIN_ITEM : MISSION_SCROLL;
             if (existing) {
                 existing.amount += amount;
@@ -559,8 +567,16 @@ function generateRewards(event) {
     return rewards;
 }
 
-function handleReward(event, rewards, username, multiplier, spawnEggItem) {
-    let player = event.server.players.find(p => p.username === username);
+/**
+ * Wendet gewürfelte QE_REWARDS-Einträge (siehe `generateRewards`) auf ein `rewardPlayer`-taugliches
+ * Payload-Objekt an, ohne den Spieler bereits zu belohnen. Wird sowohl von `handleReward`
+ * (Quick Events) als auch von `finishMission` (Missions-Bonusbelohnungen) genutzt.
+ * @param {object[]} rewards - gewürfelte Belohnungs-Einträge aus `generateRewards`
+ * @param {number} multiplier - Multiplikator (z.B. Zeitbonus bei Quick Events)
+ * @param {object} [spawnEggItem] - optionales zusätzliches Item (z.B. Kill-Missions-Ei), das immer dazukommt
+ * @returns {{items: object[], buffs: object[], coins: number}}
+ */
+function resolveRewardPayload(rewards, multiplier, spawnEggItem) {
     let items = [];
     let buffs = [];
     let coins = 0;
@@ -573,7 +589,7 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 buffs.push({ buff: reward.buff, duration: duration, amplifier: reward.amplifier });
                 break;
             case 'coin':
-                coins = Math.max(1, Math.round(reward.amount * multiplier));
+                coins += Math.max(1, Math.round(reward.amount * multiplier));
                 break;
             case 'mission':
                 let missions = Math.round(reward.amount * multiplier);
@@ -581,7 +597,13 @@ function handleReward(event, rewards, username, multiplier, spawnEggItem) {
                 break;
         }
     }
-    rewardPlayer(event, player, 'event', currentEvent.id, { items: items, buffs: buffs, coins: coins, worldborder: coins });
+    return { items: items, buffs: buffs, coins: coins };
+}
+
+function handleReward(event, rewards, username, multiplier, spawnEggItem) {
+    let player = event.server.players.find(p => p.username === username);
+    let payload = resolveRewardPayload(rewards, multiplier, spawnEggItem);
+    rewardPlayer(event, player, 'event', currentEvent.id, { items: payload.items, buffs: payload.buffs, coins: payload.coins, worldborder: payload.coins });
 }
 
 /**
