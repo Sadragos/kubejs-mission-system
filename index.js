@@ -33,6 +33,7 @@ allCsvFiles.forEach(file => {
         if(mission.egg) item.egg = mission.egg;
         if(mission.eggChance) item.eggChance = parseFloat(mission.eggChance);
         if(mission.minProgress) item.minProgress = parseFloat(mission.minProgress);
+        if(mission.groups) item.groups = mission.groups;
         out.push(`addMission(${JSON.stringify(item)});`)
     });
 });

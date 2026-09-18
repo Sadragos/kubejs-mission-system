@@ -7,6 +7,10 @@
   "kubejs.item.mission_scroll.tooltip": "Right-click to receive a new contract",
 
   "kubejs.mission.any_monster": "any monster",
+  "kubejs.mission.group.undead": "Undead",
+  "kubejs.mission.group.spider": "Spiders",
+  "kubejs.mission.group.illager": "Illagers",
+  "kubejs.mission.group.demons": "Demons",
   "kubejs.mission.type.item": "Send",
   "kubejs.mission.type.kill": "Kill",
   "kubejs.mission.type.journey": "Journey",

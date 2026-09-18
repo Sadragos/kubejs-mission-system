@@ -51,6 +51,7 @@ const TextUtils = {
             && idOrFilter.indexOf('*') === -1
             && !idOrFilter.startsWith('!')
             && !idOrFilter.startsWith('#')
+            && !idOrFilter.startsWith(KILL_GROUP_PREFIX)
             && idOrFilter.indexOf(':') > -1;
     },
     /**
@@ -93,7 +94,8 @@ const TextUtils = {
      * Returns the display name of a mob: the "any monster" translation for the `*` wildcard
      * (always, regardless of `name`); otherwise the CSV `name` (as a lang key if one matches,
      * otherwise as literal text) if given; otherwise the real name of a concrete entity ID;
-     * otherwise the raw ID/filter itself.
+     * otherwise the raw ID/filter itself. For a `§:group` reference, the resolved name is
+     * additionally given a hover listing the translated names of the group's members.
      * @param {string} idOrFilter entity ID or mission mob filter string
      * @param {string} [name] CSV `name` value
      * @returns {Internal.Component}
@@ -101,6 +103,15 @@ const TextUtils = {
     entityName: (idOrFilter, name) => {
         if (idOrFilter === '*') return Text.translate('kubejs.mission.any_monster');
         let override = TextUtils.resolveNameOverride(name);
+        if (idOrFilter.startsWith(KILL_GROUP_PREFIX)) {
+            let group = idOrFilter.substring(KILL_GROUP_PREFIX.length);
+            let label = override || Text.literal(group);
+            let moblist = (KILL_GROUPS[group] || [])
+                .map(member => TextUtils.entityName(member.item.replace('!', ''), member.name).getString())
+                .join(', ');
+            let header = Text.translate('kubejs.event.hunt.moblist_header').getString();
+            return label.hover(`§l${header}§r\n${moblist}`);
+        }
         if (override) return override;
         if (TextUtils.isConcreteId(idOrFilter)) {
             try {

@@ -7,6 +7,10 @@
   "kubejs.item.mission_scroll.tooltip": "Rechtsklick um neuen Auftrag zu erhalten",
 
   "kubejs.mission.any_monster": "einen beliebigen Gegner",
+  "kubejs.mission.group.undead": "Untote",
+  "kubejs.mission.group.spider": "Spinnen",
+  "kubejs.mission.group.illager": "Illager",
+  "kubejs.mission.group.demons": "Dämonen",
   "kubejs.mission.type.item": "Sende",
   "kubejs.mission.type.kill": "Töte",
   "kubejs.mission.type.journey": "Reise",

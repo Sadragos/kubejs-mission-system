@@ -32,7 +32,7 @@ function correctMissionInit(mission) {
     if (mission.type === MISSION_TYPE_KILL.id && mission.eggChance != -1) {
         if (!mission.eggChance) mission.eggChance = FALLBACK_EGG_CHANCE;
         if (!mission.egg) {
-            if (mission.item.indexOf(',') === -1 && mission.item.indexOf('*') === -1 && mission.item.indexOf(':') > -1) {
+            if (mission.item.indexOf(',') === -1 && mission.item.indexOf('*') === -1 && mission.item.indexOf(':') > -1 && !mission.item.startsWith(KILL_GROUP_PREFIX)) {
                 mission.egg = `${mission.item.replace('!', '')}_spawn_egg`;
             }
         }
@@ -42,17 +42,20 @@ function correctMissionInit(mission) {
 }
 
 /**
- * Ergänzt nachträglich fehlende Spawn-Eggs bei Wildcard-Kill-Missionen.
+ * Ergänzt nachträglich fehlende Spawn-Eggs bei Wildcard- und Gruppen-Kill-Missionen.
  * Für Missionen ohne konkretes Egg wird anhand des Item-Filters nach passenden
  * spezifischen Kill-Missionen gesucht und deren Eggs zusammengeführt.
  */
 function correctAllMissions() {
+    buildKillGroups();
+
     let killMission = getMissionByType(MISSION_TYPE_KILL.id);
-    let relevantKillMission = killMission.filter(mission => mission.eggChance > 0 && mission.egg && mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1);
+    let relevantKillMission = killMission.filter(mission => mission.eggChance > 0 && mission.egg && mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1 && !mission.item.startsWith(KILL_GROUP_PREFIX));
     let missionToCorrect = killMission.filter(mission => mission.eggChance > 0 && !mission.egg);
     missionToCorrect.forEach(mission => {
 
-        let relevantTargets = relevantKillMission.filter(killMission => mission.item === '*' || IdUtils.idMatches(killMission.item.replace('!', ''), mission.item));
+        let resolvedFilter = resolveKillGroups(mission.item);
+        let relevantTargets = relevantKillMission.filter(killMission => resolvedFilter === '*' || IdUtils.idMatches(killMission.item.replace('!', ''), resolvedFilter));
         if (relevantTargets.length > 0) {
             mission.egg = relevantTargets.map(killMission => killMission.egg).join(',');
         }
