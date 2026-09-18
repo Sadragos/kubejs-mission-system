@@ -1,11 +1,11 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress;groups
 kill;minecraft:blaze;;8;64;;;100;;;0.25;demons
 kill;minecraft:breeze;;8;32;;;100;;;0.25;
-kill;creeper;;4;16;;;100;;;0.1;
+kill;minecraft:creeper;;4;16;;;100;;;0.1;
 kill;minecraft:drowned;;8;64;;;100;;;0.1;undead
 kill;minecraft:elder_guardian;;1;3;16;24;75;;-1;0.5;
 kill;minecraft:ender_dragon;;1;1;16;24;75;;-1;0.7;
-kill;enderman;;6;48;6;14;100;;;0.3;
+kill;minecraft:enderman;;6;48;6;14;100;;;0.3;
 kill;minecraft:endermite;;4;16;6;12;100;;;0.3;
 kill;minecraft:evoker;;4;16;6;14;100;;;0.4;illager
 kill;minecraft:ghast;;4;16;;;100;;;0.3;demons
@@ -21,7 +21,7 @@ kill;minecraft:ravager;;1;4;;;100;;;0.35;illager
 kill;minecraft:shulker;;6;32;;;100;;;0.6;
 kill;minecraft:silverfish;;8;128;;;100;;;;
 kill;minecraft:skeleton_horse;;4;16;;;100;;;;undead
-kill;!minecraft:skeleton;;8;64;;;200;;;;undead
+kill;minecraft:skeleton;;8;64;;;200;;;;undead
 kill;minecraft:slime;;8;128;;;100;;;;
 kill;minecraft:spider;;16;64;;;100;;;;spider
 kill;minecraft:cave_spider;;16;64;;;100;;;;spider
@@ -31,7 +31,7 @@ kill;minecraft:wandering_trader;;1;1;8;16;100;;-1;;
 kill;minecraft:warden;;1;2;16;32;100;;-1;0.7;
 kill;minecraft:witch;;4;16;;;100;;;0.35;
 kill;minecraft:wither_skeleton;;8;32;;;100;;;0.35;undead,demons
-kill;!minecraft:wither;;1;2;16;24;75;;-1;0.65;
+kill;minecraft:wither;;1;2;16;24;75;;-1;0.65;
 kill;minecraft:zoglin;;8;16;;;100;;;0.4;undead,demons
 kill;minecraft:zombie;;8;64;;;250;;;;undead
 kill;minecraft:zombified_piglin;;8;64;;;100;;;;undead,demons

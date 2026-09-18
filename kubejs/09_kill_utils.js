@@ -74,5 +74,5 @@ function getMoblist(filter) {
     let killMission = getMissionByType(MISSION_TYPE_KILL.id);
     let relevantKillMission = killMission.filter(mission => mission.item.indexOf('*') === -1 && mission.item.indexOf(',') === -1 && mission.item.indexOf(':') > -1 && !mission.item.startsWith(KILL_GROUP_PREFIX));
     let resolvedFilter = resolveKillGroups(filter);
-    return relevantKillMission.filter(killMission => resolvedFilter === '*' || IdUtils.idMatches(killMission.item.replace('!', ''), resolvedFilter));
+    return relevantKillMission.filter(killMission => resolvedFilter === '*' || IdUtils.idMatches(killMission.item, resolvedFilter));
 }

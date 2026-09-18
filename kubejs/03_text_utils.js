@@ -49,7 +49,6 @@ const TextUtils = {
         return !!idOrFilter
             && idOrFilter.indexOf(',') === -1
             && idOrFilter.indexOf('*') === -1
-            && !idOrFilter.startsWith('!')
             && !idOrFilter.startsWith('#')
             && !idOrFilter.startsWith(KILL_GROUP_PREFIX)
             && idOrFilter.indexOf(':') > -1;
@@ -107,7 +106,7 @@ const TextUtils = {
             let group = idOrFilter.substring(KILL_GROUP_PREFIX.length);
             let label = override || Text.literal(group);
             let moblist = (KILL_GROUPS[group] || [])
-                .map(member => TextUtils.entityName(member.item.replace('!', ''), member.name).getString())
+                .map(member => TextUtils.entityName(member.item, member.name).getString())
                 .join(', ');
             let header = Text.translate('kubejs.event.hunt.moblist_header').getString();
             return label.hover(`§l${header}§r\n${moblist}`);

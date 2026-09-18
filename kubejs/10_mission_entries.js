@@ -33,7 +33,7 @@ function correctMissionInit(mission) {
         if (!mission.eggChance) mission.eggChance = FALLBACK_EGG_CHANCE;
         if (!mission.egg) {
             if (mission.item.indexOf(',') === -1 && mission.item.indexOf('*') === -1 && mission.item.indexOf(':') > -1 && !mission.item.startsWith(KILL_GROUP_PREFIX)) {
-                mission.egg = `${mission.item.replace('!', '')}_spawn_egg`;
+                mission.egg = `${mission.item}_spawn_egg`;
             }
         }
     }
@@ -55,7 +55,7 @@ function correctAllMissions() {
     missionToCorrect.forEach(mission => {
 
         let resolvedFilter = resolveKillGroups(mission.item);
-        let relevantTargets = relevantKillMission.filter(killMission => resolvedFilter === '*' || IdUtils.idMatches(killMission.item.replace('!', ''), resolvedFilter));
+        let relevantTargets = relevantKillMission.filter(killMission => resolvedFilter === '*' || IdUtils.idMatches(killMission.item, resolvedFilter));
         if (relevantTargets.length > 0) {
             mission.egg = relevantTargets.map(killMission => killMission.egg).join(',');
         }

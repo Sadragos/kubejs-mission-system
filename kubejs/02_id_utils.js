@@ -10,19 +10,17 @@ const IdUtils = {
         return TextUtils.capitalizeEachWord(base.split('_').join(' '));
     },
     /**
-     * Checks whether an item ID matches a comma-separated filter string.
-     * Each entry is checked as a substring match. Prefix an entry with "!" for an exact match.
+     * Checks whether an item ID matches a comma-separated filter string. Each entry is checked
+     * as an exact match (or `*` for "match anything").
      * @param {string} searchItem item ID to test
-     * @param {string} idStringLIst comma-separated filter string (e.g. "iron,!minecraft:gold_ingot")
+     * @param {string} idStringLIst comma-separated filter string (e.g. "minecraft:iron_ingot,minecraft:gold_ingot")
      * @returns {boolean}
      */
     idMatches: (searchItem, idStringLIst) => {
         if(idStringLIst == '*') return true;
         let options = idStringLIst.split(',');
         for (let i = 0; i < options.length; i++) {
-            if (options[i].startsWith('!')) {
-                if (searchItem === options[i].substring(1)) return true;
-            } else if (searchItem.indexOf(options[i]) !== -1) return true;
+            if (searchItem === options[i]) return true;
         }
         return false;
     }
