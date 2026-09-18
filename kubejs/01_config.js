@@ -77,12 +77,12 @@ const DAILY_MESSAGE_KEYS = [
 const FALLBACK_EGG_CHANCE = 0.25;
 const FALLBACK_MIN_AMOUNT = 64;
 const FALLBACK_MAX_AMOUNT = FALLBACK_MIN_AMOUNT * 3;
-const FALLBACK_MIN_COINS = 6;
+const FALLBACK_MIN_COINS = 12;
 const FALLBACK_MAX_COINS = FALLBACK_MIN_COINS * 2;
 // Spanne, aus der der "Mindest-Coins"-Wert für die Belohnungsberechnung gewürfelt wird, wenn eine
 // Mission/ein Event selbst keinen expliziten Minimalwert vorgibt
-const COIN_REWARD_MINMIN = 1;
-const COIN_REWARD_MINMAX = 3;
+const COIN_REWARD_MINMIN = 2;
+const COIN_REWARD_MINMAX = 6;
 // Multiplikator-Spanne, die auf die eggChance einer neu gewürfelten Kill-Mission angewendet wird.
 // Bei -1/-1 (aktuell) wird die eggChance dadurch immer negativ, was Ei-Drops aus Kill-Missionen
 // effektiv komplett deaktiviert - hinweis: das Feature ist ohnehin unvollständig, finishMission()

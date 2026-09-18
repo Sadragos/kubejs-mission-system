@@ -1,10 +1,10 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-journey;;Spaziergang;250;500;4;8;50;
-journey;;Kleine Wandschaft;500;1000;4;10;100;
-journey;;Wandschaft;1000;2000;6;10;200;
-journey;;Kurze Reise;2000;4000;6;12;100;
-journey;;Große Reise;4000;8000;8;12;50;
-journey;;Welteise;8000;12000;8;14;15;
-missions;hunt;;1;8;10;24;100;
-missions;thief;;1;4;10;24;25;0.1
-missions;request;;1;6;10;24;100;
+journey;;Spaziergang;250;500;8;16;50;
+journey;;Kleine Wandschaft;500;1000;8;20;100;
+journey;;Wandschaft;1000;2000;12;20;200;
+journey;;Kurze Reise;2000;4000;12;24;100;
+journey;;Große Reise;4000;8000;16;24;50;
+journey;;Welteise;8000;12000;16;28;15;
+missions;hunt;;1;8;20;48;100;
+missions;thief;;1;4;20;48;25;0.1
+missions;request;;1;6;20;48;100;
