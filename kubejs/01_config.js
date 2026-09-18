@@ -57,6 +57,13 @@ const MIN_DIFFICULTY = 0.05;
 // true = jeder Missionstyp hat seinen eigenen, unabhängigen Fortschritt
 const DIFFICULTY_BY_TYPE = false;
 
+// Daily-Login-Belohnung: Anzahl MISSION_SCROLL, die ein Spieler beim ersten Login eines
+// Kalendertages erhält (siehe PlayerEvents.loggedIn in 40_missions.js)
+const DAILY_LOGIN_SCROLL_COUNT = 5;
+// Verzögerung (in Ticks) zwischen Login und Auszahlung der Daily-Login-Belohnung, damit der
+// Client die Welt fertig geladen hat, bevor Item und Nachricht erscheinen (15s)
+const DAILY_LOGIN_REWARD_DELAY_TICKS = TICKS_PER_SECOND * 15;
+
 // Greeting (lang keys, resolved to a translated Component with the username as %s arg)
 const DAILY_MESSAGE_KEYS = [
     'kubejs.daily.greeting.0', 'kubejs.daily.greeting.1', 'kubejs.daily.greeting.2',

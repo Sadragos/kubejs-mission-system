@@ -200,27 +200,40 @@ EntityEvents.death(event => {
     }
 });
 
+// Spieler, deren Daily-Login-Belohnung noch aussteht: { username, dueTick }. Wird von
+// ServerEvents.tick weiter unten abgearbeitet (kein setTimeout: KubeJS-Serverskripte laufen
+// ohne JS-Event-Loop, daher stattdessen Tick-Zähler wie beim Rest des Quick-Event-Systems).
+const pendingDailyLoginRewards = [];
+
 PlayerEvents.loggedIn(event => {
-    setTimeout(() => {
-        if (event.player === undefined) return;
-        if (!event.server.players.some(p => p.username === event.player.username)) return;
+    const player = event.player;
 
-        const player = event.player;
-
-        if (PlayerUtils.firstLogin(player)) {
-            PlayerUtils.setLoginDate(player);
-            return;
-        }
-
-        const days = PlayerUtils.daysSinceLogin(player);
-        if (days === 0) return;
-
+    if (PlayerUtils.firstLogin(player)) {
         PlayerUtils.setLoginDate(player);
+        return;
+    }
+
+    const days = PlayerUtils.daysSinceLogin(player);
+    if (days === 0) return;
+
+    PlayerUtils.setLoginDate(player);
+    pendingDailyLoginRewards.push({ username: player.username, dueTick: event.server.tickCount + DAILY_LOGIN_REWARD_DELAY_TICKS });
+});
+
+ServerEvents.tick(event => {
+    if (pendingDailyLoginRewards.length === 0) return;
+    for (let i = pendingDailyLoginRewards.length - 1; i >= 0; i--) {
+        const pending = pendingDailyLoginRewards[i];
+        if (event.server.tickCount < pending.dueTick) continue;
+        pendingDailyLoginRewards.splice(i, 1);
+
+        const player = event.server.players.find(p => p.username === pending.username);
+        if (!player) continue;
+
         let greetingKey = DAILY_MESSAGE_KEYS[MathUtils.randomInt(0, DAILY_MESSAGE_KEYS.length - 1)];
         player.tell(Text.translate(greetingKey, player.username).color('green'));
-        let count = days === 1 ? 4 : 6;
-        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_SCROLL, amount: count }], worldborder: 16 });
-    }, 30000);
+        rewardPlayer(event, player, 'login', 'login', { items: [{ item: MISSION_SCROLL, amount: DAILY_LOGIN_SCROLL_COUNT }] });
+    }
 });
 
 /**
