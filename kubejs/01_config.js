@@ -21,7 +21,8 @@ const MISSION_MAX_TIME = MISSION_MIN_TIME + (20 * 60 * 15)
 const REWARD_ITEM = MISSION_SCROLL;
 // Preis (in Coins, im Nebenhand-Slot) um eine Mission gegen eine neue einzutauschen
 const MISSION_SWAP_FEE = 2;
-// Aktuell ungenutzt (kein Code liest diesen Wert)
+// Chance, dass eine abgeschlossene Mission zusätzlich zur regulären Belohnung eine
+// Bonusbelohnung aus QE_REWARDS erhält (siehe finishMission in 40_missions.js)
 const BONUS_REWARD_CHANCE = 0.3;
 // Maximaler Zeitbonus-Multiplikator (1 = bis zu +100% Belohnung) bei sehr schneller Event-Erfüllung,
 // linear abgebaut über die erste Hälfte der Eventlaufzeit
