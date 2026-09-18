@@ -86,7 +86,7 @@
   "kubejs.event.race.board_title": "Entfernung zum Ziel",
   "kubejs.event.race.nearby": "%s ist nur noch %sm vom Ziel entfernt!",
 
-  "kubejs.event.more_info": "[Mehr Infos]",
+  "kubejs.event.more_info": "[+]",
   "kubejs.event.time_limit": "Zeitlimit: %s",
   "kubejs.event.reward": "Belohnung: %s",
   "kubejs.event.egg_chance": "Ei-Chance: §a%s%%§f",

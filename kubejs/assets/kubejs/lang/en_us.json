@@ -86,7 +86,7 @@
   "kubejs.event.race.board_title": "Distance to target",
   "kubejs.event.race.nearby": "%s is only %sm away from the target!",
 
-  "kubejs.event.more_info": "[More Info]",
+  "kubejs.event.more_info": "[+]",
   "kubejs.event.time_limit": "Time limit: %s",
   "kubejs.event.reward": "Reward: %s",
   "kubejs.event.egg_chance": "Egg Chance: §a%s%%§f",
