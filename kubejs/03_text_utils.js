@@ -152,7 +152,7 @@ const TextUtils = {
      */
     join: (separator, texts) => {
         if (!texts || texts.length === 0) return Text.of('');
-        let result = texts[0].copy();
+        let result = Text.of('').append(texts[0]);
         for (let i = 1; i < texts.length; i++) {
             result = result.append(separator).append(texts[i]);
         }
