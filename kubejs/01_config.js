@@ -109,18 +109,6 @@ const RACE_MAX_COINS = 32;
 // Dauer (in Sekunden) der /worldborder-Animation beim Vergrößern als Belohnung
 const WORLDBORDER_ANIMATION_SECONDS = 3;
 
-// Eine Farbe pro Belohnungstyp, zentral definiert und sowohl für die Belohnungsvorschau
-// (Mission-Lore/Event-Ankündigung, siehe generateRewards) als auch für die tatsächliche
-// Auszahlungsnachricht (rewardPlayer) verwendet, damit beide immer übereinstimmen.
-const REWARD_COLORS = {
-    coin: 'green',
-    worldborder: 'green',
-    xp: 'aqua',
-    mission: 'green',
-    command: 'gold',
-    buff: 'light_purple'
-};
-
 // Zentraler Belohnungspool für Missionen UND Quick Events: bei jeder Würfelung wird jeder
 // Eintrag unabhängig gegen seine `chance` gewürfelt (0 bis length(MISSION_REWARDS) Einträge
 // treffen zu). coin/worldborder/xp basieren auf der minCoins/maxCoins-Spanne der jeweils
@@ -128,23 +116,28 @@ const REWARD_COLORS = {
 // sie nur als Basis und wenden ihren eigenen `multiplier` darauf an. command führt unabhängig
 // davon einfach den konfigurierten Befehl aus ("@p" wird durch den Zielspieler ersetzt).
 // enable_in_mission/enable_in_quickevent schalten einen Eintrag jeweils für Missionen bzw.
-// Quick Events komplett aus (Standard: beides an).
+// Quick Events komplett aus (Standard: beides an). `color` wird sowohl für die
+// Belohnungsvorschau (Mission-Lore/Event-Ankündigung, siehe generateRewards) als auch für die
+// tatsächliche Auszahlungsnachricht (rewardPlayer) verwendet, damit beide übereinstimmen.
 const MISSION_REWARDS = [
     {
         id: 'coin',
         chance: 1.0,
+        color: 'green',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'worldborder',
         chance: 1.0,
         multiplier: 1.0,
+        color: 'green',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'xp',
         chance: 0.5,
         multiplier: 1.0,
+        color: 'aqua',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
@@ -152,36 +145,40 @@ const MISSION_REWARDS = [
         minPerPlayer: 1,
         maxPerPlayer: 1,
         chance: 0.1,
+        color: 'green',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'command',
-        chance: 0.03,
+        chance: 0.0,
         command: 'give @p minecraft:diamond 1',
         nameKey: 'kubejs.reward.command.diamond',
+        color: 'gold',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'buff',
         chance: 0.3,
+        color: 'light_purple',
         enable_in_mission: true,
         enable_in_quickevent: true,
         buffs: [
             { buff: 'minecraft:speed', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 1 },
-            { buff: 'born_in_chaos_v1:dark_ward', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 },
-            { buff: 'apothic_attributes:vitality', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 4 },
             { buff: 'minecraft:haste', minDuration: 5, maxDuration: 20, minAmplifier: 0, maxAmplifier: 2 },
             { buff: 'minecraft:strength', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 2 },
             { buff: 'minecraft:resistance', minDuration: 5, maxDuration: 15, minAmplifier: 2, maxAmplifier: 2 },
             { buff: 'minecraft:regeneration', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 2 },
             { buff: 'minecraft:luck', minDuration: 5, maxDuration: 15, minAmplifier: 0, maxAmplifier: 4 },
             { buff: 'minecraft:health_boost', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 9 },
-            { buff: 'apothic_attributes:flying', minDuration: 4, maxDuration: 10, minAmplifier: 0, maxAmplifier: 0 },
-            { buff: 'apothic_attributes:knowledge', minDuration: 4, maxDuration: 10, minAmplifier: 0, maxAmplifier: 1 },
             { buff: 'farmersdelight:nourishment', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 }
         ]
     }
 ];
+
+// Aus MISSION_REWARDS abgeleitete id -> color Lookup, für schnellen Zugriff in generateRewards
+// und rewardPlayer, ohne die Farbe ein zweites Mal pflegen zu müssen.
+const REWARD_COLORS = {};
+MISSION_REWARDS.forEach(reward => { REWARD_COLORS[reward.id] = reward.color; });
 
 // Debuffs bei misslungener "verfluchter" Mission (zufällig wird genau einer verhängt)
 const CURSE_EFFECTS = [
