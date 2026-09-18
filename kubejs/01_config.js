@@ -105,9 +105,6 @@ const RACE_WIN_DISTANCE = 5;
 const RACE_MIN_COINS = 16;
 const RACE_MAX_COINS = 32;
 
-// Skill-Mod-Anbindung: Kategorie-ID, in die increaseSkillXP() Erfahrung einzahlt (Puffish Skills)
-const SKILL_XP_CATEGORY = 'epsilonskills:passive_skills';
-
 // Belohnungen
 // Dauer (in Sekunden) der /worldborder-Animation beim Vergrößern als Belohnung
 const WORLDBORDER_ANIMATION_SECONDS = 3;

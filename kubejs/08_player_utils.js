@@ -119,13 +119,12 @@ function getMissionsPulledTotal(player) {
 }
 
 /**
- * Erhöht die Passive-Skills-XP eines Spielers um einen bestimmten Betrag.
- * @param {ServerEvent} event - Server-Event, das ausgelöst wurde
- * @param {string} playername - Username des Spielers, dessen Passive-Skills-XP erhöht wird
+ * Erhöht die (vanilla) Erfahrungspunkte eines Spielers um einen bestimmten Betrag.
+ * @param {Internal.ServerPlayer} player - Spieler, dessen XP erhöht wird
  * @param {number} xp - Anzahl der hinzuzufügenden XP
  */
-function increaseSkillXP(event, playername, xp) {
-    event.server.runCommandSilent(`puffish_skills experience add ${playername} ${SKILL_XP_CATEGORY} ${xp}`);
+function increaseXP(player, xp) {
+    player.giveExperiencePoints(xp);
 }
 
 function rewardPlayer(event, player, source, type, rewards) {
@@ -160,7 +159,7 @@ function rewardPlayer(event, player, source, type, rewards) {
         rewardItems.push(Text.translate('kubejs.reward.item_count', TextUtils.colored(internalRewards.coins, 'white'), TextUtils.itemName(COIN_ITEM)).color('white'));
     }
     if (internalRewards.xp > 0) {
-        increaseSkillXP(event, player.username, internalRewards.xp);
+        increaseXP(player, internalRewards.xp);
         rewardItems.push(Text.translate('kubejs.reward.xp', TextUtils.colored(internalRewards.xp, 'aqua')).color('aqua'));
     }
     if (internalRewards.worldborder > 0) {

@@ -107,7 +107,7 @@
   "kubejs.reward.event_success": "Event completed successfully!",
   "kubejs.reward.header": "» Reward: %s «",
   "kubejs.reward.item_count": "%sx %s",
-  "kubejs.reward.xp": "%s Skill XP",
+  "kubejs.reward.xp": "%s XP",
   "kubejs.reward.worldborder": "+%sm Worldborder",
   "kubejs.reward.buff": "%s Minutes %s %s",
   "kubejs.reward.command.diamond": "1x Diamond",
