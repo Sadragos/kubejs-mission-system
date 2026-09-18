@@ -4,9 +4,9 @@
     "layer0": "kubejs:item/mission"
   },
   "overrides": [
-    { "predicate": { "custom_model_data": 4 }, "model": "kubejs:item/mission_missions" },
-    { "predicate": { "custom_model_data": 3 }, "model": "kubejs:item/mission_journey" },
+    { "predicate": { "custom_model_data": 1 }, "model": "kubejs:item/mission_item" },
     { "predicate": { "custom_model_data": 2 }, "model": "kubejs:item/mission_kill" },
-    { "predicate": { "custom_model_data": 1 }, "model": "kubejs:item/mission_item" }
+    { "predicate": { "custom_model_data": 3 }, "model": "kubejs:item/mission_journey" },
+    { "predicate": { "custom_model_data": 4 }, "model": "kubejs:item/mission_missions" }
   ]
 }
