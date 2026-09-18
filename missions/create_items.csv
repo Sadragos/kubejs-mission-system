@@ -12,9 +12,9 @@ item;create:crushing_wheel;;4;12;6;12;100;0.3
 item;create:electron_tube;;16;32;6;12;100;0.25
 item;create:experience_nugget;;128;512;6;12;100;0.1
 item;create:gearbox;;32;128;6;12;100;0.1
-item;create:honeyed_apple;;16;64;6;12;100;0about:blank#blocked.25
+item;create:honeyed_apple;;16;64;6;12;100;0.25
 item;create:large_cogwheel;;128;512;6;12;100;0.1
-item;limestone;;128;1024;6;12;100;
+item;create:limestone;;128;1024;6;12;100;
 item;create:mechanical_arm;;6;18;6;12;100;0.3
 item;create:ochrum;;128;512;6;12;100;
 item;create:polished_rose_quartz;;16;64;6;12;100;

@@ -7,7 +7,7 @@ const MISSION_SCROLL = 'kubejs:mission_scroll';
 // Durchschnittliche Anzahl Quick Events pro Stunde, wenn niemand online ist ("Sockel"-Rate)
 const AVG_MISSIONS_PER_HOUR = 0.7;
 // Zusätzliche Events pro Stunde und Online-Spieler (steigt also mit der Spieleranzahl)
-const AVG_MISSION_PER_HOUR_PLAYER = 0.2;
+const AVG_MISSION_PER_HOUR_PLAYER = 0.1;
 // Maximale Entfernung (in Blöcken) vom Zielspieler, in der Dieb/Airdrop erscheinen
 const MISSION_SUMMON_MAX_PLAYER_DIST = 16 * 8;
 // Alle wie viele Ticks der Event-Würfel-/Tick-Handler prüft (20 Ticks = 1 Sekunde)
@@ -25,7 +25,7 @@ const MAX_TIME_BONUS = 1;
 // Zusätzlicher globaler Multiplikator für Quick-Event-Belohnungen, multiplikativ mit dem
 // Server-Durchschnittsfortschritt verrechnet (siehe generateRewards in 20_quick_events.js) -
 // macht Quick Events grundsätzlich lohnenswerter als einzelne Missionen.
-const QE_REWARD_MULTIPLIER = 1.5;
+const QE_REWARD_MULTIPLIER = 0.75;
 
 // Sonstiges
 const TICKS_PER_SECOND = 20;
@@ -33,7 +33,7 @@ const TICKS_PER_MINUTE = TICKS_PER_SECOND * 60;
 const TICKS_PER_HOUR = TICKS_PER_MINUTE * 60;
 // Chance (0-1), dass eine neu gewürfelte Mission stattdessen eine "verfluchte" Wilde Jagd/Gemätzel
 // auslöst (Strafe bei Fehlschlag, siehe CURSE_EFFECTS)
-const CURSE_CHANCE = 0.05;
+const CURSE_CHANCE = 0.02;
 // Chance (0-1), dass ein Hunt-Event als Koop-Variante (alle gegen ein gemeinsames Ziel) statt solo
 // (wer zuerst fertig ist gewinnt) gestartet wird
 const MULTIPLAYER_PERCENTAGE = 0.7;
@@ -45,10 +45,10 @@ const MISSION_TARGET_PLAYER_MULT = 0.35;
 // Wie viele abgeschlossene Missionen pro Typ als "100% Fortschritt" gelten (siehe getPlayerProgress);
 // bestimmt, wie schnell Belohnungsmengen/-ziele mit der Spielererfahrung skalieren
 const MISSION_TYPE_GOALS = {
-    item: 100,
-    kill: 80,
-    journey: 25,
-    missions: 20
+    item: 200,
+    kill: 150,
+    journey: 50,
+    missions: 40
 };
 // Fortschritt, den ein Spieler mindestens "hat", auch ganz am Anfang (verhindert Division durch 0
 // bzw. unfair niedrige Anfangsbelohnungen)
@@ -73,7 +73,7 @@ const DAILY_MESSAGE_KEYS = [
 // Chance (0-1), dass eine Kill-Mission zusätzlich ein Spawn-Ei als Belohnung anbietet, falls die
 // CSV-Zeile keine eigene eggChance definiert
 const FALLBACK_EGG_CHANCE = 0.25;
-const FALLBACK_MIN_AMOUNT = 64;
+const FALLBACK_MIN_AMOUNT = 32;
 const FALLBACK_MAX_AMOUNT = FALLBACK_MIN_AMOUNT * 3;
 const FALLBACK_MIN_COINS = 12;
 const FALLBACK_MAX_COINS = FALLBACK_MIN_COINS * 2;
@@ -91,11 +91,11 @@ const MISSION_EGG_CHANCE_MULTIPLIER_MAX = -1;
 // Gewichte: relative Wahrscheinlichkeit, mit der ein Missionstyp bzw. Quick Event gegenüber
 // den anderen gewürfelt wird (höher = häufiger). "missions"/"präsent" sind absichtlich selten.
 const MISSION_TYPE_WEIGHTS = { item: 13, kill: 8, journey: 2, missions: 1 };
-const QUICK_EVENT_WEIGHTS = { thief: 2, airdrop: 2, present: 1, hunt: 4, request: 2, race: 2 };
+const QUICK_EVENT_WEIGHTS = { thief: 2, airdrop: 2, present: 1, hunt: 6, request: 5, race: 1 };
 
 // Wettrennen-Event: Zielpunkt wird in zufälliger Distanz (X/Z, Höhe irrelevant) zum Weltspawn gewählt
-const RACE_MIN_DISTANCE = 300;
-const RACE_MAX_DISTANCE = 3000;
+const RACE_MIN_DISTANCE = 500;
+const RACE_MAX_DISTANCE = 8000;
 // Entfernung (Blöcke), ab der ein Spieler per Chat auf die Nähe zum Ziel hingewiesen wird
 const RACE_NEARBY_DISTANCE = 100;
 // Entfernung (Blöcke), innerhalb derer das Ziel automatisch als erreicht gilt
@@ -138,7 +138,7 @@ const MISSION_REWARDS = [
     }, {
         id: 'xp',
         chance: 0.5,
-        multiplier: 5.0,
+        multiplier: 6.0,
         color: 'green',
         enable_in_mission: true,
         enable_in_quickevent: true
@@ -186,13 +186,9 @@ MISSION_REWARDS.forEach(reward => { REWARD_COLORS[reward.id] = reward.color; });
 // Debuffs bei misslungener "verfluchter" Mission (zufällig wird genau einer verhängt)
 const CURSE_EFFECTS = [
     'minecraft:slowness 300',
-    'apothic_attributes:grievous 300',
-    'sizeshiftingpotions:shrinking 120 5',
-    'irons_spellbooks:chilled 240',
     'minecraft:hunger 180',
     'minecraft:infested 300',
     'minecraft:mining_fatigue 180',
-    'apothic_attributes:sundering 240',
     'minecraft:darkness 60',
     'minecraft:oozing 300',
     'minecraft:oozing 300',
