@@ -309,7 +309,7 @@ function buildMissionLore(missionType, target, rewards, erstellt, item, name, pl
         Text.translate('kubejs.mission.lore.target', item).color('gray'),
         Text.translate('kubejs.mission.lore.created', TimeUtils.formatDateISO(erstellt)).color('gray'),
         Text.translate('kubejs.mission.lore.creator', playername).color('gray'),
-        Text.translate('kubejs.mission.lore.number', nr).color('gray'),
+        Text.translate('kubejs.mission.lore.number', String(nr)).color('gray'),
         Text.translate('kubejs.mission.lore.level', (mod * 100).toFixed(2)).color('gray')
     ];
     if (eggChance > 0) {
