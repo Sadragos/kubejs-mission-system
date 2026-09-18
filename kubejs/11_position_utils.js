@@ -69,7 +69,7 @@ const PositionUtils = {
      * @returns {{ x: number, y: number, z: number }}
      */
     getWorldSpawn: (server) => {
-        let pos = server.overworld.getSharedSpawnPos();
+        let pos = server.overworld().getSharedSpawnPos();
         return { x: pos.x, y: pos.y, z: pos.z };
     },
     /**
