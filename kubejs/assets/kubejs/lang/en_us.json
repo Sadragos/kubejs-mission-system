@@ -81,6 +81,11 @@
   "kubejs.event.request.no_item": "You don't have any %s in your inventory.",
   "kubejs.event.request.delivered": "You sent %sx %s to the guild!",
 
+  "kubejs.event.race.name": "Race",
+  "kubejs.event.race.announce": "The guild calls for a race! Target: %s. Whoever gets there first wins!",
+  "kubejs.event.race.board_title": "Distance to target",
+  "kubejs.event.race.nearby": "%s is only %sm away from the target!",
+
   "kubejs.event.more_info": "[More Info]",
   "kubejs.event.time_limit": "Time limit: %s",
   "kubejs.event.reward": "Reward: %s",

@@ -81,6 +81,11 @@
   "kubejs.event.request.no_item": "Du hast kein %s im Inventar.",
   "kubejs.event.request.delivered": "Du hast %sx %s zur Gilde geschickt!",
 
+  "kubejs.event.race.name": "Wettrennen",
+  "kubejs.event.race.announce": "Die Gilde ruft zu einem Wettrennen auf! Ziel: %s. Wer zuerst dort ankommt, gewinnt!",
+  "kubejs.event.race.board_title": "Entfernung zum Ziel",
+  "kubejs.event.race.nearby": "%s ist nur noch %sm vom Ziel entfernt!",
+
   "kubejs.event.more_info": "[Mehr Infos]",
   "kubejs.event.time_limit": "Zeitlimit: %s",
   "kubejs.event.reward": "Belohnung: %s",

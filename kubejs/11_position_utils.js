@@ -64,6 +64,15 @@ const PositionUtils = {
         }
     },
     /**
+     * Returns the overworld's shared spawn position.
+     * @param {Internal.MinecraftServer} server
+     * @returns {{ x: number, y: number, z: number }}
+     */
+    getWorldSpawn: (server) => {
+        let pos = server.overworld.getSharedSpawnPos();
+        return { x: pos.x, y: pos.y, z: pos.z };
+    },
+    /**
      * Calculates a random position at a fixed distance from the given position.
      * The angle is chosen randomly; Y is passed through unchanged.
      * @param {{ x: number, y: number, z: number }} position origin position

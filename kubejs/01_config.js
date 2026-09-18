@@ -93,7 +93,17 @@ const MISSION_EGG_CHANCE_MULTIPLIER_MAX = -1;
 // Gewichte: relative Wahrscheinlichkeit, mit der ein Missionstyp bzw. Quick Event gegenüber
 // den anderen gewürfelt wird (höher = häufiger). "missions"/"präsent" sind absichtlich selten.
 const MISSION_TYPE_WEIGHTS = { item: 13, kill: 8, journey: 2, missions: 1 };
-const QUICK_EVENT_WEIGHTS = { thief: 2, airdrop: 2, present: 1, hunt: 4, request: 2 };
+const QUICK_EVENT_WEIGHTS = { thief: 2, airdrop: 2, present: 1, hunt: 4, request: 2, race: 2 };
+
+// Wettrennen-Event: Zielpunkt wird in zufälliger Distanz (X/Z, Höhe irrelevant) zum Weltspawn gewählt
+const RACE_MIN_DISTANCE = 300;
+const RACE_MAX_DISTANCE = 3000;
+// Entfernung (Blöcke), ab der ein Spieler per Chat auf die Nähe zum Ziel hingewiesen wird
+const RACE_NEARBY_DISTANCE = 100;
+// Entfernung (Blöcke), innerhalb derer das Ziel automatisch als erreicht gilt
+const RACE_WIN_DISTANCE = 5;
+const RACE_MIN_COINS = 16;
+const RACE_MAX_COINS = 32;
 
 // Skill-Mod-Anbindung: Kategorie-ID, in die increaseSkillXP() Erfahrung einzahlt (Puffish Skills)
 const SKILL_XP_CATEGORY = 'epsilonskills:passive_skills';

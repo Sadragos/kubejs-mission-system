@@ -451,7 +451,113 @@ const ITEM_REQUEST_EVENT = {
     },
 }
 
-const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT, ITEM_REQUEST_EVENT];
+const RACE_EVENT = {
+    nameKey: 'kubejs.event.race.name',
+    id: 'race',
+    progressType: 'journey',
+    weight: QUICK_EVENT_WEIGHTS.race,
+    showInStat: true,
+    abbr: 'R',
+    startTick: undefined,
+    endTick: undefined,
+    missionTime: undefined,
+
+    targetPos: undefined,
+    notified: undefined,
+    label: undefined,
+    rewards: [],
+
+    startEvent(event) {
+        currentEvent.startTick = event.server.tickCount;
+        currentEvent.missionTime = MathUtils.randomInt(MISSION_MIN_TIME, MISSION_MAX_TIME);
+        currentEvent.endTick = event.server.tickCount + currentEvent.missionTime;
+        currentEvent.label = eventLabel(RACE_EVENT.nameKey);
+        currentEvent.notified = new Set();
+
+        let avgPlayerProgress = getAveragePlayerProgress(event.server, 'journey', true);
+        currentEvent.rewards = generateRewards({ min: RACE_MIN_COINS, max: RACE_MAX_COINS }, avgPlayerProgress * QE_REWARD_MULTIPLIER, 'event');
+
+        let spawnPos = PositionUtils.getWorldSpawn(event.server);
+        let distance = MathUtils.randomInt(RACE_MIN_DISTANCE, RACE_MAX_DISTANCE);
+        currentEvent.targetPos = PositionUtils.randomPositionWithDistance(spawnPos, distance);
+
+        let title = `§6[${RACE_EVENT.abbr}]§f ${Text.translate('kubejs.event.race.board_title').getString()}`;
+        ScoreboardUtils.initBoard(event.server, 'my_mission_scores', title);
+
+        let targetPart = TextUtils.colored(PositionUtils.toChatPosition(currentEvent.targetPos), 'green');
+        let detailLines = [
+            Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime)).getString(),
+            Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display)).getString()).getString(),
+            Text.translate('kubejs.event.difficulty', (avgPlayerProgress * 100).toFixed(1)).getString()
+        ];
+
+        event.server.tell(TextUtils.join(Text.of(' '), [
+            currentEvent.label,
+            Text.translate('kubejs.event.race.announce', targetPart),
+            moreInfoText(detailLines)
+        ]));
+
+        PositionUtils.markPosition(event.server, currentEvent.targetPos, Text.translate(RACE_EVENT.nameKey).getString());
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.2');
+    },
+
+    handleTick(event) {
+        for (let player of event.server.players) {
+            if (!currentEvent) break;
+            if (player.level.dimension !== 'minecraft:overworld') continue;
+
+            let pos = player.blockPosition();
+            let dx = pos.x - currentEvent.targetPos.x;
+            let dz = pos.z - currentEvent.targetPos.z;
+            let distance = Math.sqrt(dx * dx + dz * dz);
+            let username = String(player.username);
+
+            ScoreboardUtils.setScore(event.server, 'my_mission_scores', username, Math.round(distance));
+
+            if (distance < RACE_WIN_DISTANCE) {
+                currentEvent.handleWin(event, username);
+                return;
+            }
+            if (distance < RACE_NEARBY_DISTANCE && !currentEvent.notified.has(username)) {
+                currentEvent.notified.add(username);
+                event.server.tell(Text.translate('kubejs.event.race.nearby', TextUtils.colored(username, 'green'), TextUtils.colored(Math.round(distance), 'green')).color('gold'));
+            }
+        }
+    },
+
+    handleWin(event, username) {
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        let bonusText = TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green');
+        let detailLines = getTimeStats(event).map(el => el.getString());
+        detailLines.push(Text.translate('kubejs.event.time_bonus', bonusText).getString());
+
+        event.server.tell(TextUtils.join(Text.of(' '), [
+            Text.translate('kubejs.event.winner', currentEvent.label, TextUtils.colored(username, 'green')),
+            moreInfoText(detailLines)
+        ]));
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.firework_rocket.launch');
+
+        checkForHelperMission(event, username, RACE_EVENT.id);
+        handleReward(event, currentEvent.rewards, username, bonus);
+
+        currentEvent = undefined;
+        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+    },
+
+    stopEvent(event) {
+        event.server.tell(Text.translate('kubejs.event.failed', currentEvent.label));
+        currentEvent = undefined;
+        ScoreboardUtils.removeScoreboard(event.server, 'my_mission_scores');
+        SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.lightning_bolt.thunder');
+    },
+
+    timeNotification(event) {
+        let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
+        getTimeRemaining(event, false, bonus);
+    }
+}
+
+const ALL_QUICK_EVENTS = [THIEF_EVENT, AIRDROP_EVENT, PRESENT_EVENT, HUNT_EVENT, ITEM_REQUEST_EVENT, RACE_EVENT];
 
 // Items für QuickEvent abgeben
 ItemEvents.rightClicked('minecraft:bowl', event => {
@@ -498,7 +604,7 @@ ServerEvents.tick(event => {
             if (currentEvent.handleTick) {
                 currentEvent.handleTick(event);
             }
-            if (currentEvent.endTick < event.server.tickCount) {
+            if (currentEvent && currentEvent.endTick < event.server.tickCount) {
                 currentEvent.stopEvent(event);
                 currentEvent = undefined;
             }
