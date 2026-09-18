@@ -43,6 +43,7 @@
   "kubejs.mission.lore.number": "Auftrag Nr: %s",
   "kubejs.mission.lore.level": "Level: %s%%",
   "kubejs.mission.lore.egg_chance": "Ei-Chance: %s%%",
+  "kubejs.mission.lore.bonus_reward": "Bonus: %s",
 
   "kubejs.event.present.name": "Geschenkt",
   "kubejs.event.present.announce": "Ein neuer Auftrag der Gilde für jeden!",

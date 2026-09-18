@@ -125,6 +125,7 @@ ItemEvents.rightClicked(MISSION_SCROLL, event => {
                 }
             }
             let missionNr = getMissionsPulledTotal(event.player) + 1;
+            let bonusRewards = Math.random() < BONUS_REWARD_CHANCE ? generateRewards(event, mission.type) : [];
             giveMissionItem(
                 event,
                 mission.type,
@@ -136,7 +137,8 @@ ItemEvents.rightClicked(MISSION_SCROLL, event => {
                 event.player.username,
                 playerProgress,
                 eggChance,
-                missionNr
+                missionNr,
+                bonusRewards
             );
             SoundUtils.playSoundAtPlayer(event.server, event.player.username, 'minecraft:item.book.page_turn');
             increaseMissionPulled(event.player, mission.type);
@@ -244,20 +246,22 @@ function resolveTargetName(typeId, item, name) {
     }
 }
 
-function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr) {
+function giveMissionItem(event, type, item, name, amount, reward, erstellt, username, mod, eggChance, nr, bonusRewards) {
     eggChance = eggChance || 0;
+    bonusRewards = bonusRewards || [];
     if (type == MISSION_TYPE_JOUNREY.id) {
         item = PositionUtils.toChatPosition(PositionUtils.randomPositionWithDistance(event.player.position(), amount));
     }
     let missionType = MISSION_TYPES.find(mt => mt.id === type);
     let target = resolveTargetName(type, item, name);
+    let bonusPayload = resolveRewardPayload(bonusRewards, 1);
 
     let stack = Item.of(MISSION_CONTRACT);
     stack.count = 1;
     stack.setDamage(amount);
     stack.setMaxDamage(amount);
     stack.setCustomName(buildMissionTitle(missionType, target, amount));
-    stack.setLore(buildMissionLore(missionType, target, reward, erstellt, item, name, username, mod, eggChance, nr));
+    stack.setLore(buildMissionLore(missionType, target, reward, erstellt, item, name, username, mod, eggChance, nr, bonusRewards));
 
     let tag = NBT.compoundTag();
     tag.putString('typeId', type);
@@ -269,6 +273,9 @@ function giveMissionItem(event, type, item, name, amount, reward, erstellt, user
     tag.putDouble('level', mod);
     tag.putDouble('eggChance', eggChance);
     tag.putInt('nr', nr);
+    // Beim Ziehen gewürfelte Bonusbelohnung (siehe generateRewards/resolveRewardPayload) wird hier
+    // festgeschrieben, damit sie schon in der Lore sichtbar ist und bei Abgabe nur noch ausgezahlt wird.
+    tag.putString('bonusReward', JSON.stringify(bonusPayload));
     stack.setCustomData(tag);
 
     event.player.give(stack);
@@ -280,9 +287,10 @@ function buildMissionTitle(missionType, target, amount) {
     return Text.translate('kubejs.mission.title', label, `${amount}${unit}`, target);
 }
 
-function buildMissionLore(missionType, target, coins, erstellt, item, name, playername, mod, eggChance, nr) {
+function buildMissionLore(missionType, target, coins, erstellt, item, name, playername, mod, eggChance, nr, bonusRewards) {
     mod = mod || 1;
     eggChance = eggChance || 0;
+    bonusRewards = bonusRewards || [];
     let coinsKey = coins === 1 ? 'kubejs.mission.lore.reward.one' : 'kubejs.mission.lore.reward.other';
 
     let lines = [
@@ -299,6 +307,9 @@ function buildMissionLore(missionType, target, coins, erstellt, item, name, play
     if (eggChance > 0) {
         lines.push(Text.translate('kubejs.mission.lore.egg_chance', (eggChance * 100).toFixed(2)).color('gray'));
     }
+    if (bonusRewards.length > 0) {
+        lines.push(Text.translate('kubejs.mission.lore.bonus_reward', TextUtils.join(Text.of(', '), bonusRewards.map(r => r.display))).color('gold'));
+    }
     return lines;
 }
 
@@ -307,15 +318,8 @@ function finishMission(event, player, data) {
     let unit = data.type.id === MISSION_TYPE_JOUNREY.id ? 'm' : 'x';
     let target = resolveTargetName(data.typeId, data.item, data.name);
 
-    let coins = data.coins;
-    let items = [];
-    let buffs = [];
-    if (Math.random() < BONUS_REWARD_CHANCE) {
-        let bonus = resolveRewardPayload(generateRewards(event, data.type.id), 1);
-        coins += bonus.coins;
-        items = bonus.items;
-        buffs = bonus.buffs;
-    }
+    let bonus = data.bonusReward || { items: [], buffs: [], coins: 0 };
+    let coins = data.coins + bonus.coins;
 
     rewardPlayer(
         event,
@@ -325,8 +329,8 @@ function finishMission(event, player, data) {
         {
             coins: coins,
             worldborder: coins,
-            items: items,
-            buffs: buffs
+            items: bonus.items,
+            buffs: bonus.buffs
         }
     );
     let broadcast = Text.translate('kubejs.mission.finish.broadcast', TextUtils.colored(playerName), `${data.maxDamage}${unit}`, target, TextUtils.colored(data.coins)).color('green');
@@ -354,7 +358,8 @@ function parseMissionInfo(itemStack) {
         player: tag.getString('creator'),
         maxDamage: maxDamage,
         currentDamage: currentDamage,
-        level: tag.getDouble('level')
+        level: tag.getDouble('level'),
+        bonusReward: JSON.parse(tag.getString('bonusReward') || '{"items":[],"buffs":[],"coins":0}')
     }
 }
 

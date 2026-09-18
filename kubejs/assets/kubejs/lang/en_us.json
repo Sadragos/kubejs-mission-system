@@ -43,6 +43,7 @@
   "kubejs.mission.lore.number": "Contract #: %s",
   "kubejs.mission.lore.level": "Level: %s%%",
   "kubejs.mission.lore.egg_chance": "Egg Chance: %s%%",
+  "kubejs.mission.lore.bonus_reward": "Bonus: %s",
 
   "kubejs.event.present.name": "Gift",
   "kubejs.event.present.announce": "A new contract from the guild for everyone!",
