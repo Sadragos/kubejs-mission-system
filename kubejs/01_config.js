@@ -127,21 +127,21 @@ const MISSION_REWARDS = [
     {
         id: 'coin',
         chance: 1.0,
-        color: 'green',
+        color: 'yellow',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'worldborder',
-        chance: 1.0,
+        chance: 0.0,
         multiplier: 1.0,
-        color: 'green',
+        color: 'aqua',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
         id: 'xp',
         chance: 0.5,
-        multiplier: 1.0,
-        color: 'aqua',
+        multiplier: 5.0,
+        color: 'green',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {
@@ -150,7 +150,7 @@ const MISSION_REWARDS = [
         min: 1,
         max: 1,
         chance: 0.1,
-        color: 'green',
+        color: 'gold',
         enable_in_mission: true,
         enable_in_quickevent: true
     }, {

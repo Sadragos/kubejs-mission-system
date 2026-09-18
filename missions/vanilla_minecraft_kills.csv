@@ -37,7 +37,7 @@ kill;minecraft:zombie;;8;64;;;250;;;;undead
 kill;minecraft:zombified_piglin;;8;64;;;100;;;;undead,demons
 kill;*;;128;512;;;3500;;0.15;;
 kill;minecraft:creaking;;4;8;;;75;;;0.35;
-kill;§:undead;kubejs.mission.group.undead;16;96;;;150;;;0.1;
-kill;§:spider;kubejs.mission.group.spider;16;64;;;120;;;0.05;
-kill;§:illager;kubejs.mission.group.illager;8;48;;;120;;;0.2;
-kill;§:demons;kubejs.mission.group.demons;16;80;;;140;;;0.15;
+kill;§:undead;kubejs.mission.group.undead;16;96;;;600;;;;
+kill;§:spider;kubejs.mission.group.spider;16;64;;;350;;;;
+kill;§:illager;kubejs.mission.group.illager;8;48;;;250;;;0.2;
+kill;§:demons;kubejs.mission.group.demons;16;80;;;450;;;0.2;
