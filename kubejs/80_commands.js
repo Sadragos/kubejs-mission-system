@@ -47,7 +47,33 @@ ServerEvents.commandRegistry((event) => {
                             .executes((ctx) => {
                                 const name = Arguments.STRING.getResult(ctx, "player");
                                 return runStats(ctx.source, name);
-                            }),
+                            })
+                            .then(
+                                Commands.literal("reset")
+                                    .executes((ctx) => {
+                                        const name = Arguments.STRING.getResult(ctx, "player");
+                                        return runStatsReset(ctx.source, name);
+                                    }),
+                            )
+                            .then(
+                                Commands.literal("set")
+                                    .then(
+                                        Commands.argument("stat", Arguments.STRING.create(event))
+                                            .suggests((ctx, builder) => {
+                                                getStatKeys().forEach((k) => builder.suggest(k));
+                                                return builder.buildFuture();
+                                            })
+                                            .then(
+                                                Commands.argument("value", Arguments.INTEGER.create(event))
+                                                    .executes((ctx) => {
+                                                        const name = Arguments.STRING.getResult(ctx, "player");
+                                                        const stat = Arguments.STRING.getResult(ctx, "stat");
+                                                        const value = Arguments.INTEGER.getResult(ctx, "value");
+                                                        return runStatsSet(ctx.source, name, stat, value);
+                                                    }),
+                                            ),
+                                    ),
+                            ),
                     ),
             ),
     );
@@ -70,6 +96,31 @@ ServerEvents.commandRegistry((event) => {
 
     function runStart(source, type) {
         startEvent(source, type);
+        return 1;
+    }
+
+    function runStatsReset(source, playerName) {
+        const player = source.server.playerList.players.find((p) => p.username === playerName);
+        if (!player) {
+            source.player.tell(Text.translate('kubejs.command.player_not_found', playerName).color('red'));
+            return 1;
+        }
+        resetPlayerStats(player);
+        source.player.tell(Text.translate('kubejs.command.stats.reset_success', player.username).color('green'));
+        return 1;
+    }
+
+    function runStatsSet(source, playerName, stat, value) {
+        const player = source.server.playerList.players.find((p) => p.username === playerName);
+        if (!player) {
+            source.player.tell(Text.translate('kubejs.command.player_not_found', playerName).color('red'));
+            return 1;
+        }
+        if (!setPlayerStat(player, stat, value)) {
+            source.player.tell(Text.translate('kubejs.command.stats.invalid_stat', stat).color('red'));
+            return 1;
+        }
+        source.player.tell(Text.translate('kubejs.command.stats.set_success', stat, player.username, value).color('green'));
         return 1;
     }
 

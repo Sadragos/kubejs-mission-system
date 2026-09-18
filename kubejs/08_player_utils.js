@@ -119,6 +119,47 @@ function getMissionsPulledTotal(player) {
 }
 
 /**
+ * Liste aller persistenten Statistik-Schlüssel, die per OP-Befehl
+ * (/missions stats <player> reset|set) ausgelesen bzw. verändert werden dürfen.
+ * @returns {string[]}
+ */
+function getStatKeys() {
+    const keys = ['missions_done'];
+    for (const type of Object.keys(MISSION_TYPE_GOALS)) {
+        keys.push(`mission_done_${type}`, `mission_pulled_${type}`);
+    }
+    keys.push('mission_pulled_cursed');
+    for (const ev of ALL_QUICK_EVENTS) {
+        keys.push(`events_${ev.id}`);
+    }
+    return keys;
+}
+
+/**
+ * Setzt alle Missions-/Event-Statistikwerte eines Spielers auf 0 zurück.
+ * @param {Internal.ServerPlayer} player
+ */
+function resetPlayerStats(player) {
+    const pData = player.persistentData;
+    for (const key of getStatKeys()) {
+        pData.putInt(key, 0);
+    }
+}
+
+/**
+ * Setzt einen einzelnen Statistikwert eines Spielers.
+ * @param {Internal.ServerPlayer} player
+ * @param {string} stat - Muss ein von getStatKeys() zurückgegebener Schlüssel sein
+ * @param {number} value
+ * @returns {boolean} true, wenn stat gültig war und der Wert gesetzt wurde
+ */
+function setPlayerStat(player, stat, value) {
+    if (!getStatKeys().includes(stat)) return false;
+    player.persistentData.putInt(stat, value);
+    return true;
+}
+
+/**
  * Erhöht die (vanilla) Erfahrungspunkte eines Spielers um einen bestimmten Betrag.
  * @param {Internal.ServerPlayer} player - Spieler, dessen XP erhöht wird
  * @param {number} xp - Anzahl der hinzuzufügenden XP

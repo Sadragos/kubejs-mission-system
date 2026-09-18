@@ -122,6 +122,9 @@
   "kubejs.command.stats.event_header": "--- Event Stats: %s ---",
   "kubejs.command.stats.event_line": "§8[§6%s§8]§a%s",
   "kubejs.command.stats.event_total_line": "§8[§6Total§8] §a%s",
+  "kubejs.command.stats.reset_success": "Reset stats for %s.",
+  "kubejs.command.stats.set_success": "Set stat \"%s\" of %s to %s.",
+  "kubejs.command.stats.invalid_stat": "Unknown stat \"%s\".",
 
   "kubejs.daily.greeting.0": "§aHello %s! Great to see you here. Here, go get to work!",
   "kubejs.daily.greeting.1": "§aHi %s! Welcome back! Here's a little task for you!",
