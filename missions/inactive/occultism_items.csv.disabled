@@ -1,18 +1,18 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;occultism:satchel;Surprisingly Substantial Satchel;1;6;;;50;0.05
-item;occultism:fragile_soul_gem;Fragile Empty Soul Gem;1;6;;;50;0.1
-item;occultism:book_of_binding_foliot;Book of Binding: Foliot;4;32;;;75;0.05
-item;occultism:book_of_binding_djinni;Book of Binding: Djinni;4;32;;;75;0.05
-item;occultism:brush;Chalk Brush;4;32;;;100;0.05
-item;occultism:chalk_white;White Chalk;2;16;;;100;0.05
-item;occultism:chalk_light_gray;Light Gray Chalk;2;16;;;100;0.05
-item;occultism:chalk_gold;Yellow Chalk;2;16;;;100;0.1
-item;occultism:magic_lamp_empty;Empty Magic Lamp;2;16;;;100;0.1
-item;tallow;Tallow;4;32;;;100;0.05
-item;silver_ingot,ingot_silver;Silberbarren;16;64;;;100;0.05
-item;occultism:iesnium_ingot;Iesnium Nugget;2;16;;;100;0.25
-item;occultism:demons_dream_essence;Demon's Dream Essence;16;64;;;100;0.05
-item;occultism:otherstone;Otherstone;32;128;;;100;0.05
-item;occultism:otherworld_log;Otherworld Log;16;64;;;100;0.05
-item;large_candle;Large Candle;8;32;;;100;0.05
-item;occultism:sacrificial_bowl;Sacrificial Bowl;8;32;;;100;0.05
+item;occultism:satchel;;1;6;;;50;0.05
+item;occultism:fragile_soul_gem;;1;6;;;50;0.1
+item;occultism:book_of_binding_foliot;;4;32;;;75;0.05
+item;occultism:book_of_binding_djinni;;4;32;;;75;0.05
+item;occultism:brush;;4;32;;;100;0.05
+item;occultism:chalk_white;;2;16;;;100;0.05
+item;occultism:chalk_light_gray;;2;16;;;100;0.05
+item;occultism:chalk_gold;;2;16;;;100;0.1
+item;occultism:magic_lamp_empty;;2;16;;;100;0.1
+item;tallow;;4;32;;;100;0.05
+item;silver_ingot,ingot_silver;;16;64;;;100;0.05
+item;occultism:iesnium_ingot;;2;16;;;100;0.25
+item;occultism:demons_dream_essence;;16;64;;;100;0.05
+item;occultism:otherstone;;32;128;;;100;0.05
+item;occultism:otherworld_log;;16;64;;;100;0.05
+item;large_candle;;8;32;;;100;0.05
+item;occultism:sacrificial_bowl;;8;32;;;100;0.05

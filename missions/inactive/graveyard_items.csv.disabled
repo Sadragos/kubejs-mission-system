@@ -1,2 +1,2 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;graveyard:corruption;Korruption;16;64;6;12;100;
+item;graveyard:corruption;;16;64;6;12;100;

@@ -1,21 +1,21 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;ars_nouveau:blue_archwood_log;Cascading Archwood Log;64;256;;;100;
-item;ars_nouveau:red_archwood_log;Blazing Archwood Log;64;256;;;100;
-item;ars_nouveau:purple_archwood_log;Vexing Archwood Log;64;256;;;100;
-item;ars_nouveau:green_archwood_log;Flourisching Archwood Log;64;256;;;100;
-item;ars_nouveau:sourceberry_bush;Sourceberry;64;256;;;100;
-item;ars_nouveau:mendosteen_pod;Mendosteen;8;32;;;100;0.1
-item;ars_nouveau:bastion_pod;Bastion Fruit;8;32;;;100;0.05
-item;ars_nouveau:frostaya_pod;Frostaya;8;32;;;100;0.05
-item;ars_nouveau:bombegranate_pod;Bombegranate;8;32;;;100;0.05
+item;ars_nouveau:blue_archwood_log;;64;256;;;100;
+item;ars_nouveau:red_archwood_log;;64;256;;;100;
+item;ars_nouveau:purple_archwood_log;;64;256;;;100;
+item;ars_nouveau:green_archwood_log;;64;256;;;100;
+item;ars_nouveau:sourceberry_bush;;64;256;;;100;
+item;ars_nouveau:mendosteen_pod;;8;32;;;100;0.1
+item;ars_nouveau:bastion_pod;;8;32;;;100;0.05
+item;ars_nouveau:frostaya_pod;;8;32;;;100;0.05
+item;ars_nouveau:bombegranate_pod;;8;32;;;100;0.05
 item;ars_nouveau:sourcestone;;64;256;;;100;0.05
 item;ars_nouveau:magebloom;;32;128;;;100;0.05
 item;ars_nouveau:wilden_horn;;8;32;;;100;0.2
 item;ars_nouveau:wilden_spike;;8;32;;;100;0.2
 item;ars_nouveau:wilden_wing;;8;32;;;100;0.2
-item;ars_nouveau:drygmy_shard;Drygmy Token;4;16;;;100;0.05
-item;ars_nouveau:starbuncle_shards;Starbuncle Token;4;16;;;100;0.05
-item;ars_nouveau:whirlisprig_shards;Whirlsprig Token;4;16;;;100;0.05
+item;ars_nouveau:drygmy_shard;;4;16;;;100;0.05
+item;ars_nouveau:starbuncle_shards;;4;16;;;100;0.05
+item;ars_nouveau:whirlisprig_shards;;4;16;;;100;0.05
 item;ars_nouveau:experience_gem;;64;256;;;100;0.1
 item;ars_nouveau:source_berry_roll;;16;64;;;100;0.1
 item;ars_nouveau:abjuration_essence;;6;24;;;100;0.1

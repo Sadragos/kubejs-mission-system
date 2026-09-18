@@ -1,5 +1,5 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;_spirit;Spirits;64;512;6;12;600;
+item;_spirit;;64;512;6;12;600;
 item;malum:sacred_spirit;;16;64;6;12;100;
 item;malum:wicked_spirit;;16;64;6;12;100;
 item;malum:arcane_spirit;;16;64;6;12;100;

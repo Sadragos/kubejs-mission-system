@@ -1,9 +1,9 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
-kill;undergarden:rotling;Moderling;8;32;;;100;;;
-kill;undergarden:rotwalker;Moderläufer;4;16;;;100;;;
-kill;undergarden:rotbeast;Moderbiest;1;6;;;100;;;
-kill;undergarden:rotbelcher;Moderspeier;4;16;;;100;;;
-kill;undergarden:nargoyle;Nargoyle;4;16;;;100;;;
-kill;undergarden:muncher;Mampfer;4;16;;;100;;;
-kill;undergarden:forgotten;Vergessener;4;16;;;100;;;
-kill;undergarden:forgotten_guardian;Vergessener Wächter;1;4;;;75;;-1;
+kill;undergarden:rotling;;8;32;;;100;;;
+kill;undergarden:rotwalker;;4;16;;;100;;;
+kill;undergarden:rotbeast;;1;6;;;100;;;
+kill;undergarden:rotbelcher;;4;16;;;100;;;
+kill;undergarden:nargoyle;;4;16;;;100;;;
+kill;undergarden:muncher;;4;16;;;100;;;
+kill;undergarden:forgotten;;4;16;;;100;;;
+kill;undergarden:forgotten_guardian;;1;4;;;75;;-1;

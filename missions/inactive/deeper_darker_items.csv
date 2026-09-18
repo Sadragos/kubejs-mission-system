@@ -1,13 +1,13 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;deeperdarker:bloom_berries;Bloom Berries;125;512;6;12;75;0.4
-item;deeperdarker:echo_log;Echo Log;125;512;6;12;75;0.4
-item;deeperdarker:echo_sapling;Echo Sappling;32;128;6;12;75;0.4
-item;deeperdarker:gloomslate;Gloomslate;1024;4096;6;12;75;0.4
-item;deeperdarker:gloomy_cactus;Gloomy Cactus;32;128;6;12;75;0.4
-item;deeperdarker:resonarium;Resonarium;16;64;6;12;75;0.4
-item;deeperdarker:sculk_bone;Sculk Bone;16;64;6;12;75;0.4
-item;deeperdarker:sculk_gleam;Sculk Gleam;64;256;6;12;75;0.4
-item;deeperdarker:sculk_stone;Sculk Stone;1024;4096;6;12;75;0.4
-item;deeperdarker:soul_crystal;Soul Crystal;2;8;6;12;75;0.4
-item;deeperdarker:soul_dust;Soul Dust;8;32;6;12;75;0.4
-item;deeperdarker:warden_carapace;Warden Carapce;1;2;8;16;40;0.4
+item;deeperdarker:bloom_berries;;125;512;6;12;75;0.4
+item;deeperdarker:echo_log;;125;512;6;12;75;0.4
+item;deeperdarker:echo_sapling;;32;128;6;12;75;0.4
+item;deeperdarker:gloomslate;;1024;4096;6;12;75;0.4
+item;deeperdarker:gloomy_cactus;;32;128;6;12;75;0.4
+item;deeperdarker:resonarium;;16;64;6;12;75;0.4
+item;deeperdarker:sculk_bone;;16;64;6;12;75;0.4
+item;deeperdarker:sculk_gleam;;64;256;6;12;75;0.4
+item;deeperdarker:sculk_stone;;1024;4096;6;12;75;0.4
+item;deeperdarker:soul_crystal;;2;8;6;12;75;0.4
+item;deeperdarker:soul_dust;;8;32;6;12;75;0.4
+item;deeperdarker:warden_carapace;;1;2;8;16;40;0.4

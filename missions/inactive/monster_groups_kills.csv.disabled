@@ -1,8 +1,8 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;egg;eggChance;minProgress
-kill;spider;Arachnen;8;96;;;300;;;
-kill;skeleton;Knochengerüste;32;128;;;600;;0.20;
-kill;zombi,skeleton,husk,stray,knight,corpse,bone,necro,drowned,sunken,skull,soul,ghost,specter,spectre,spectral,wraith;Untote;128;256;;;1500;;0.20;
-kill;illager,pillage,vindicator,evoker,ravager,witch,iceologer,minecolonies;Raider;32;128;;;600;;0.20;0.1
-kill;blaze,wither,magma,zoglin,piglin,ghast,eternalnether,mushlin;Dämonen;32;128;;;400;;0.20;0.25
-kill;zombi,husk,drowned;Wandelnde Leichen;32;128;;;600;;0.20;
-kill;nightmare,missioner,lifestealer;Böse Überaschung;2;8;8;16;150;;0.01;0.3
+kill;spider;;8;96;;;300;;;
+kill;skeleton;;32;128;;;600;;0.20;
+kill;zombi,skeleton,husk,stray,knight,corpse,bone,necro,drowned,sunken,skull,soul,ghost,specter,spectre,spectral,wraith;;128;256;;;1500;;0.20;
+kill;illager,pillage,vindicator,evoker,ravager,witch,iceologer,minecolonies;;32;128;;;600;;0.20;0.1
+kill;blaze,wither,magma,zoglin,piglin,ghast,eternalnether,mushlin;;32;128;;;400;;0.20;0.25
+kill;zombi,husk,drowned;;32;128;;;600;;0.20;
+kill;nightmare,missioner,lifestealer;;2;8;8;16;150;;0.01;0.3

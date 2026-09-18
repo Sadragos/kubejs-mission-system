@@ -1,18 +1,18 @@
 type;item;name;minAmount;maxAmount;minCoins;maxCoins;weight;minProgress
-item;melon_juice;Melonensaft;64;256;6;12;100;0.05
-item;apple_cider;Apfelwein;64;256;6;12;100;0.05
-item;skillet;Bratpfanne;16;64;6;12;100;
-item;cooking_pot;Kochtopf;16;64;6;12;100;
-item;smoked_ham;Räucherschinken;16;64;6;12;100;0.3
-item;sweet_berry_cheesecake;Süßbeerenkäsekuchen;8;32;6;12;100;0.5
-item;fruit_salad;Fruchtsalat;16;64;6;12;100;0.3
-item;barbecue_stick;Barbecuespieß;8;64;6;12;100;0.2
-item;hamburger;Hamburger;8;64;6;12;100;0.2
-item;stuffed_potato;Gefüllte Kartoffel;16;64;6;12;100;0.1
-item;salmon_roll;Lachsrolle;16;64;6;12;100;0.1
-item;kelp_roll;Seetangrolle;16;96;6;12;100;0.1
-item;grilled_salmon;Gegrillter Lachs;8;64;6;12;100;0.25
-item;roast_chicken_block;Backhähnchen;8;32;6;12;100;0.3
-item;stuffed_pumpkin_block;Gefüllter Kürbis;8;48;6;12;100;0.3
-item;shepherds_pie;Hirtenkuchen;8;32;6;12;100;0.35
-item;honey_glazed_ham_block;Honigglasierter Schinken;8;48;6;12;100;0.6
+item;melon_juice;;64;256;6;12;100;0.05
+item;apple_cider;;64;256;6;12;100;0.05
+item;skillet;;16;64;6;12;100;
+item;cooking_pot;;16;64;6;12;100;
+item;smoked_ham;;16;64;6;12;100;0.3
+item;sweet_berry_cheesecake;;8;32;6;12;100;0.5
+item;fruit_salad;;16;64;6;12;100;0.3
+item;barbecue_stick;;8;64;6;12;100;0.2
+item;hamburger;;8;64;6;12;100;0.2
+item;stuffed_potato;;16;64;6;12;100;0.1
+item;salmon_roll;;16;64;6;12;100;0.1
+item;kelp_roll;;16;96;6;12;100;0.1
+item;grilled_salmon;;8;64;6;12;100;0.25
+item;roast_chicken_block;;8;32;6;12;100;0.3
+item;stuffed_pumpkin_block;;8;48;6;12;100;0.3
+item;shepherds_pie;;8;32;6;12;100;0.35
+item;honey_glazed_ham_block;;8;48;6;12;100;0.6
