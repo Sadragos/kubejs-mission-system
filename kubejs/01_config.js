@@ -21,12 +21,13 @@ const MISSION_MAX_TIME = MISSION_MIN_TIME + (20 * 60 * 15)
 const REWARD_ITEM = MISSION_SCROLL;
 // Preis (in Coins, im Nebenhand-Slot) um eine Mission gegen eine neue einzutauschen
 const MISSION_SWAP_FEE = 2;
-// Chance, dass eine abgeschlossene Mission zusätzlich zur regulären Belohnung eine
-// Bonusbelohnung aus QE_REWARDS erhält (siehe finishMission in 40_missions.js)
-const BONUS_REWARD_CHANCE = 0.3;
 // Maximaler Zeitbonus-Multiplikator (1 = bis zu +100% Belohnung) bei sehr schneller Event-Erfüllung,
 // linear abgebaut über die erste Hälfte der Eventlaufzeit
 const MAX_TIME_BONUS = 1;
+// Zusätzlicher globaler Multiplikator für Quick-Event-Belohnungen, multiplikativ mit dem
+// Server-Durchschnittsfortschritt verrechnet (siehe generateRewards in 20_quick_events.js) -
+// macht Quick Events grundsätzlich lohnenswerter als einzelne Missionen.
+const QE_REWARD_MULTIPLIER = 1.5;
 
 // Sonstiges
 const TICKS_PER_SECOND = 20;
@@ -101,22 +102,37 @@ const SKILL_XP_CATEGORY = 'epsilonskills:passive_skills';
 // Dauer (in Sekunden) der /worldborder-Animation beim Vergrößern als Belohnung
 const WORLDBORDER_ANIMATION_SECONDS = 3;
 
-// Event-Belohnungspool: pro Event-Erfolg wird jeder Eintrag unabhängig gegen seine `chance` gewürfelt
-const QE_REWARDS = [
+// Zentraler Belohnungspool für Missionen UND Quick Events: bei jeder Würfelung wird jeder
+// Eintrag unabhängig gegen seine `chance` gewürfelt (0 bis length(MISSION_REWARDS) Einträge
+// treffen zu). coin/worldborder/xp basieren auf der minCoins/maxCoins-Spanne der jeweils
+// relevanten Missions-/Event-CSV-Zeile: coin zahlt sie direkt aus, worldborder und xp nutzen
+// sie nur als Basis und wenden ihren eigenen `multiplier` darauf an. command führt unabhängig
+// davon einfach den konfigurierten Befehl aus ("@p" wird durch den Zielspieler ersetzt).
+const MISSION_REWARDS = [
     {
         id: 'coin',
-        minPerPlayer: 4,
-        maxPerPlayer: 8,
-        weight: 100,
         chance: 1.0
+    }, {
+        id: 'worldborder',
+        chance: 1.0,
+        multiplier: 1.0
+    }, {
+        id: 'xp',
+        chance: 0.5,
+        multiplier: 1.0
     }, {
         id: 'mission',
         minPerPlayer: 1,
         maxPerPlayer: 1,
         chance: 0.1
     }, {
+        id: 'command',
+        chance: 0.03,
+        command: 'give @p minecraft:diamond 1',
+        nameKey: 'kubejs.reward.command.diamond'
+    }, {
         id: 'buff',
-        chance: 1.0,
+        chance: 0.3,
         buffs: [
             { buff: 'minecraft:speed', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 1 },
             { buff: 'born_in_chaos_v1:dark_ward', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 },

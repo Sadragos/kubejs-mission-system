@@ -134,7 +134,8 @@ function rewardPlayer(event, player, source, type, rewards) {
         xp: rewards.xp || 0,
         worldborder: rewards.worldborder || 0,
         items: rewards.items || [],
-        buffs: rewards.buffs || []
+        buffs: rewards.buffs || [],
+        commands: rewards.commands || []
     };
 
     SoundUtils.playSoundAtPlayer(event.server, player.username, 'minecraft:entity.firework_rocket.launch');
@@ -174,6 +175,10 @@ function rewardPlayer(event, player, source, type, rewards) {
     for (let buff of internalRewards.buffs) {
         event.server.runCommandSilent(`effect give ${player.username} ${buff.buff} ${buff.duration * 60} ${buff.amplifier}`);
         rewardItems.push(Text.translate('kubejs.reward.buff', TextUtils.colored(buff.duration, 'light_purple'), TextUtils.effectName(buff.buff), TextUtils.colored(TextUtils.toRoman(buff.amplifier), 'light_purple')).color('light_purple'));
+    }
+    for (let command of internalRewards.commands) {
+        event.server.runCommandSilent(command.command);
+        rewardItems.push(Text.translate(command.nameKey).color('gold'));
     }
     let rewardLine = Text.translate('kubejs.reward.header', TextUtils.join(Text.of(', '), rewardItems)).color('gold');
     player.tell(rewardLine);

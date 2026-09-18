@@ -94,7 +94,7 @@ const HUNT_EVENT = {
 
         currentEvent.label = eventLabel(currentEvent.nameKey, unlucky);
 
-        currentEvent.rewards = generateRewards(event, currentEvent.progressType);
+        currentEvent.rewards = generateRewards({ min: currentEvent.targetMonster.minCoins, max: currentEvent.targetMonster.maxCoins }, avgPlayerProgress * QE_REWARD_MULTIPLIER);
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -371,9 +371,9 @@ const ITEM_REQUEST_EVENT = {
         currentEvent.total = 0;
         currentEvent.actionTable = new Map();
 
-        currentEvent.rewards = generateRewards(event, currentEvent.progressType);
-
         currentEvent.targetItem = MathUtils.randomWeightedEntry(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
+
+        currentEvent.rewards = generateRewards({ min: currentEvent.targetItem.minCoins, max: currentEvent.targetItem.maxCoins }, playermod * QE_REWARD_MULTIPLIER);
 
         currentEvent.targetAmount = Math.ceil(MathUtils.randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
@@ -521,89 +521,119 @@ function startEvent(event, typeFilter, force) {
 }
 
 /**
- * Würfelt den QE_REWARDS-Bonuspool aus (unabhängig pro Eintrag gegen dessen `chance`).
- * Wird sowohl für Quick-Event- als auch für Missions-Bonusbelohnungen verwendet.
- * @param {ServerEvent} event
- * @param {string} progressType - Missionstyp, gegen den der durchschnittliche Spielerfortschritt
- *   für die Mengen-Skalierung berechnet wird (z.B. "kill", "item")
+ * Würfelt den MISSION_REWARDS-Pool aus (unabhängig pro Eintrag gegen dessen `chance`) und baut
+ * für jeden Treffer ein bereits farbig formatiertes `.display`-Component. Wird sowohl für
+ * Quick Events als auch für normale Missionen verwendet.
+ * @param {{min: number, max: number}} coinRange - minCoins/maxCoins der relevanten Missions-/Event-CSV-Zeile
+ * @param {number} multiplier - Skalierungsfaktor für coin/worldborder/xp/buff (individueller
+ *   Spieler-Fortschritt bei Missionen, Server-Durchschnitt * QE_REWARD_MULTIPLIER bei Quick Events)
  * @returns {object[]} Liste gewürfelter Belohnungs-Einträge
  */
-function generateRewards(event, progressType) {
+function generateRewards(coinRange, multiplier) {
     let rewards = [];
-    for (let i = 0; i < QE_REWARDS.length; i++) {
-        let pick = QE_REWARDS[i];
+    let coinAmount = MathUtils.randomIntAdjusted(coinRange.min, coinRange.max, multiplier, 1, MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX));
+
+    for (let i = 0; i < MISSION_REWARDS.length; i++) {
+        let pick = MISSION_REWARDS[i];
         if (Math.random() >= pick.chance) continue;
-        if (pick.id === 'buff') {
-            let pickedBuff = pick.buffs[Math.floor(Math.random() * pick.buffs.length)];
-            let duration = MathUtils.randomInt(pickedBuff.minDuration, pickedBuff.maxDuration);
-            let amplifier = MathUtils.randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier);
-            let preparedBuff = {
-                id: pick.id,
-                buff: pickedBuff.buff,
-                duration: duration,
-                amplifier: amplifier
-            };
-            preparedBuff.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier))).color('light_purple');
-            rewards.push(preparedBuff);
-        } else {
-            let existing = rewards.find(r => r.id === pick.id);
-            let coinMin = pick.id === 'coin' ? MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX) : 1;
-            let amount = MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, getAveragePlayerProgress(event.server, progressType || 'kill', true), 1, coinMin);
-            let itemId = pick.id === 'coin' ? COIN_ITEM : MISSION_SCROLL;
-            if (existing) {
-                existing.amount += amount;
-                existing.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(existing.amount), TextUtils.itemName(itemId)).color('green');
-                continue;
+
+        switch (pick.id) {
+            case 'coin': {
+                let reward = { id: 'coin', amount: coinAmount };
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(coinAmount), TextUtils.itemName(COIN_ITEM)).color('green');
+                rewards.push(reward);
+                break;
             }
-            let preparedReward = {
-                id: pick.id,
-                item: itemId,
-                amount: amount
+            case 'worldborder': {
+                let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
+                let reward = { id: 'worldborder', amount: amount };
+                reward.display = Text.translate('kubejs.reward.worldborder', TextUtils.colored(amount, 'green')).color('green');
+                rewards.push(reward);
+                break;
             }
-            preparedReward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(preparedReward.amount), TextUtils.itemName(itemId)).color('green');
-            rewards.push(preparedReward);
+            case 'xp': {
+                let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
+                let reward = { id: 'xp', amount: amount };
+                reward.display = Text.translate('kubejs.reward.xp', TextUtils.colored(amount, 'aqua')).color('aqua');
+                rewards.push(reward);
+                break;
+            }
+            case 'mission': {
+                let amount = Math.max(1, Math.round(MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, multiplier, 1, 1)));
+                let reward = { id: 'mission', item: MISSION_SCROLL, amount: amount };
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(MISSION_SCROLL)).color('green');
+                rewards.push(reward);
+                break;
+            }
+            case 'command': {
+                let reward = { id: 'command', command: pick.command, nameKey: pick.nameKey };
+                reward.display = Text.translate(pick.nameKey).color('gold');
+                rewards.push(reward);
+                break;
+            }
+            case 'buff': {
+                let pickedBuff = pick.buffs[Math.floor(Math.random() * pick.buffs.length)];
+                let duration = Math.max(1, Math.round(MathUtils.randomInt(pickedBuff.minDuration, pickedBuff.maxDuration) * multiplier));
+                let amplifier = Math.max(0, Math.round(MathUtils.randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier) * multiplier));
+                let reward = { id: 'buff', buff: pickedBuff.buff, duration: duration, amplifier: amplifier };
+                reward.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier))).color('light_purple');
+                rewards.push(reward);
+                break;
+            }
         }
-    };
+    }
     return rewards;
 }
 
 /**
- * Wendet gewürfelte QE_REWARDS-Einträge (siehe `generateRewards`) auf ein `rewardPlayer`-taugliches
- * Payload-Objekt an, ohne den Spieler bereits zu belohnen. Wird sowohl von `handleReward`
- * (Quick Events) als auch von `finishMission` (Missions-Bonusbelohnungen) genutzt.
+ * Wendet gewürfelte MISSION_REWARDS-Einträge (siehe `generateRewards`) auf ein `rewardPlayer`-
+ * taugliches Payload-Objekt an, ohne den Spieler bereits zu belohnen. Wird sowohl von
+ * `handleReward` (Quick Events) als auch von `giveMissionItem`/`finishMission` (Missionen) genutzt.
  * @param {object[]} rewards - gewürfelte Belohnungs-Einträge aus `generateRewards`
- * @param {number} multiplier - Multiplikator (z.B. Zeitbonus bei Quick Events)
+ * @param {number} multiplier - zusätzlicher Auszahlungs-Multiplikator (z.B. Zeitbonus bei Quick
+ *   Events; bei Missionen einfach 1, da die Skalierung dort schon beim Würfeln passiert ist)
  * @param {object} [spawnEggItem] - optionales zusätzliches Item (z.B. Kill-Missions-Ei), das immer dazukommt
- * @returns {{items: object[], buffs: object[], coins: number}}
+ * @param {string} [username] - Zielspieler, gegen den `@p` in command-Belohnungen ersetzt wird
+ * @returns {{items: object[], buffs: object[], commands: object[], coins: number, xp: number, worldborder: number}}
  */
-function resolveRewardPayload(rewards, multiplier, spawnEggItem) {
+function resolveRewardPayload(rewards, multiplier, spawnEggItem, username) {
     let items = [];
     let buffs = [];
+    let commands = [];
     let coins = 0;
+    let xp = 0;
+    let worldborder = 0;
     if (spawnEggItem) items.push(spawnEggItem);
 
     for (let reward of rewards) {
         switch (reward.id) {
-            case 'buff':
-                let duration = Math.round(reward.duration * multiplier);
-                buffs.push({ buff: reward.buff, duration: duration, amplifier: reward.amplifier });
-                break;
             case 'coin':
                 coins += Math.max(1, Math.round(reward.amount * multiplier));
                 break;
+            case 'worldborder':
+                worldborder += Math.max(1, Math.round(reward.amount * multiplier));
+                break;
+            case 'xp':
+                xp += Math.max(1, Math.round(reward.amount * multiplier));
+                break;
             case 'mission':
-                let missions = Math.round(reward.amount * multiplier);
-                items.push({ item: MISSION_SCROLL, amount: missions });
+                items.push({ item: reward.item, amount: Math.max(1, Math.round(reward.amount * multiplier)) });
+                break;
+            case 'command':
+                commands.push({ command: reward.command.replace(/@p\b/g, username), nameKey: reward.nameKey });
+                break;
+            case 'buff':
+                buffs.push({ buff: reward.buff, duration: Math.max(1, Math.round(reward.duration * multiplier)), amplifier: reward.amplifier });
                 break;
         }
     }
-    return { items: items, buffs: buffs, coins: coins };
+    return { items: items, buffs: buffs, commands: commands, coins: coins, xp: xp, worldborder: worldborder };
 }
 
 function handleReward(event, rewards, username, multiplier, spawnEggItem) {
     let player = event.server.players.find(p => p.username === username);
-    let payload = resolveRewardPayload(rewards, multiplier, spawnEggItem);
-    rewardPlayer(event, player, 'event', currentEvent.id, { items: payload.items, buffs: payload.buffs, coins: payload.coins, worldborder: payload.coins });
+    let payload = resolveRewardPayload(rewards, multiplier, spawnEggItem, username);
+    rewardPlayer(event, player, 'event', currentEvent.id, payload);
 }
 
 /**
