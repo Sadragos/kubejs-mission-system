@@ -24,9 +24,9 @@ function tickTimeColor(ticks) {
 function getTimeRemaining(event, progress, bonus) {
     progress = progress === undefined ? false : progress;
     let remainingTicks = currentEvent.endTick - event.server.tickCount;
-    let parts = [currentEvent.label, Text.translate('kubejs.event.time_remaining_short', tickTimeColor(remainingTicks) + ticksToTime(remainingTicks))];
-    if (progress) parts.push(Text.translate('kubejs.event.progress', TextUtils.colored(currentEvent.total, 'green'), currentEvent.targetAmount));
-    if (bonus && bonus > 1) parts.push(Text.translate('kubejs.event.time_bonus', TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green')));
+    let parts = [currentEvent.label, Text.translate('kubejs.event.time_remaining_short', tickTimeColor(remainingTicks) + ticksToTime(remainingTicks)).color('gray')];
+    if (progress) parts.push(Text.translate('kubejs.event.progress', TextUtils.colored(currentEvent.total, 'green'), TextUtils.colored(currentEvent.targetAmount, 'green')).color('gray'));
+    if (bonus && bonus > 1) parts.push(Text.translate('kubejs.event.time_bonus', TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green')).color('gray'));
     event.server.tell(TextUtils.join(Text.of(' '), parts));
 }
 
