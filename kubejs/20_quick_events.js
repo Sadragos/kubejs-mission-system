@@ -683,7 +683,7 @@ function generateRewards(coinRange, multiplier, context) {
         switch (pick.id) {
             case 'coin': {
                 let reward = { id: 'coin', amount: coinAmount };
-                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(coinAmount), TextUtils.itemName(COIN_ITEM)).color(REWARD_COLORS.coin);
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(coinAmount, REWARD_COLORS.coin), TextUtils.itemName(COIN_ITEM)).color(REWARD_COLORS.coin);
                 rewards.push(reward);
                 break;
             }
@@ -704,7 +704,7 @@ function generateRewards(coinRange, multiplier, context) {
             case 'item': {
                 let amount = resolveScaledRewardAmount(pick, coinAmount, multiplier);
                 let reward = { id: 'item', item: pick.item, amount: amount };
-                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(pick.item)).color(pick.color);
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount, pick.color), TextUtils.itemName(pick.item)).color(pick.color);
                 rewards.push(reward);
                 break;
             }
@@ -719,7 +719,7 @@ function generateRewards(coinRange, multiplier, context) {
                 let duration = Math.max(1, Math.round(MathUtils.randomInt(pickedBuff.minDuration, pickedBuff.maxDuration) * multiplier));
                 let amplifier = Math.max(0, Math.round(MathUtils.randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier) * multiplier));
                 let reward = { id: 'buff', buff: pickedBuff.buff, duration: duration, amplifier: amplifier };
-                reward.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier))).color(REWARD_COLORS.buff);
+                reward.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration, REWARD_COLORS.buff), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier), REWARD_COLORS.buff)).color(REWARD_COLORS.buff);
                 rewards.push(reward);
                 break;
             }
