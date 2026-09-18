@@ -27,6 +27,16 @@ function scoreboardTitle(abbr, amount, target, unlucky) {
     return `${color}[${abbr}]§f ${amount}§8x§f ${target.getString()}`;
 }
 
+/**
+ * Builds a compact "[Mehr Infos]" Component that shows the given detail lines on hover,
+ * instead of spelling them out as extra chat lines.
+ * @param {string[]} lines - preformatted detail lines (e.g. "Zeitlimit: 05:00")
+ * @returns {Internal.Component}
+ */
+function moreInfoText(lines) {
+    return Text.translate('kubejs.event.more_info').color('gray').hover(lines.filter(Boolean).join('\n'));
+}
+
 const PRESENT_EVENT = {
     nameKey: 'kubejs.event.present.name',
     id: 'present',
@@ -122,18 +132,22 @@ const HUNT_EVENT = {
 
         let introKey = currentEvent.multiplayer ? 'kubejs.event.hunt.announce.coop' : 'kubejs.event.hunt.announce.solo';
 
+        let detailLines = [
+            Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime)).getString(),
+            Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display)).getString()).getString()
+        ];
+        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
+            detailLines.push(Text.translate('kubejs.event.egg_chance', (currentEvent.targetMonster.eggChance * 100).toFixed(0)).getString());
+        }
+        detailLines.push(Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)).getString());
+
         let parts = [
             currentEvent.label,
             Text.translate(introKey, mobPart),
-            Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime))
+            moreInfoText(detailLines)
         ];
-        parts.push(Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
-        if (currentEvent.targetMonster.eggChance > 0 && currentEvent.targetMonster.egg) {
-            parts.push(Text.translate('kubejs.event.egg_chance', (currentEvent.targetMonster.eggChance * 100).toFixed(0)));
-        }
-        parts.push(Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)));
 
-        event.server.tell(parts);
+        event.server.tell(TextUtils.join(Text.of(' '), parts));
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.6');
     },
 
@@ -193,18 +207,17 @@ const HUNT_EVENT = {
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:entity.firework_rocket.launch');
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green');
-        let lines = [];
+        let resultLine;
+        let detailLines = [Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')).getString()];
         if (currentEvent.multiplayer) {
-            lines.push(Text.translate('kubejs.event.success', currentEvent.label));
-            lines.push(Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')));
-            lines.push(Text.translate('kubejs.event.avg_kills', TextUtils.colored(averageKills.toFixed(1), 'green')));
+            resultLine = Text.translate('kubejs.event.success', currentEvent.label);
+            detailLines.push(Text.translate('kubejs.event.avg_kills', TextUtils.colored(averageKills.toFixed(1), 'green')).getString());
         } else {
-            lines.push(Text.translate('kubejs.event.winner', currentEvent.label, TextUtils.colored(winnerName, 'green')));
-            lines.push(Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')));
+            resultLine = Text.translate('kubejs.event.winner', currentEvent.label, TextUtils.colored(winnerName, 'green'));
         }
-        Array.prototype.push.apply(lines, getTimeStats(event));
-        lines.push(Text.translate('kubejs.event.time_bonus', bonusText));
-        event.server.tell(TextUtils.join(Text.of('\n'), lines));
+        Array.prototype.push.apply(detailLines, getTimeStats(event).map(el => el.getString()));
+        detailLines.push(Text.translate('kubejs.event.time_bonus', bonusText).getString());
+        event.server.tell(TextUtils.join(Text.of(' '), [resultLine, moreInfoText(detailLines)]));
 
         if (currentEvent.multiplayer) {
             for (let [key] of currentEvent.actionTable) {
@@ -387,15 +400,19 @@ const ITEM_REQUEST_EVENT = {
             .color('green')
             .hover(`§l${itemIdHeader}§r\n${currentEvent.targetItem.item}`);
 
+        let detailLines = [
+            Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime)).getString(),
+            Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display)).getString()).getString(),
+            Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)).getString()
+        ];
+
         let parts = [
             currentEvent.label,
             Text.translate('kubejs.event.request.announce', itemPart),
-            Text.translate('kubejs.event.time_limit', tickTimeColor(currentEvent.missionTime) + ticksToTime(currentEvent.missionTime))
+            moreInfoText(detailLines)
         ];
-        parts.push(Text.translate('kubejs.event.reward', TextUtils.join(Text.of(', '), currentEvent.rewards.map(el => el.display))));
-        parts.push(Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)));
 
-        event.server.tell(parts);
+        event.server.tell(TextUtils.join(Text.of(' '), parts));
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.1');
     },
     stopEvent(event) {
@@ -416,11 +433,10 @@ const ITEM_REQUEST_EVENT = {
 
         let bonus = getTimeBonusMultiplier(currentEvent.startTick, event.server.tickCount, currentEvent.endTick);
         let bonusText = TextUtils.colored(`${(bonus * 100).toFixed(0)}%`, 'green');
-        let lines = [Text.translate('kubejs.event.success', currentEvent.label)];
-        lines.push(Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')));
-        Array.prototype.push.apply(lines, getTimeStats(event));
-        lines.push(Text.translate('kubejs.event.time_bonus', bonusText));
-        event.server.tell(TextUtils.join(Text.of('\n'), lines));
+        let detailLines = [Text.translate('kubejs.event.participants', TextUtils.colored(hunters.join(', '), 'green')).getString()];
+        Array.prototype.push.apply(detailLines, getTimeStats(event).map(el => el.getString()));
+        detailLines.push(Text.translate('kubejs.event.time_bonus', bonusText).getString());
+        event.server.tell(TextUtils.join(Text.of(' '), [Text.translate('kubejs.event.success', currentEvent.label), moreInfoText(detailLines)]));
 
         for (let [key] of currentEvent.actionTable) {
             handleReward(event, currentEvent.rewards, key, bonus);
