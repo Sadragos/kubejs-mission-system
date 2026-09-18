@@ -66,22 +66,29 @@ const TextUtils = {
         return translated.getString() !== name ? translated : Text.literal(name);
     },
     /**
-     * Returns the display name of an item: the CSV `name` (as a lang key if one matches,
-     * otherwise as literal text) if given; otherwise the real name of a `#namespace:path` item
-     * tag's first item, or of a single concrete item ID; otherwise the raw ID/filter itself.
+     * Returns the display name of an item: for a `#namespace:path` item tag, the CSV `name`
+     * (as a lang key if one matches, otherwise literal text) if given, otherwise the real name
+     * of the tag's first item — either way with a hover showing the raw tag ID so players can
+     * look it up in JEI/REI. For a single concrete item ID, the CSV `name` if given, otherwise
+     * its real name. Otherwise the raw ID/filter itself.
      * @param {string} idOrFilter item ID, item tag (`#namespace:path`) or mission item filter string
      * @param {string} [name] CSV `name` value
      * @returns {Internal.Component}
      */
     itemName: (idOrFilter, name) => {
         let override = TextUtils.resolveNameOverride(name);
-        if (override) return override;
         if (idOrFilter && idOrFilter.startsWith('#')) {
             try {
                 let stack = Ingredient.first(idOrFilter);
-                if (stack && !stack.isEmpty()) return stack.getHoverName();
+                if (stack && !stack.isEmpty()) {
+                    let label = override || stack.getHoverName();
+                    let header = Text.translate('kubejs.mission.tag_header').getString();
+                    return label.hover(`§l${header}§r\n${idOrFilter}`);
+                }
             } catch (e) { /* empty/unknown tag, fall through */ }
-        } else if (TextUtils.isConcreteId(idOrFilter)) {
+        }
+        if (override) return override;
+        if (TextUtils.isConcreteId(idOrFilter)) {
             try {
                 let stack = Item.of(idOrFilter);
                 if (stack && !stack.isEmpty()) return stack.getHoverName();

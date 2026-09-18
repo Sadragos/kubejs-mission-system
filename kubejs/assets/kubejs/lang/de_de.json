@@ -10,6 +10,9 @@
   "kubejs.item.currency.total_value": "Inventar-Gesamtwert: %s Coins",
 
   "kubejs.mission.any_monster": "einen beliebigen Gegner",
+  "kubejs.mission.tag_header": "Item-Tag",
+  "kubejs.mission.tag.logs": "Baumstämme",
+  "kubejs.mission.tag.music_discs": "Musikplatten",
   "kubejs.mission.group.undead": "Untote",
   "kubejs.mission.group.spider": "Spinnen",
   "kubejs.mission.group.illager": "Illager",

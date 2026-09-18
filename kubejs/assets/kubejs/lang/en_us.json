@@ -10,6 +10,9 @@
   "kubejs.item.currency.total_value": "Inventory Total: %s Coins",
 
   "kubejs.mission.any_monster": "any monster",
+  "kubejs.mission.tag_header": "Item Tag",
+  "kubejs.mission.tag.logs": "Logs",
+  "kubejs.mission.tag.music_discs": "Music Discs",
   "kubejs.mission.group.undead": "Undead",
   "kubejs.mission.group.spider": "Spiders",
   "kubejs.mission.group.illager": "Illagers",
