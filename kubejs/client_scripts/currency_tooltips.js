@@ -8,7 +8,7 @@ const CURRENCY_VALUES = {
     'kubejs:coin_pouch': 64
 };
 
-ItemEvents.dynamicTooltips(/^kubejs:coin(_stack|_pouch)?$/, event => {
+function addCurrencyTooltip(event) {
     let value = CURRENCY_VALUES[event.item.id];
     if (!value) return;
 
@@ -30,4 +30,8 @@ ItemEvents.dynamicTooltips(/^kubejs:coin(_stack|_pouch)?$/, event => {
     }
 
     event.add(lines);
-});
+}
+
+// ItemEvents.dynamicTooltips ist wie ItemEvents.rightClicked ein auf eine konkrete Item-ID
+// gezielter Handler, kein Regex-Filter - deshalb einzeln pro Währungs-Item registrieren.
+Object.keys(CURRENCY_VALUES).forEach(id => ItemEvents.dynamicTooltips(id, addCurrencyTooltip));
