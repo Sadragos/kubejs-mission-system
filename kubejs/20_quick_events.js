@@ -34,7 +34,7 @@ function scoreboardTitle(abbr, amount, target, unlucky) {
  * @returns {Internal.Component}
  */
 function moreInfoText(lines) {
-    return Text.translate('kubejs.event.more_info').color('gray').hover(lines.filter(Boolean).join('\n'));
+    return Text.translate('kubejs.event.more_info').color('aqua').hover(lines.filter(Boolean).join('\n'));
 }
 
 const PRESENT_EVENT = {
@@ -143,7 +143,7 @@ const HUNT_EVENT = {
 
         let parts = [
             currentEvent.label,
-            Text.translate(introKey, mobPart),
+            Text.translate(introKey, mobPart).color('gray'),
             moreInfoText(detailLines)
         ];
 
@@ -408,7 +408,7 @@ const ITEM_REQUEST_EVENT = {
 
         let parts = [
             currentEvent.label,
-            Text.translate('kubejs.event.request.announce', itemPart),
+            Text.translate('kubejs.event.request.announce', itemPart).color('gray'),
             moreInfoText(detailLines)
         ];
 
@@ -493,7 +493,7 @@ const RACE_EVENT = {
 
         event.server.tell(TextUtils.join(Text.of(' '), [
             currentEvent.label,
-            Text.translate('kubejs.event.race.announce', targetPart),
+            Text.translate('kubejs.event.race.announce', targetPart).color('gray'),
             moreInfoText(detailLines)
         ]));
 
