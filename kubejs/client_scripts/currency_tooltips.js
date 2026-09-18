@@ -8,14 +8,23 @@ const CURRENCY_VALUES = {
     'kubejs:coin_pouch': 64
 };
 
+/**
+ * Formats an integer with "." as thousands separator (e.g. 4156 -> "4.156").
+ * @param {number} n
+ * @returns {string}
+ */
+function formatCoinAmount(n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
 function addCurrencyTooltip(event) {
     let value = CURRENCY_VALUES[event.item.id];
     if (!value) return;
 
-    let lines = [Text.translate('kubejs.item.currency.value', value).color('gold')];
+    let lines = [Text.translate('kubejs.item.currency.value', formatCoinAmount(value)).color('gold')];
 
     if (event.item.count > 1) {
-        lines.push(Text.translate('kubejs.item.currency.stack_value', value * event.item.count).color('gold'));
+        lines.push(Text.translate('kubejs.item.currency.stack_value', formatCoinAmount(value * event.item.count)).color('gold'));
     }
 
     let player = Client.player;
@@ -26,12 +35,19 @@ function addCurrencyTooltip(event) {
             let stackValue = CURRENCY_VALUES[inventory.getItem(i).id];
             if (stackValue) total += stackValue * inventory.getItem(i).count;
         }
-        lines.push(Text.translate('kubejs.item.currency.total_value', total).color('yellow'));
+        lines.push(Text.translate('kubejs.item.currency.total_value', formatCoinAmount(total)).color('yellow'));
     }
 
     event.add(lines);
 }
 
-// ItemEvents.dynamicTooltips ist wie ItemEvents.rightClicked ein auf eine konkrete Item-ID
-// gezielter Handler, kein Regex-Filter - deshalb einzeln pro Währungs-Item registrieren.
-Object.keys(CURRENCY_VALUES).forEach(id => ItemEvents.dynamicTooltips(id, addCurrencyTooltip));
+// ItemEvents.dynamicTooltips registriert nur einen benannten Handler - er wird nie von allein
+// aufgerufen. Erst ItemEvents.modifyTooltips().modify(item, tooltip => tooltip.dynamic(id))
+// bindet diesen Handler tatsächlich an die gewünschten Items (siehe KubeJS-Doku).
+ItemEvents.modifyTooltips(event => {
+    Object.keys(CURRENCY_VALUES).forEach(id => {
+        event.modify(id, tooltip => tooltip.dynamic('currency_tooltip'));
+    });
+});
+
+ItemEvents.dynamicTooltips('currency_tooltip', addCurrencyTooltip);
