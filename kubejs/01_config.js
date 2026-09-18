@@ -109,6 +109,18 @@ const RACE_MAX_COINS = 32;
 // Dauer (in Sekunden) der /worldborder-Animation beim Vergrößern als Belohnung
 const WORLDBORDER_ANIMATION_SECONDS = 3;
 
+// Eine Farbe pro Belohnungstyp, zentral definiert und sowohl für die Belohnungsvorschau
+// (Mission-Lore/Event-Ankündigung, siehe generateRewards) als auch für die tatsächliche
+// Auszahlungsnachricht (rewardPlayer) verwendet, damit beide immer übereinstimmen.
+const REWARD_COLORS = {
+    coin: 'green',
+    worldborder: 'green',
+    xp: 'aqua',
+    mission: 'green',
+    command: 'gold',
+    buff: 'light_purple'
+};
+
 // Zentraler Belohnungspool für Missionen UND Quick Events: bei jeder Würfelung wird jeder
 // Eintrag unabhängig gegen seine `chance` gewürfelt (0 bis length(MISSION_REWARDS) Einträge
 // treffen zu). coin/worldborder/xp basieren auf der minCoins/maxCoins-Spanne der jeweils

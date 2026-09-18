@@ -666,34 +666,34 @@ function generateRewards(coinRange, multiplier, context) {
         switch (pick.id) {
             case 'coin': {
                 let reward = { id: 'coin', amount: coinAmount };
-                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(coinAmount), TextUtils.itemName(COIN_ITEM)).color('green');
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(coinAmount), TextUtils.itemName(COIN_ITEM)).color(REWARD_COLORS.coin);
                 rewards.push(reward);
                 break;
             }
             case 'worldborder': {
                 let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
                 let reward = { id: 'worldborder', amount: amount };
-                reward.display = Text.translate('kubejs.reward.worldborder', TextUtils.colored(amount, 'green')).color('green');
+                reward.display = Text.translate('kubejs.reward.worldborder', TextUtils.colored(amount, REWARD_COLORS.worldborder)).color(REWARD_COLORS.worldborder);
                 rewards.push(reward);
                 break;
             }
             case 'xp': {
                 let amount = Math.max(1, Math.round(coinAmount * pick.multiplier));
                 let reward = { id: 'xp', amount: amount };
-                reward.display = Text.translate('kubejs.reward.xp', TextUtils.colored(amount, 'aqua')).color('aqua');
+                reward.display = Text.translate('kubejs.reward.xp', TextUtils.colored(amount, REWARD_COLORS.xp)).color(REWARD_COLORS.xp);
                 rewards.push(reward);
                 break;
             }
             case 'mission': {
                 let amount = Math.max(1, Math.round(MathUtils.randomIntAdjusted(pick.minPerPlayer, pick.maxPerPlayer, multiplier, 1, 1)));
                 let reward = { id: 'mission', item: MISSION_SCROLL, amount: amount };
-                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(MISSION_SCROLL)).color('green');
+                reward.display = Text.translate('kubejs.reward.item_count', TextUtils.colored(amount), TextUtils.itemName(MISSION_SCROLL)).color(REWARD_COLORS.mission);
                 rewards.push(reward);
                 break;
             }
             case 'command': {
                 let reward = { id: 'command', command: pick.command, nameKey: pick.nameKey };
-                reward.display = Text.translate(pick.nameKey).color('gold');
+                reward.display = Text.translate(pick.nameKey).color(REWARD_COLORS.command);
                 rewards.push(reward);
                 break;
             }
@@ -702,7 +702,7 @@ function generateRewards(coinRange, multiplier, context) {
                 let duration = Math.max(1, Math.round(MathUtils.randomInt(pickedBuff.minDuration, pickedBuff.maxDuration) * multiplier));
                 let amplifier = Math.max(0, Math.round(MathUtils.randomInt(pickedBuff.minAmplifier, pickedBuff.maxAmplifier) * multiplier));
                 let reward = { id: 'buff', buff: pickedBuff.buff, duration: duration, amplifier: amplifier };
-                reward.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier))).color('light_purple');
+                reward.display = Text.translate('kubejs.reward.buff', TextUtils.colored(duration), TextUtils.effectName(pickedBuff.buff), TextUtils.colored(TextUtils.toRoman(amplifier))).color(REWARD_COLORS.buff);
                 rewards.push(reward);
                 break;
             }
