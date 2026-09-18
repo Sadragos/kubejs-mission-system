@@ -111,6 +111,7 @@
   "kubejs.reward.command.diamond": "1x Diamant",
 
   "kubejs.command.no_event": "Kein Event aktiv!",
+  "kubejs.command.info.header": "Aktuell ist folgendes Event aktiv: %s",
   "kubejs.command.invalid": "Ungültiger Befehl!",
   "kubejs.command.player_not_found": "Spieler \"%s\" nicht gefunden.",
   "kubejs.command.stats.mission_header": "--- Auftrags-Statistik: %s ---",

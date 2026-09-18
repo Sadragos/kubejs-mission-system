@@ -31,6 +31,14 @@ ServerEvents.commandRegistry((event) => {
     event.register(
         Commands.literal("missions")
             .then(
+                Commands.literal("info")
+                    .executes((ctx) => runInfo(ctx.source)),
+            ),
+    );
+
+    event.register(
+        Commands.literal("missions")
+            .then(
                 Commands.literal("stats")
                     .executes((ctx) => {
                         return runStats(ctx.source, null);
@@ -90,6 +98,19 @@ ServerEvents.commandRegistry((event) => {
                 break;
             default:
                 source.player.tell(Text.translate('kubejs.command.invalid').color('red'));
+        }
+        return 1;
+    }
+
+    function runInfo(source) {
+        if (!currentEvent || !currentEvent.introLine) {
+            source.player.tell(Text.translate('kubejs.command.no_event').color('red'));
+            return 1;
+        }
+        source.player.tell(Text.translate('kubejs.command.info.header', Text.translate(currentEvent.nameKey).color('yellow')).color('gray').underlined());
+        source.player.tell(TextUtils.join(Text.of(' '), [currentEvent.label, currentEvent.introLine]));
+        for (const line of currentEvent.detailLines) {
+            source.player.tell(Text.of(line));
         }
         return 1;
     }

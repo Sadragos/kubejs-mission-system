@@ -211,13 +211,14 @@ const HUNT_EVENT = {
         }
         detailLines.push(Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)).getString());
 
-        let parts = [
-            currentEvent.label,
-            Text.translate(introKey, mobPart).color('gray'),
-            moreInfoText(detailLines)
-        ];
+        currentEvent.introLine = Text.translate(introKey, mobPart).color('gray');
+        currentEvent.detailLines = detailLines;
 
-        event.server.tell(TextUtils.join(Text.of(' '), parts));
+        event.server.tell(TextUtils.join(Text.of(' '), [
+            currentEvent.label,
+            currentEvent.introLine,
+            moreInfoText(detailLines)
+        ]));
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.6');
     },
 
@@ -474,13 +475,14 @@ const ITEM_REQUEST_EVENT = {
             Text.translate('kubejs.event.difficulty', (playermod * 100).toFixed(1)).getString()
         ];
 
-        let parts = [
-            currentEvent.label,
-            Text.translate('kubejs.event.request.announce', itemPart).color('gray'),
-            moreInfoText(detailLines)
-        ];
+        currentEvent.introLine = Text.translate('kubejs.event.request.announce', itemPart).color('gray');
+        currentEvent.detailLines = detailLines;
 
-        event.server.tell(TextUtils.join(Text.of(' '), parts));
+        event.server.tell(TextUtils.join(Text.of(' '), [
+            currentEvent.label,
+            currentEvent.introLine,
+            moreInfoText(detailLines)
+        ]));
         SoundUtils.playSoundAtPlayer(event.server, '@a', 'minecraft:item.goat_horn.sound.1');
     },
     stopEvent(event) {
@@ -557,9 +559,12 @@ const RACE_EVENT = {
             Text.translate('kubejs.event.difficulty', (avgPlayerProgress * 100).toFixed(1)).getString()
         ];
 
+        currentEvent.introLine = Text.translate('kubejs.event.race.announce', targetPart).color('gray');
+        currentEvent.detailLines = detailLines;
+
         event.server.tell(TextUtils.join(Text.of(' '), [
             currentEvent.label,
-            Text.translate('kubejs.event.race.announce', targetPart).color('gray'),
+            currentEvent.introLine,
             moreInfoText(detailLines)
         ]));
 
