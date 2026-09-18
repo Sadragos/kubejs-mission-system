@@ -125,7 +125,7 @@ ItemEvents.rightClicked(MISSION_SCROLL, event => {
                 }
             }
             let missionNr = getMissionsPulledTotal(event.player) + 1;
-            let rewards = generateRewards({ min: mission.minCoins, max: mission.maxCoins }, playerProgress);
+            let rewards = generateRewards({ min: mission.minCoins, max: mission.maxCoins }, playerProgress, 'mission');
             giveMissionItem(
                 event,
                 mission.type,

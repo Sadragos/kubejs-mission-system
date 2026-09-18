@@ -94,7 +94,7 @@ const HUNT_EVENT = {
 
         currentEvent.label = eventLabel(currentEvent.nameKey, unlucky);
 
-        currentEvent.rewards = generateRewards({ min: currentEvent.targetMonster.minCoins, max: currentEvent.targetMonster.maxCoins }, avgPlayerProgress * QE_REWARD_MULTIPLIER);
+        currentEvent.rewards = generateRewards({ min: currentEvent.targetMonster.minCoins, max: currentEvent.targetMonster.maxCoins }, avgPlayerProgress * QE_REWARD_MULTIPLIER, 'event');
 
         currentEvent.actionTable = new Map();
         currentEvent.total = 0;
@@ -373,7 +373,7 @@ const ITEM_REQUEST_EVENT = {
 
         currentEvent.targetItem = MathUtils.randomWeightedEntry(getMissionByType('item').filter(mission => mission.min >= event.server.players.length && (!mission.minProgress || mission.minProgress <= playermodsum)));
 
-        currentEvent.rewards = generateRewards({ min: currentEvent.targetItem.minCoins, max: currentEvent.targetItem.maxCoins }, playermod * QE_REWARD_MULTIPLIER);
+        currentEvent.rewards = generateRewards({ min: currentEvent.targetItem.minCoins, max: currentEvent.targetItem.maxCoins }, playermod * QE_REWARD_MULTIPLIER, 'event');
 
         currentEvent.targetAmount = Math.ceil(MathUtils.randomInt(currentEvent.targetItem.min, currentEvent.targetItem.max) * playerMulti);
         currentEvent.targetAmount = Math.max(Math.ceil(currentEvent.targetAmount * playermod), event.server.players.length);
@@ -527,14 +527,18 @@ function startEvent(event, typeFilter, force) {
  * @param {{min: number, max: number}} coinRange - minCoins/maxCoins der relevanten Missions-/Event-CSV-Zeile
  * @param {number} multiplier - Skalierungsfaktor für coin/worldborder/xp/buff (individueller
  *   Spieler-Fortschritt bei Missionen, Server-Durchschnitt * QE_REWARD_MULTIPLIER bei Quick Events)
+ * @param {'mission'|'event'} context - schließt Einträge mit `enable_in_mission`/
+ *   `enable_in_quickevent: false` für den jeweils anderen Kontext aus
  * @returns {object[]} Liste gewürfelter Belohnungs-Einträge
  */
-function generateRewards(coinRange, multiplier) {
+function generateRewards(coinRange, multiplier, context) {
     let rewards = [];
     let coinAmount = MathUtils.randomIntAdjusted(coinRange.min, coinRange.max, multiplier, 1, MathUtils.randomInt(COIN_REWARD_MINMIN, COIN_REWARD_MINMAX));
 
     for (let i = 0; i < MISSION_REWARDS.length; i++) {
         let pick = MISSION_REWARDS[i];
+        if (context === 'mission' && pick.enable_in_mission === false) continue;
+        if (context === 'event' && pick.enable_in_quickevent === false) continue;
         if (Math.random() >= pick.chance) continue;
 
         switch (pick.id) {

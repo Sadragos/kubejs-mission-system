@@ -108,31 +108,45 @@ const WORLDBORDER_ANIMATION_SECONDS = 3;
 // relevanten Missions-/Event-CSV-Zeile: coin zahlt sie direkt aus, worldborder und xp nutzen
 // sie nur als Basis und wenden ihren eigenen `multiplier` darauf an. command führt unabhängig
 // davon einfach den konfigurierten Befehl aus ("@p" wird durch den Zielspieler ersetzt).
+// enable_in_mission/enable_in_quickevent schalten einen Eintrag jeweils für Missionen bzw.
+// Quick Events komplett aus (Standard: beides an).
 const MISSION_REWARDS = [
     {
         id: 'coin',
-        chance: 1.0
+        chance: 1.0,
+        enable_in_mission: true,
+        enable_in_quickevent: true
     }, {
         id: 'worldborder',
         chance: 1.0,
-        multiplier: 1.0
+        multiplier: 1.0,
+        enable_in_mission: true,
+        enable_in_quickevent: true
     }, {
         id: 'xp',
         chance: 0.5,
-        multiplier: 1.0
+        multiplier: 1.0,
+        enable_in_mission: true,
+        enable_in_quickevent: true
     }, {
         id: 'mission',
         minPerPlayer: 1,
         maxPerPlayer: 1,
-        chance: 0.1
+        chance: 0.1,
+        enable_in_mission: true,
+        enable_in_quickevent: true
     }, {
         id: 'command',
         chance: 0.03,
         command: 'give @p minecraft:diamond 1',
-        nameKey: 'kubejs.reward.command.diamond'
+        nameKey: 'kubejs.reward.command.diamond',
+        enable_in_mission: true,
+        enable_in_quickevent: true
     }, {
         id: 'buff',
         chance: 0.3,
+        enable_in_mission: true,
+        enable_in_quickevent: true,
         buffs: [
             { buff: 'minecraft:speed', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 1 },
             { buff: 'born_in_chaos_v1:dark_ward', minDuration: 10, maxDuration: 20, minAmplifier: 0, maxAmplifier: 0 },
